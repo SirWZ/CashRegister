@@ -17,6 +17,7 @@ import java.awt.SystemColor;
 import java.awt.Font;
 import java.awt.Component;
 
+
 public class CashierViewWindow {
 
 	private JFrame frame;
@@ -50,7 +51,7 @@ public class CashierViewWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame("Интерфейс касира");
+		frame = new JFrame("РРЅС‚РµСЂС„РµР№СЃ РєР°СЃРёСЂР°");
 		frame.setBounds(100, 100, 581, 472);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -60,35 +61,35 @@ public class CashierViewWindow {
 		panel.setLayout(new GridLayout(5, 2, 0, 0));
 		JButton[][] arrayOfButtons = new JButton[2][5];
 
-		JButton sellingButton = new JButton("Продажа");
+		JButton sellingButton = new JButton("РџСЂРѕРґР°Р¶Р°");
 		sellingButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		arrayOfButtons[0][0] = sellingButton;
 
-		JButton payInButton = new JButton("Вплата");
+		JButton payInButton = new JButton("Р’РїР»Р°С‚Р°");
 		arrayOfButtons[0][1] = payInButton;
 		
-		JButton payOffButton = new JButton("Выплата");
+		JButton payOffButton = new JButton("Р’С‹РїР»Р°С‚Р°");
 		arrayOfButtons[0][2] = payOffButton;
 
-		JButton endSessionButton = new JButton("Закончить смену");
+		JButton endSessionButton = new JButton("Р—Р°РєРѕРЅС‡РёС‚СЊ СЃРјРµРЅСѓ");
 		arrayOfButtons[0][3] = endSessionButton;
 
-		JButton myShopButton = new JButton("Мой магазин");
+		JButton myShopButton = new JButton("РњРѕР№ РјР°РіР°Р·РёРЅ");
 		arrayOfButtons[0][4] = myShopButton;
 
-		JButton retrieveGoodsButton = new JButton("Возврат товара");
+		JButton retrieveGoodsButton = new JButton("Р’РѕР·РІСЂР°С‚ С‚РѕРІР°СЂР°");
 		arrayOfButtons[1][0] = retrieveGoodsButton;
 
-		JButton acceptDeliveryButton = new JButton("Принять доставку");
+		JButton acceptDeliveryButton = new JButton("РџСЂРёРЅСЏС‚СЊ РґРѕСЃС‚Р°РІРєСѓ");
 		arrayOfButtons[1][1] = acceptDeliveryButton;
 
-		JButton deleteGoodsButton = new JButton("Списать товар");
+		JButton deleteGoodsButton = new JButton("РЎРїРёСЃР°С‚СЊ С‚РѕРІР°СЂ");
 		arrayOfButtons[1][2] = deleteGoodsButton;
 
-		JButton printDeclarationButton = new JButton("Напечатать отчёт");
+		JButton printDeclarationButton = new JButton("РќР°РїРµС‡Р°С‚Р°С‚СЊ РѕС‚С‡С‘С‚");
 		arrayOfButtons[1][3] = printDeclarationButton;
 
-		JButton exitButton = new JButton("Выход");
+		JButton exitButton = new JButton("Р’С‹С…РѕРґ");
 		arrayOfButtons[1][4] = exitButton;
 
 		setFocusEvent(arrayOfButtons);
@@ -110,15 +111,15 @@ public class CashierViewWindow {
 	}
 
 	/*
-	 * Метод для переключения кнопок с помощью стрелок а так же для изменения цвета
-	 * кнопки на более тёмный если кнопка выбрана, так же добавление реакции на
-	 * ENTER. Передается сюда массив кнопок 2 на 4.
+	 * РњРµС‚РѕРґ РґР»СЏ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РєРЅРѕРїРѕРє СЃ РїРѕРјРѕС‰СЊСЋ СЃС‚СЂРµР»РѕРє Р° С‚Р°Рє Р¶Рµ РґР»СЏ РёР·РјРµРЅРµРЅРёСЏ С†РІРµС‚Р°
+	 * РєРЅРѕРїРєРё РЅР° Р±РѕР»РµРµ С‚С‘РјРЅС‹Р№ РµСЃР»Рё РєРЅРѕРїРєР° РІС‹Р±СЂР°РЅР°, С‚Р°Рє Р¶Рµ РґРѕР±Р°РІР»РµРЅРёРµ СЂРµР°РєС†РёРё РЅР°
+	 * ENTER. РџРµСЂРµРґР°РµС‚СЃСЏ СЃСЋРґР° РјР°СЃСЃРёРІ РєРЅРѕРїРѕРє 2 РЅР° 4.
 	 * 
-	 * P.S. Хз, может этот варик можно изменить т.к. при добавлении только одной
-	 * кнопки в Грид Вью будет баг, и чтобы ничего не херилось кнопки прийдется
-	 * добавлять парами.
+	 * P.S. РҐР·, РјРѕР¶РµС‚ СЌС‚РѕС‚ РІР°СЂРёРє РјРѕР¶РЅРѕ РёР·РјРµРЅРёС‚СЊ С‚.Рє. РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё С‚РѕР»СЊРєРѕ РѕРґРЅРѕР№
+	 * РєРЅРѕРїРєРё РІ Р“СЂРёРґ Р’СЊСЋ Р±СѓРґРµС‚ Р±Р°Рі, Рё С‡С‚РѕР±С‹ РЅРёС‡РµРіРѕ РЅРµ С…РµСЂРёР»РѕСЃСЊ РєРЅРѕРїРєРё РїСЂРёР№РґРµС‚СЃСЏ
+	 * РґРѕР±Р°РІР»СЏС‚СЊ РїР°СЂР°РјРё.
 	 * 
-	 * P.S.S. Хотя насчёт бага я хуй знает, может его и не будет)
+	 * P.S.S. РҐРѕС‚СЏ РЅР°СЃС‡С‘С‚ Р±Р°РіР° СЏ С…СѓР№ Р·РЅР°РµС‚, РјРѕР¶РµС‚ РµРіРѕ Рё РЅРµ Р±СѓРґРµС‚)
 	 */
 	private void setFocusEvent(JButton[][] buttons) {
 		for (int i = 0; i < buttons.length; i++) {
@@ -126,15 +127,23 @@ public class CashierViewWindow {
 				final int curColumn = i;
 				final int curRow = j;
 
-				// Установка одинакового размера в зависимости от buttonSize
+				// РЈСЃС‚Р°РЅРѕРІРєР° РѕРґРёРЅР°РєРѕРІРѕРіРѕ СЂР°Р·РјРµСЂР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ buttonSize
 				buttons[i][j].setFont(new Font("Tahoma", Font.PLAIN, buttonSize));
 
-				// Добавление активации при нажатии Enter
+				// Р”РѕР±Р°РІР»РµРЅРёРµ Р°РєС‚РёРІР°С†РёРё РїСЂРё РЅР°Р¶Р°С‚РёРё Enter
 				buttons[i][j].addKeyListener(enter);
 
-				// Добавление того самого затемнения при фокусе
+				// Р”РѕР±Р°РІР»РµРЅРёРµ С‚РѕРіРѕ СЃР°РјРѕРіРѕ Р·Р°С‚РµРјРЅРµРЅРёСЏ РїСЂРё С„РѕРєСѓСЃРµ
 				buttons[i][j].addFocusListener(new FocusListener() {
 
+					
+
+					@Override
+					public void focusLost(FocusEvent event) {
+						buttons[curColumn][curRow].setBackground(null);
+
+					}
+					
 					@Override
 					public void focusGained(FocusEvent event) {
 
@@ -142,15 +151,9 @@ public class CashierViewWindow {
 
 					}
 
-					@Override
-					public void focusLost(FocusEvent event) {
-						buttons[curColumn][curRow].setBackground(null);
-
-					}
-
 				});
 
-				// Добавление переключения с помощью стрелок
+				// Р”РѕР±Р°РІР»РµРЅРёРµ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ СЃ РїРѕРјРѕС‰СЊСЋ СЃС‚СЂРµР»РѕРє
 				buttons[i][j].addKeyListener(new KeyAdapter() {
 					
 					@Override
@@ -199,7 +202,7 @@ public class CashierViewWindow {
 
 	}
 
-	// KeyListener реагирующий на ENTER
+	// KeyListener СЂРµР°РіРёСЂСѓСЋС‰РёР№ РЅР° ENTER
 	private KeyListener enter = new KeyAdapter() {
 		@Override
 		public void keyTyped(KeyEvent e) {
