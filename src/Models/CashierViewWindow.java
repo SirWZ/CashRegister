@@ -106,7 +106,7 @@ class CashierViewWindow {
 	/*
 	    INFO для Макса
 	    Создай обработку івентов для всих кнопок, для кнопок вплата/виплата тіло методи містить тіки одну строчку
-	    ---------new CashInOut("Вплата"/"Выплата");---------
+	    --------- new CashInOut("Вплата"/"Выплата").setVisible(true);---------
 	 */
 	private void setFocusEvent(JButton[][] buttons) {
 		for (int i = 0; i < buttons.length; i++) {

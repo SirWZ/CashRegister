@@ -5,17 +5,48 @@
 package Models;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
+
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.*;
 
 /**
  * @author Gevtsi Yurii
  */
-public class CashInOut extends JFrame {
-    public CashInOut(String name) {
-        initComponents(name);
+class CashInOut extends JFrame {
+    CashInOut(String name) {
+        initComponents();
+        this.setTitle(name);
     }
 
-    private void initComponents(String name) {
+    private void okbtnActionPerformed(ActionEvent e) {
+        int summ;
+        try{
+            if (parseDouble(inOuttextField.getText())>0){
+                InOutdialog.setVisible(true);
+                infolabel.setText(this.getTitle() + " : ");
+                masegelable.setText( inOuttextField.getText());
+                komentlableright.setText(komenttextField.getText());
+            }else JOptionPane.showMessageDialog(this,"toze idite na huj","Ошибка",JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception k){
+            JOptionPane.showMessageDialog(this,"idite na huj","Ошибка",JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }
+
+    private void nobtnActionPerformed(ActionEvent e) {
+        InOutdialog.dispose();
+    }
+
+    private void yesbtnActionPerformed(ActionEvent e) {
+        InOutdialog.dispose();
+        dispose();
+    }
+
+    private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
         inoutlabel = new JLabel();
@@ -23,14 +54,21 @@ public class CashInOut extends JFrame {
         komentlabel = new JLabel();
         komenttextField = new JTextField();
         okbtn = new JButton();
+        InOutdialog = new JDialog();
+        infolabel = new JLabel();
+        masegelable = new JLabel();
+        komentlableleft = new JLabel();
+        komentlableright = new JLabel();
+        yesbtn = new JButton();
+        nobtn = new JButton();
 
         //======== this ========
-        setTitle("\u0412\u043f\u043b\u0430\u0442\u0430/\u0412\u044b\u043f\u043b\u0430\u0442\u0430");
+        setResizable(false);
         Container contentPane = getContentPane();
         contentPane.setLayout(new GridLayout(3, 2));
 
         //---- inoutlabel ----
-        inoutlabel.setText("inout");
+        inoutlabel.setText("\u0421\u0443\u043c\u043c\u0430");
         contentPane.add(inoutlabel);
         contentPane.add(inOuttextField);
 
@@ -41,9 +79,39 @@ public class CashInOut extends JFrame {
 
         //---- okbtn ----
         okbtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c");
+        okbtn.addActionListener(this::okbtnActionPerformed);
         contentPane.add(okbtn);
-        pack();
-        setLocationRelativeTo(getOwner());
+        setSize(580, 235);
+        setLocationRelativeTo(null);
+
+        //======== InOutdialog ========
+        {
+            InOutdialog.setTitle("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435");
+            InOutdialog.setAlwaysOnTop(true);
+            InOutdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            InOutdialog.setResizable(false);
+            Container InOutdialogContentPane = InOutdialog.getContentPane();
+            InOutdialogContentPane.setLayout(new GridLayout(3, 2));
+            InOutdialogContentPane.add(infolabel);
+            InOutdialogContentPane.add(masegelable);
+
+            //---- komentlableleft ----
+            komentlableleft.setText("\u041a\u043e\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439");
+            InOutdialogContentPane.add(komentlableleft);
+            InOutdialogContentPane.add(komentlableright);
+
+            //---- yesbtn ----
+            yesbtn.setText("\u0414\u0430");
+            yesbtn.addActionListener(this::yesbtnActionPerformed);
+            InOutdialogContentPane.add(yesbtn);
+
+            //---- nobtn ----
+            nobtn.setText("\u041d\u0435\u0442");
+            nobtn.addActionListener(this::nobtnActionPerformed);
+            InOutdialogContentPane.add(nobtn);
+            InOutdialog.setSize(270, 230);
+            InOutdialog.setLocationRelativeTo(null);
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -54,5 +122,12 @@ public class CashInOut extends JFrame {
     private JLabel komentlabel;
     private JTextField komenttextField;
     private JButton okbtn;
+    private JDialog InOutdialog;
+    private JLabel infolabel;
+    private JLabel masegelable;
+    private JLabel komentlableleft;
+    private JLabel komentlableright;
+    private JButton yesbtn;
+    private JButton nobtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

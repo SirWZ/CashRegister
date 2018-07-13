@@ -8,10 +8,12 @@ new FormModel {
 			"rows": 3
 		} ) {
 			name: "this"
-			"title": "Вплата/Выплата"
+			"$sizePolicy": 1
+			"resizable": false
+			"$locationPolicy": 1
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "inoutlabel"
-				"text": "inout"
+				"text": "Сумма"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "inOuttextField"
@@ -26,10 +28,49 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "okbtn"
 				"text": "Подтвердить"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okbtnActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 580, 235 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridLayout ) {
+			"rows": 3
+			"columns": 2
+		} ) {
+			name: "InOutdialog"
+			"$sizePolicy": 1
+			"title": "Подтвердить действие"
+			"$locationPolicy": 1
+			"alwaysOnTop": true
+			"defaultCloseOperation": 2
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "infolabel"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "masegelable"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "komentlableleft"
+				"text": "Коментарий"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "komentlableright"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "yesbtn"
+				"text": "Да"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "yesbtnActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "nobtn"
+				"text": "Нет"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nobtnActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 235, 240 )
+			"size": new java.awt.Dimension( 270, 230 )
 		} )
 	}
 }
