@@ -1,7 +1,5 @@
 package Models;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
@@ -18,33 +16,16 @@ import java.awt.Font;
 import java.awt.Component;
 
 
-public class CashierViewWindow {
+class CashierViewWindow {
 
 	private JFrame frame;
-	private final int buttonSize = 22;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CashierViewWindow window = new CashierViewWindow();
-
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
 	 */
-	public CashierViewWindow() {
+	CashierViewWindow() {
 		initialize();
+		this.frame.setVisible(true);
 	}
 
 	/**
@@ -128,6 +109,7 @@ public class CashierViewWindow {
 				final int curRow = j;
 
 				// Установка одинакового размера в зависимости от buttonSize
+				int buttonSize = 22;
 				buttons[i][j].setFont(new Font("Tahoma", Font.PLAIN, buttonSize));
 
 				// Добавление активации при нажатии Enter

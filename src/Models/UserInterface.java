@@ -6,7 +6,6 @@ package Models;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.security.Key;
 import javax.swing.*;
 
 /**
@@ -17,7 +16,8 @@ public class UserInterface extends JFrame {
         initComponents();
     }
 
-    private void loggBtnActionPerformed(ActionEvent e) {
+    private void loggBtnActionPerformed() {
+        new CashierViewWindow();
         this.setVisible(false);
     }
 
@@ -28,12 +28,14 @@ public class UserInterface extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        loginLable = new JLabel();
-        logintextField = new JTextField();
-        passwordLabel = new JLabel();
-        passwordField = new JPasswordField();
-        spacepanel = new JPanel();
-        loggpanel = new JPanel();
+        // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+        JLabel loginLable = new JLabel();
+        JTextField logintextField = new JTextField();
+        JLabel passwordLabel = new JLabel();
+        JPasswordField passwordField = new JPasswordField();
+        JPanel spacepanel = new JPanel();
+        JPanel loggpanel = new JPanel();
         loggBtn = new JButton();
 
         //======== this ========
@@ -82,7 +84,7 @@ public class UserInterface extends JFrame {
 
             //---- loggBtn ----
             loggBtn.setText("Logg  in");
-            loggBtn.addActionListener(this::loggBtnActionPerformed);
+            loggBtn.addActionListener(e -> loggBtnActionPerformed());
             loggpanel.add(loggBtn);
         }
         contentPane.add(loggpanel);
@@ -91,14 +93,6 @@ public class UserInterface extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-    private JLabel loginLable;
-    private JTextField logintextField;
-    private JLabel passwordLabel;
-    private JPasswordField passwordField;
-    private JPanel spacepanel;
-    private JPanel loggpanel;
     private JButton loggBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
