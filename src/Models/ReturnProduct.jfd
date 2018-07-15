@@ -1,0 +1,110 @@
+JFDML JFormDesigner: "6.0.3.0.150" Java: "1.8.0_152-release" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:35:p, comp exitbtn:::p:152:p, space ::386:x, comp findbtn:::p:217:p, space :p:68:p}, seq l {space :p:97:p, par t {comp returnbtn:::p:148:p, comp scrollPane1:::p:646:p}, space ::115:x}}"
+			"$verticalGroup": "par l {seq l {space :p:25:p, par l {comp findbtn:::p::p, seq {space :10:10:p, comp exitbtn:::p:40:p}}, space :p:42:p, comp scrollPane1:::p:131:p, space :p:47:p, comp returnbtn:::p::p, space ::23:x}}"
+		} ) {
+			name: "this"
+			"$sizePolicy": 1
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "findbtn"
+				"text": "Поиск товара в чеке"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "producttable"
+					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+						add( new java.util.Vector {
+							add( "" )
+							add( "" )
+							add( "" )
+							add( "" )
+							add( "" )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+					}, new java.util.Vector {
+						add( "Товар" )
+						add( "Количество" )
+						add( "Цена" )
+						add( "Количество возврата" )
+						add( "Причина(опционально)" )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 150, 0, 0, true ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 155, 0, 0, true ) )
+					} )
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "returnbtn"
+				"text": "Вернуть товары"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "exitbtn"
+				"text": "Тут будет иконка"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 860, 380 )
+		} )
+	}
+}

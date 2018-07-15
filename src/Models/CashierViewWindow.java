@@ -48,9 +48,11 @@ class CashierViewWindow {
 
 		JButton payInButton = new JButton("Вплата");
 		arrayOfButtons[0][1] = payInButton;
+		payInButton.addActionListener(e-> new CashInOut("Вплата").setVisible(true));
 		
 		JButton payOffButton = new JButton("Выплата");
 		arrayOfButtons[0][2] = payOffButton;
+		payOffButton.addActionListener(e-> new CashInOut("Выплата").setVisible(true));
 
 		JButton endSessionButton = new JButton("Закончить смену");
 		arrayOfButtons[0][3] = endSessionButton;
@@ -60,6 +62,7 @@ class CashierViewWindow {
 
 		JButton retrieveGoodsButton = new JButton("Возврат товара");
 		arrayOfButtons[1][0] = retrieveGoodsButton;
+		retrieveGoodsButton.addActionListener(e-> new ReturnProduct().setVisible(true));
 
 		JButton acceptDeliveryButton = new JButton("Принять доставку");
 		arrayOfButtons[1][1] = acceptDeliveryButton;

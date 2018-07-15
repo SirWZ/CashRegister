@@ -19,7 +19,6 @@ public class UserInterface extends JFrame {
     private void loggBtnActionPerformed() {
         new CashierViewWindow();
         this.setVisible(false);
-         new CashInOut("Выплата").setVisible(true);
     }
 
     private void passwordFieldKeyPressed(KeyEvent e) {
@@ -71,7 +70,7 @@ public class UserInterface extends JFrame {
             // JFormDesigner evaluation mark
             spacepanel.setBorder(new javax.swing.border.CompoundBorder(
                 new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                    "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                    "", javax.swing.border.TitledBorder.CENTER,
                     javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
                     java.awt.Color.red), spacepanel.getBorder())); spacepanel.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
 
