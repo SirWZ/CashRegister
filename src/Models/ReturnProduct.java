@@ -5,6 +5,7 @@
 package Models;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -14,6 +15,24 @@ import javax.swing.table.*;
 class ReturnProduct extends JFrame {
     ReturnProduct() {
         initComponents();
+        firstdialog.setVisible(true);
+    }
+
+    private void returnbtnActionPerformed(ActionEvent e) {
+        this.dispose();
+    }
+
+    private void exitbtn2ActionPerformed(ActionEvent e) {
+        firstdialog.dispose();
+    }
+
+    private void nextbtn2ActionPerformed(ActionEvent e) {
+        firstdialog.dispose();
+        this.setVisible(true);
+    }
+
+    private void exitbtnActionPerformed(ActionEvent e) {
+        this.dispose();
     }
 
     private void initComponents() {
@@ -24,6 +43,11 @@ class ReturnProduct extends JFrame {
         producttable = new JTable();
         returnbtn = new JButton();
         exitbtn = new JButton();
+        firstdialog = new JDialog();
+        label1 = new JLabel();
+        pargonnumtextfield = new JTextField();
+        exitbtn2 = new JButton();
+        nextbtn2 = new JButton();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -59,9 +83,11 @@ class ReturnProduct extends JFrame {
 
         //---- returnbtn ----
         returnbtn.setText("\u0412\u0435\u0440\u043d\u0443\u0442\u044c \u0442\u043e\u0432\u0430\u0440\u044b");
+        returnbtn.addActionListener(e -> returnbtnActionPerformed(e));
 
         //---- exitbtn ----
         exitbtn.setText("\u0422\u0443\u0442 \u0431\u0443\u0434\u0435\u0442 \u0438\u043a\u043e\u043d\u043a\u0430");
+        exitbtn.addActionListener(e -> exitbtnActionPerformed(e));
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
@@ -97,6 +123,58 @@ class ReturnProduct extends JFrame {
         );
         setSize(860, 380);
         setLocationRelativeTo(getOwner());
+
+        //======== firstdialog ========
+        {
+            Container firstdialogContentPane = firstdialog.getContentPane();
+
+            //---- label1 ----
+            label1.setText("\u041d\u043e\u043c\u0435\u0440 \u0447\u0435\u043a\u0430");
+
+            //---- exitbtn2 ----
+            exitbtn2.setText("\u0412\u044b\u0445\u043e\u0434");
+            exitbtn2.addActionListener(e -> exitbtn2ActionPerformed(e));
+
+            //---- nextbtn2 ----
+            nextbtn2.setText("\u0414\u0430\u043b\u0435");
+            nextbtn2.addActionListener(e -> nextbtn2ActionPerformed(e));
+
+            GroupLayout firstdialogContentPaneLayout = new GroupLayout(firstdialogContentPane);
+            firstdialogContentPane.setLayout(firstdialogContentPaneLayout);
+            firstdialogContentPaneLayout.setHorizontalGroup(
+                firstdialogContentPaneLayout.createParallelGroup()
+                    .addGroup(firstdialogContentPaneLayout.createSequentialGroup()
+                        .addGroup(firstdialogContentPaneLayout.createParallelGroup()
+                            .addGroup(firstdialogContentPaneLayout.createSequentialGroup()
+                                .addGap(56, 56, 56)
+                                .addComponent(label1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(pargonnumtextfield, GroupLayout.PREFERRED_SIZE, 328, GroupLayout.PREFERRED_SIZE))
+                            .addGroup(firstdialogContentPaneLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(exitbtn2)))
+                        .addContainerGap(17, Short.MAX_VALUE))
+                    .addGroup(GroupLayout.Alignment.TRAILING, firstdialogContentPaneLayout.createSequentialGroup()
+                        .addGap(0, 372, Short.MAX_VALUE)
+                        .addComponent(nextbtn2, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49))
+            );
+            firstdialogContentPaneLayout.setVerticalGroup(
+                firstdialogContentPaneLayout.createParallelGroup()
+                    .addGroup(firstdialogContentPaneLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(exitbtn2)
+                        .addGap(18, 18, 18)
+                        .addGroup(firstdialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                            .addComponent(label1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pargonnumtextfield, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(nextbtn2)
+                        .addContainerGap(23, Short.MAX_VALUE))
+            );
+            firstdialog.pack();
+            firstdialog.setLocationRelativeTo(firstdialog.getOwner());
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -107,5 +185,10 @@ class ReturnProduct extends JFrame {
     private JTable producttable;
     private JButton returnbtn;
     private JButton exitbtn;
+    private JDialog firstdialog;
+    private JLabel label1;
+    private JTextField pargonnumtextfield;
+    private JButton exitbtn2;
+    private JButton nextbtn2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

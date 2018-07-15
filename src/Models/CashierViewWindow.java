@@ -82,7 +82,7 @@ class CashierViewWindow {
 
 		// Кнопка Возврат товара
 		JButton retrieveGoodsButton = new JButton("Возврат товара");
-		retrieveGoodsButton.addActionListener(e -> new ReturnProduct().setVisible(true));
+		retrieveGoodsButton.addActionListener(e -> new ReturnProduct());
 		arrayOfButtons[1][0] = retrieveGoodsButton;
 
 		// Кнопка принять доставку
@@ -108,7 +108,8 @@ class CashierViewWindow {
 
 		// Конпка Выход
 		JButton exitButton = new JButton("Выход");
-		exitButton.addActionListener(e -> {
+		exitButton.addActionListener(e -> {frame.dispose();
+		new UserInterface().setVisible(true);
 
 		});
 		arrayOfButtons[1][4] = exitButton;

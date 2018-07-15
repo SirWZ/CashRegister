@@ -97,14 +97,42 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "returnbtn"
 				"text": "Вернуть товары"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "returnbtnActionPerformed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "exitbtn"
 				"text": "Тут будет иконка"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtnActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 860, 380 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {par l {seq l {space :p:56:p, comp label1:::p:100:p, space u:::p, comp pargonnumtextfield:::p:328:p}, seq l {space :p:18:p, comp exitbtn2:::p::p}}, space ::17:x}, seq t {space :0:372:x, comp nextbtn2:::p:92:p, space :p:49:p}}"
+			"$verticalGroup": "par l {seq l {space :p:19:p, comp exitbtn2:::p::p, space s:::p, par t {comp label1:::p:28:p, comp pargonnumtextfield:::p::p}, space s:::p, comp nextbtn2:::p::p, space ::23:x}}"
+		} ) {
+			name: "firstdialog"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Номер чека"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "pargonnumtextfield"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "exitbtn2"
+				"text": "Выход"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtn2ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "nextbtn2"
+				"text": "Дале"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nextbtn2ActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 190, 410 )
+			"size": new java.awt.Dimension( 515, 200 )
 		} )
 	}
 }
