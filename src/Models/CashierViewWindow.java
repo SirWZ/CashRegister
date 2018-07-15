@@ -13,8 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.SystemColor;
 import java.awt.Font;
-import java.awt.Component;
-
 
 class CashierViewWindow {
 
@@ -31,6 +29,9 @@ class CashierViewWindow {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	/**
+	 * 
+	 */
 	private void initialize() {
 		frame = new JFrame("Интерфейс касира");
 		frame.setBounds(100, 100, 581, 472);
@@ -42,42 +43,81 @@ class CashierViewWindow {
 		panel.setLayout(new GridLayout(5, 2, 0, 0));
 		JButton[][] arrayOfButtons = new JButton[2][5];
 
+		// Кнопка Продажи
 		JButton sellingButton = new JButton("Продажа");
-		sellingButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		sellingButton.addActionListener(e -> {
+
+		});
 		arrayOfButtons[0][0] = sellingButton;
 
+		// Кнопка Вплаты
 		JButton payInButton = new JButton("Вплата");
-		arrayOfButtons[0][1] = payInButton;
-		payInButton.addActionListener(e-> new CashInOut("Вплата").setVisible(true));
-		
-		JButton payOffButton = new JButton("Выплата");
-		arrayOfButtons[0][2] = payOffButton;
-		payOffButton.addActionListener(e-> new CashInOut("Выплата").setVisible(true));
+		payInButton.addActionListener(e -> {
+			new CashInOut("Вплата").setVisible(true);
 
+		});
+		arrayOfButtons[0][1] = payInButton;
+
+		// Кнопка выплаты
+		JButton payOffButton = new JButton("Выплата");
+		payOffButton.addActionListener(e -> {
+			new CashInOut("Выплата").setVisible(true);
+
+		});
+		arrayOfButtons[0][2] = payOffButton;
+
+		// Кнопка Закончить смену
 		JButton endSessionButton = new JButton("Закончить смену");
+		endSessionButton.addActionListener(e -> {
+
+		});
 		arrayOfButtons[0][3] = endSessionButton;
 
+		// Кнопка Мой магазин
 		JButton myShopButton = new JButton("Мой магазин");
+		myShopButton.addActionListener(e -> {
+
+		});
 		arrayOfButtons[0][4] = myShopButton;
 
+		// Кнопка Возврат товара
 		JButton retrieveGoodsButton = new JButton("Возврат товара");
-		arrayOfButtons[1][0] = retrieveGoodsButton;
-		retrieveGoodsButton.addActionListener(e-> new ReturnProduct().setVisible(true));
+		retrieveGoodsButton.addActionListener(e -> {
 
+		});
+		arrayOfButtons[1][0] = retrieveGoodsButton;
+
+		// Кнопка принять доставку
 		JButton acceptDeliveryButton = new JButton("Принять доставку");
+		acceptDeliveryButton.addActionListener(e -> {
+
+		});
 		arrayOfButtons[1][1] = acceptDeliveryButton;
 
+		// Кнопка списать товар
 		JButton deleteGoodsButton = new JButton("Списать товар");
+		deleteGoodsButton.addActionListener(e -> {
+
+		});
 		arrayOfButtons[1][2] = deleteGoodsButton;
 
+		// Кнопка напечатать отчёт
 		JButton printDeclarationButton = new JButton("Напечатать отчёт");
+		printDeclarationButton.addActionListener(e -> {
+
+		});
 		arrayOfButtons[1][3] = printDeclarationButton;
 
+		// Конпка Выход
 		JButton exitButton = new JButton("Выход");
+		exitButton.addActionListener(e -> {
+
+		});
 		arrayOfButtons[1][4] = exitButton;
 
 		setFocusEvent(arrayOfButtons);
 
+		// Добавление кнопок попарно (одна слева - одна справа)
 		panel.add(sellingButton);
 		panel.add(retrieveGoodsButton);
 
@@ -107,9 +147,9 @@ class CashierViewWindow {
 	 */
 
 	/*
-	    INFO для Макса
-	    Создай обработку івентов для всих кнопок, для кнопок вплата/виплата тіло методи містить тіки одну строчку
-	    --------- new CashInOut("Вплата"/"Выплата").setVisible(true);---------
+	 * INFO для Макса Создай обработку івентов для всих кнопок, для кнопок
+	 * вплата/виплата тіло методи містить тіки одну строчку --------- new
+	 * CashInOut("Вплата"/"Выплата").setVisible(true);---------
 	 */
 	private void setFocusEvent(JButton[][] buttons) {
 		for (int i = 0; i < buttons.length; i++) {
@@ -127,14 +167,12 @@ class CashierViewWindow {
 				// Добавление того самого затемнения при фокусе
 				buttons[i][j].addFocusListener(new FocusListener() {
 
-					
-
 					@Override
 					public void focusLost(FocusEvent event) {
 						buttons[curColumn][curRow].setBackground(null);
 
 					}
-					
+
 					@Override
 					public void focusGained(FocusEvent event) {
 
@@ -146,7 +184,7 @@ class CashierViewWindow {
 
 				// Добавление переключения с помощью стрелок
 				buttons[i][j].addKeyListener(new KeyAdapter() {
-					
+
 					@Override
 					public void keyPressed(KeyEvent e) {
 						switch (e.getKeyCode()) {
