@@ -69,7 +69,7 @@ class CashierViewWindow {
 		// Кнопка Закончить смену
 		JButton endSessionButton = new JButton("Закончить смену");
 		endSessionButton.addActionListener(e -> {
-
+		new FinishWork(frame).setVisible(true);
 		});
 		arrayOfButtons[0][3] = endSessionButton;
 
