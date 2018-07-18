@@ -5,55 +5,48 @@
 package Models;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
 /**
  * @author Gevtsi Yurii
  */
-public class FinishWork extends JDialog {
-    public FinishWork(Frame owner) {
+ class FinishWork extends JDialog {
+    FinishWork(Frame owner) {
         super(owner);
         initComponents();
     }
 
-    public FinishWork(Dialog owner) {
-        super(owner);
-        initComponents();
-    }
-
-
-    private void okEndBtnActionPerformed(ActionEvent e) {
+    private void okEndBtnActionPerformed() {
         this.dispose();
         countcashdialog.setVisible(true);
     }
 
-    private void cancelButtonActionPerformed(ActionEvent e) {
+    private void cancelButtonActionPerformed() {
         this.dispose();
     }
 
-    private void okButton2ActionPerformed(ActionEvent e) {
+    private void okButton2ActionPerformed() {
         countcashdialog.dispose();
         countcashdialog2.setVisible(true);
     }
 
-    private void cancelButton2ActionPerformed(ActionEvent e) {
+    private void cancelButton2ActionPerformed() {
         countcashdialog.dispose();
         printdialog.setVisible(true);
     }
 
-    private void okButton3ActionPerformed(ActionEvent e) {
+    private void okButton3ActionPerformed() {
         printdialog.dispose();
         JOptionPane.showMessageDialog(this,"Смена закончена","",JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void cancelButton3ActionPerformed(ActionEvent e) {
+    private void cancelButton3ActionPerformed() {
         printdialog.dispose();
         JOptionPane.showMessageDialog(this,"Смена закончена","",JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void okButton4ActionPerformed(ActionEvent e) {
+    private void okButton4ActionPerformed() {
         countcashdialog2.dispose();
         printdialog.setVisible(true);
     }
@@ -62,33 +55,35 @@ public class FinishWork extends JDialog {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        dialogPane = new JPanel();
-        contentPanel = new JPanel();
-        textlabel = new JLabel();
-        buttonBar = new JPanel();
-        okEndBtn = new JButton();
-        noEndBtn = new JButton();
+        // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+        JPanel dialogPane = new JPanel();
+        JPanel contentPanel = new JPanel();
+        JLabel textlabel = new JLabel();
+        JPanel buttonBar = new JPanel();
+        JButton okEndBtn = new JButton();
+        JButton noEndBtn = new JButton();
         countcashdialog = new JDialog();
-        dialogPane2 = new JPanel();
-        contentPanel2 = new JPanel();
-        textlabel2 = new JLabel();
-        buttonBar2 = new JPanel();
-        okCountbtn = new JButton();
-        noCountBtn = new JButton();
+        JPanel dialogPane2 = new JPanel();
+        JPanel contentPanel2 = new JPanel();
+        JLabel textlabel2 = new JLabel();
+        JPanel buttonBar2 = new JPanel();
+        JButton okCountbtn = new JButton();
+        JButton noCountBtn = new JButton();
         printdialog = new JDialog();
-        dialogPane3 = new JPanel();
-        contentPanel3 = new JPanel();
-        textlabel3 = new JLabel();
-        buttonBar3 = new JPanel();
-        okPrintBtn = new JButton();
-        noPrintBtn = new JButton();
+        JPanel dialogPane3 = new JPanel();
+        JPanel contentPanel3 = new JPanel();
+        JLabel textlabel3 = new JLabel();
+        JPanel buttonBar3 = new JPanel();
+        JButton okPrintBtn = new JButton();
+        JButton noPrintBtn = new JButton();
         countcashdialog2 = new JDialog();
-        dialogPane4 = new JPanel();
-        contentPanel4 = new JPanel();
-        label1 = new JLabel();
-        textField1 = new JTextField();
-        buttonBar4 = new JPanel();
-        okSummBtn = new JButton();
+        JPanel dialogPane4 = new JPanel();
+        JPanel contentPanel4 = new JPanel();
+        JLabel label1 = new JLabel();
+        JTextField textField1 = new JTextField();
+        JPanel buttonBar4 = new JPanel();
+        JButton okSummBtn = new JButton();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -101,9 +96,9 @@ public class FinishWork extends JDialog {
             // JFormDesigner evaluation mark
             dialogPane.setBorder(new javax.swing.border.CompoundBorder(
                 new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                    "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                    "", javax.swing.border.TitledBorder.CENTER,
                     javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                    java.awt.Color.red), dialogPane.getBorder())); dialogPane.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+                    java.awt.Color.red), dialogPane.getBorder())); dialogPane.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
 
             dialogPane.setLayout(new BorderLayout());
 
@@ -139,14 +134,12 @@ public class FinishWork extends JDialog {
 
                 //---- okEndBtn ----
                 okEndBtn.setText("\u0414\u0430");
-                okEndBtn.addActionListener(e -> {
-			okEndBtnActionPerformed(e);
-		});
+                okEndBtn.addActionListener(e ->okEndBtnActionPerformed());
                 buttonBar.add(okEndBtn);
 
                 //---- noEndBtn ----
                 noEndBtn.setText("\u041d\u0435\u0442");
-                noEndBtn.addActionListener(e -> cancelButtonActionPerformed(e));
+                noEndBtn.addActionListener(e -> cancelButtonActionPerformed());
                 buttonBar.add(noEndBtn);
             }
             dialogPane.add(buttonBar, BorderLayout.SOUTH);
@@ -169,7 +162,7 @@ public class FinishWork extends JDialog {
                     new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
                         "", javax.swing.border.TitledBorder.CENTER,
                         javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), dialogPane2.getBorder())); dialogPane2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+                        java.awt.Color.red), dialogPane2.getBorder())); dialogPane2.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
 
                 dialogPane2.setLayout(new BorderLayout());
 
@@ -205,16 +198,14 @@ public class FinishWork extends JDialog {
 
                     //---- okCountbtn ----
                     okCountbtn.setText("\u0414\u0430");
-                    okCountbtn.addActionListener(e -> {
-			okButton2ActionPerformed(e);
-		});
+                    okCountbtn.addActionListener(e ->okButton2ActionPerformed());
                     buttonBar2.add(okCountbtn);
 
                     //---- noCountBtn ----
                     noCountBtn.setText("\u041d\u0435\u0442");
                     noCountBtn.addActionListener(e -> {
-			cancelButtonActionPerformed(e);
-			cancelButton2ActionPerformed(e);
+			cancelButtonActionPerformed();
+			cancelButton2ActionPerformed();
 		});
                     buttonBar2.add(noCountBtn);
                 }
@@ -239,7 +230,7 @@ public class FinishWork extends JDialog {
                     new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
                         "", javax.swing.border.TitledBorder.CENTER,
                         javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), dialogPane3.getBorder())); dialogPane3.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+                        java.awt.Color.red), dialogPane3.getBorder())); dialogPane3.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
 
                 dialogPane3.setLayout(new BorderLayout());
 
@@ -275,18 +266,15 @@ public class FinishWork extends JDialog {
 
                     //---- okPrintBtn ----
                     okPrintBtn.setText("\u0414\u0430");
-                    okPrintBtn.addActionListener(e -> {
-
-			okButton3ActionPerformed(e);
-		});
+                    okPrintBtn.addActionListener(e ->okButton3ActionPerformed());
                     buttonBar3.add(okPrintBtn);
 
                     //---- noPrintBtn ----
                     noPrintBtn.setText("\u041d\u0435\u0442");
                     noPrintBtn.addActionListener(e -> {
-			cancelButtonActionPerformed(e);
-			cancelButton2ActionPerformed(e);
-			cancelButton3ActionPerformed(e);
+			cancelButtonActionPerformed();
+			cancelButton2ActionPerformed();
+			cancelButton3ActionPerformed();
 		});
                     buttonBar3.add(noPrintBtn);
                 }
@@ -311,7 +299,7 @@ public class FinishWork extends JDialog {
                     new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
                         "", javax.swing.border.TitledBorder.CENTER,
                         javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), dialogPane4.getBorder())); dialogPane4.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+                        java.awt.Color.red), dialogPane4.getBorder())); dialogPane4.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
 
                 dialogPane4.setLayout(new BorderLayout());
 
@@ -353,8 +341,8 @@ public class FinishWork extends JDialog {
                     okSummBtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c");
                     okSummBtn.addActionListener(e -> {
 
-			okButton2ActionPerformed(e);
-			okButton4ActionPerformed(e);
+			okButton2ActionPerformed();
+			okButton4ActionPerformed();
 		});
                     buttonBar4.add(okSummBtn);
                 }
@@ -367,34 +355,8 @@ public class FinishWork extends JDialog {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-    private JPanel dialogPane;
-    private JPanel contentPanel;
-    private JLabel textlabel;
-    private JPanel buttonBar;
-    private JButton okEndBtn;
-    private JButton noEndBtn;
     private JDialog countcashdialog;
-    private JPanel dialogPane2;
-    private JPanel contentPanel2;
-    private JLabel textlabel2;
-    private JPanel buttonBar2;
-    private JButton okCountbtn;
-    private JButton noCountBtn;
     private JDialog printdialog;
-    private JPanel dialogPane3;
-    private JPanel contentPanel3;
-    private JLabel textlabel3;
-    private JPanel buttonBar3;
-    private JButton okPrintBtn;
-    private JButton noPrintBtn;
     private JDialog countcashdialog2;
-    private JPanel dialogPane4;
-    private JPanel contentPanel4;
-    private JLabel label1;
-    private JTextField textField1;
-    private JPanel buttonBar4;
-    private JButton okSummBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
