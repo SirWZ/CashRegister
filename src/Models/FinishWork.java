@@ -23,9 +23,6 @@ public class FinishWork extends JDialog {
         initComponents();
     }
 
-    private void okButtonActionPerformed(ActionEvent e) {
-        // TODO add your code here
-    }
 
     private void okEndBtnActionPerformed(ActionEvent e) {
         this.dispose();
@@ -143,8 +140,6 @@ public class FinishWork extends JDialog {
                 //---- okEndBtn ----
                 okEndBtn.setText("\u0414\u0430");
                 okEndBtn.addActionListener(e -> {
-			okButtonActionPerformed(e);
-			okEndBtnActionPerformed(e);
 			okEndBtnActionPerformed(e);
 		});
                 buttonBar.add(okEndBtn);
@@ -172,7 +167,7 @@ public class FinishWork extends JDialog {
                 // JFormDesigner evaluation mark
                 dialogPane2.setBorder(new javax.swing.border.CompoundBorder(
                     new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        "", javax.swing.border.TitledBorder.CENTER,
                         javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
                         java.awt.Color.red), dialogPane2.getBorder())); dialogPane2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
@@ -211,7 +206,6 @@ public class FinishWork extends JDialog {
                     //---- okCountbtn ----
                     okCountbtn.setText("\u0414\u0430");
                     okCountbtn.addActionListener(e -> {
-			okButtonActionPerformed(e);
 			okButton2ActionPerformed(e);
 		});
                     buttonBar2.add(okCountbtn);
@@ -243,7 +237,7 @@ public class FinishWork extends JDialog {
                 // JFormDesigner evaluation mark
                 dialogPane3.setBorder(new javax.swing.border.CompoundBorder(
                     new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        "", javax.swing.border.TitledBorder.CENTER,
                         javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
                         java.awt.Color.red), dialogPane3.getBorder())); dialogPane3.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
@@ -282,8 +276,7 @@ public class FinishWork extends JDialog {
                     //---- okPrintBtn ----
                     okPrintBtn.setText("\u0414\u0430");
                     okPrintBtn.addActionListener(e -> {
-			okButtonActionPerformed(e);
-			okButton3ActionPerformed(e);
+
 			okButton3ActionPerformed(e);
 		});
                     buttonBar3.add(okPrintBtn);
@@ -316,7 +309,7 @@ public class FinishWork extends JDialog {
                 // JFormDesigner evaluation mark
                 dialogPane4.setBorder(new javax.swing.border.CompoundBorder(
                     new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        "", javax.swing.border.TitledBorder.CENTER,
                         javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
                         java.awt.Color.red), dialogPane4.getBorder())); dialogPane4.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
@@ -359,7 +352,7 @@ public class FinishWork extends JDialog {
                     //---- okSummBtn ----
                     okSummBtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c");
                     okSummBtn.addActionListener(e -> {
-			okButtonActionPerformed(e);
+
 			okButton2ActionPerformed(e);
 			okButton4ActionPerformed(e);
 		});
