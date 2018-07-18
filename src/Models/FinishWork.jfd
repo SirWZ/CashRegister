@@ -5,6 +5,9 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "this"
+			"$sizePolicy": 1
+			"resizable": false
+			"defaultCloseOperation": 2
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane"
 				"border": &EmptyBorder0 new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
@@ -48,6 +51,9 @@ new FormModel {
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridLayout ) ) {
 			name: "countcashdialog"
+			"resizable": false
+			"$sizePolicy": 1
+			"defaultCloseOperation": 2
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane2"
 				"border": #EmptyBorder0
@@ -89,6 +95,7 @@ new FormModel {
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridLayout ) ) {
 			name: "printdialog"
+			"defaultCloseOperation": 2
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane3"
 				"border": #EmptyBorder0
@@ -132,6 +139,8 @@ new FormModel {
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridLayout ) ) {
 			name: "countcashdialog2"
+			"resizable": false
+			"defaultCloseOperation": 2
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane4"
 				"border": #EmptyBorder0

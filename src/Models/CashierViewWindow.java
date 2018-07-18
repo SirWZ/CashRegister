@@ -102,7 +102,8 @@ class CashierViewWindow {
 		// Кнопка напечатать отчёт
 		JButton printDeclarationButton = new JButton("Напечатать отчёт");
 		printDeclarationButton.addActionListener(e -> {
-
+			this.frame.dispose();
+			new PrintReport().setVisible(true);
 		});
 		arrayOfButtons[1][3] = printDeclarationButton;
 

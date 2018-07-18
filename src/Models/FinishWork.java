@@ -12,12 +12,16 @@ import javax.swing.border.*;
  * @author Gevtsi Yurii
  */
  class FinishWork extends JDialog {
+     Frame frame;
     FinishWork(Frame owner) {
         super(owner);
+        frame = owner;
         initComponents();
+        this.setResizable(false);
     }
 
     private void okEndBtnActionPerformed() {
+        frame.dispose();
         this.dispose();
         countcashdialog.setVisible(true);
     }
@@ -27,6 +31,7 @@ import javax.swing.border.*;
     }
 
     private void okButton2ActionPerformed() {
+
         countcashdialog.dispose();
         countcashdialog2.setVisible(true);
     }
@@ -37,13 +42,13 @@ import javax.swing.border.*;
     }
 
     private void okButton3ActionPerformed() {
-        printdialog.dispose();
-        JOptionPane.showMessageDialog(this,"Смена закончена","",JOptionPane.INFORMATION_MESSAGE);
+        cancelButton3ActionPerformed();
     }
 
     private void cancelButton3ActionPerformed() {
         printdialog.dispose();
         JOptionPane.showMessageDialog(this,"Смена закончена","",JOptionPane.INFORMATION_MESSAGE);
+        new UserInterface().setVisible(true);
     }
 
     private void okButton4ActionPerformed() {
@@ -64,6 +69,7 @@ import javax.swing.border.*;
         JButton okEndBtn = new JButton();
         JButton noEndBtn = new JButton();
         countcashdialog = new JDialog();
+        countcashdialog.setResizable(false);
         JPanel dialogPane2 = new JPanel();
         JPanel contentPanel2 = new JPanel();
         JLabel textlabel2 = new JLabel();
@@ -71,6 +77,7 @@ import javax.swing.border.*;
         JButton okCountbtn = new JButton();
         JButton noCountBtn = new JButton();
         printdialog = new JDialog();
+        printdialog.setResizable(false);
         JPanel dialogPane3 = new JPanel();
         JPanel contentPanel3 = new JPanel();
         JLabel textlabel3 = new JLabel();
@@ -78,6 +85,8 @@ import javax.swing.border.*;
         JButton okPrintBtn = new JButton();
         JButton noPrintBtn = new JButton();
         countcashdialog2 = new JDialog();
+        countcashdialog2.setResizable(false);
+
         JPanel dialogPane4 = new JPanel();
         JPanel contentPanel4 = new JPanel();
         JLabel label1 = new JLabel();
