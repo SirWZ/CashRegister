@@ -5,8 +5,8 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3"
-			"$columnConstraints": "[fill][4,fill][87,fill][165,fill]"
-			"$rowConstraints": "[][][][][][][]"
+			"$columnConstraints": "[4,fill][87,grow,fill][165,grow,fill]"
+			"$rowConstraints": "[][40,grow,fill][42,grow,fill][46,grow,fill][95,grow,fill][39,grow,fill]"
 		} ) {
 			name: "this"
 			"title": "Списать товар"
@@ -16,40 +16,40 @@ new FormModel {
 				name: "namelabel"
 				"text": "Название"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1"
+				"value": "cell 1 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "nametextField"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 1"
+				"value": ""
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "codelabel"
 				"text": "Код товара"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 2"
+				"value": "cell 1 2,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "codetextField"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 2"
+				"value": "cell 2 2"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "countlabel"
 				"text": "Количество"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 3"
+				"value": "cell 1 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "counttextField"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 3"
+				"value": "cell 2 3"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "reasonlabel"
 				"text": "Причина"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 4"
+				"value": "cell 1 4,alignx center,growx 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
@@ -59,27 +59,28 @@ new FormModel {
 					"lineWrap": true
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 4"
+				"value": "cell 2 4"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[fill][fill][fill][52,fill][fill][fill]"
-				"$rowConstraints": "[][][][]"
+				"$columnConstraints": "[fill][fill][52,fill]"
+				"$rowConstraints": "[fill][grow,fill][][]"
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "okbtn"
 					"text": "Списать"
+					"horizontalAlignment": 2
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okbtnActionPerformed", true ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 4 1 2 1"
+					"value": "cell 1 0 2 2"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 5"
+				"value": "cell 2 5"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 420, 300 )
+			"size": new java.awt.Dimension( 570, 375 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridLayout ) {
 			"columns": 1
@@ -131,7 +132,7 @@ new FormModel {
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 510, 185 )
+			"location": new java.awt.Point( 645, 125 )
 			"size": new java.awt.Dimension( 280, 160 )
 		} )
 	}

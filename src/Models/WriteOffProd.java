@@ -5,7 +5,6 @@
 package Models;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 
@@ -17,18 +16,18 @@ public class WriteOffProd extends JFrame {
         initComponents();
     }
 
-    private void okbtnActionPerformed(ActionEvent e) {
+    private void okbtnActionPerformed() {
         masseglabel.setText(nametextField.getText());
         writeoffdialog.setVisible(true);
     }
 
-    private void okbtn2ActionPerformed(ActionEvent e) {
-        nobtn2ActionPerformed(e);
+    private void okbtn2ActionPerformed() {
+        nobtn2ActionPerformed();
         this.dispose();
-        new CashierViewWindow();
+        //new CashierViewWindow();
     }
 
-    private void nobtn2ActionPerformed(ActionEvent e) {
+    private void nobtn2ActionPerformed() {
         writeoffdialog.dispose();
     }
 
@@ -61,37 +60,35 @@ public class WriteOffProd extends JFrame {
         contentPane.setLayout(new MigLayout(
             "hidemode 3",
             // columns
-            "[fill]" +
             "[4,fill]" +
-            "[87,fill]" +
-            "[165,fill]",
+            "[87,grow,fill]" +
+            "[165,grow,fill]",
             // rows
             "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]" +
-            "[]"));
+            "[40,grow,fill]" +
+            "[42,grow,fill]" +
+            "[46,grow,fill]" +
+            "[95,grow,fill]" +
+            "[39,grow,fill]"));
 
         //---- namelabel ----
         namelabel.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435");
-        contentPane.add(namelabel, "cell 2 1");
-        contentPane.add(nametextField, "cell 3 1");
+        contentPane.add(namelabel, "cell 1 1,alignx center,growx 0");
+        contentPane.add(nametextField, "");
 
         //---- codelabel ----
         codelabel.setText("\u041a\u043e\u0434 \u0442\u043e\u0432\u0430\u0440\u0430");
-        contentPane.add(codelabel, "cell 2 2");
-        contentPane.add(codetextField, "cell 3 2");
+        contentPane.add(codelabel, "cell 1 2,alignx center,growx 0");
+        contentPane.add(codetextField, "cell 2 2");
 
         //---- countlabel ----
         countlabel.setText("\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e");
-        contentPane.add(countlabel, "cell 2 3");
-        contentPane.add(counttextField, "cell 3 3");
+        contentPane.add(countlabel, "cell 1 3,alignx center,growx 0");
+        contentPane.add(counttextField, "cell 2 3");
 
         //---- reasonlabel ----
         reasonlabel.setText("\u041f\u0440\u0438\u0447\u0438\u043d\u0430");
-        contentPane.add(reasonlabel, "cell 2 4");
+        contentPane.add(reasonlabel, "cell 1 4,alignx center,growx 0");
 
         //======== scrollPane1 ========
         {
@@ -101,7 +98,7 @@ public class WriteOffProd extends JFrame {
             reasontextArea.setLineWrap(true);
             scrollPane1.setViewportView(reasontextArea);
         }
-        contentPane.add(scrollPane1, "cell 3 4");
+        contentPane.add(scrollPane1, "cell 2 4");
 
         //======== panel1 ========
         {
@@ -109,7 +106,7 @@ public class WriteOffProd extends JFrame {
             // JFormDesigner evaluation mark
             panel1.setBorder(new javax.swing.border.CompoundBorder(
                 new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                    "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                    "", javax.swing.border.TitledBorder.CENTER,
                     javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
                     java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
@@ -118,23 +115,21 @@ public class WriteOffProd extends JFrame {
                 // columns
                 "[fill]" +
                 "[fill]" +
-                "[fill]" +
-                "[52,fill]" +
-                "[fill]" +
-                "[fill]",
+                "[52,fill]",
                 // rows
-                "[]" +
-                "[]" +
+                "[fill]" +
+                "[grow,fill]" +
                 "[]" +
                 "[]"));
 
             //---- okbtn ----
             okbtn.setText("\u0421\u043f\u0438\u0441\u0430\u0442\u044c");
-            okbtn.addActionListener(e -> okbtnActionPerformed(e));
-            panel1.add(okbtn, "cell 4 1 2 1");
+            okbtn.setHorizontalAlignment(SwingConstants.LEFT);
+            okbtn.addActionListener(e -> okbtnActionPerformed());
+            panel1.add(okbtn, "cell 1 0 2 2");
         }
-        contentPane.add(panel1, "cell 3 5");
-        setSize(420, 300);
+        contentPane.add(panel1, "cell 2 5");
+        setSize(570, 375);
         setLocationRelativeTo(getOwner());
 
         //======== writeoffdialog ========
@@ -151,7 +146,7 @@ public class WriteOffProd extends JFrame {
                 // JFormDesigner evaluation mark
                 panel2.setBorder(new javax.swing.border.CompoundBorder(
                     new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        "", javax.swing.border.TitledBorder.CENTER,
                         javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
                         java.awt.Color.red), panel2.getBorder())); panel2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
@@ -203,12 +198,12 @@ public class WriteOffProd extends JFrame {
 
                 //---- okbtn2 ----
                 okbtn2.setText("\u0414\u0430");
-                okbtn2.addActionListener(e -> okbtn2ActionPerformed(e));
+                okbtn2.addActionListener(e -> okbtn2ActionPerformed());
                 panel3.add(okbtn2, "cell 2 1");
 
                 //---- nobtn2 ----
                 nobtn2.setText("\u041d\u0435\u0442");
-                nobtn2.addActionListener(e -> nobtn2ActionPerformed(e));
+                nobtn2.addActionListener(e -> nobtn2ActionPerformed());
                 panel3.add(nobtn2, "cell 4 1");
             }
             writeoffdialogContentPane.add(panel3);

@@ -95,7 +95,7 @@ class CashierViewWindow {
 		// Кнопка списать товар
 		JButton deleteGoodsButton = new JButton("Списать товар");
 		deleteGoodsButton.addActionListener(e -> {new WriteOffProd().setVisible(true);
-		frame.dispose();
+		//frame.dispose();
 
 		});
 		arrayOfButtons[1][2] = deleteGoodsButton;
