@@ -5,6 +5,7 @@
 package Models;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 
@@ -14,7 +15,7 @@ import net.miginfocom.swing.*;
 class PrintReport extends JFrame {
     PrintReport() {
         initComponents();
-        this.setTitle("Выбор чека");
+        this.setTitle("Выбор отчета");
     }
 
 
@@ -50,6 +51,7 @@ class PrintReport extends JFrame {
         noprintbtnActionPerformed();
     }
 
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
@@ -59,8 +61,8 @@ class PrintReport extends JFrame {
         reptbtn4 = new JButton();
         printdialog = new JDialog();
         printlbl = new JLabel();
-        JButton okprintbtn = new JButton();
-        JButton noprintbtn = new JButton();
+        okprintbtn = new JButton();
+        noprintbtn = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -69,9 +71,9 @@ class PrintReport extends JFrame {
             "insets 0,hidemode 3,gap 0 0",
             // columns
             "[grow,fill]" +
-            "[fill]" +
             "[grow,fill]" +
-            "[fill]" +
+            "[grow,fill]" +
+            "[grow,fill]" +
             "[grow,fill]",
             // rows
             "[]" +
@@ -116,7 +118,7 @@ class PrintReport extends JFrame {
 
             //---- okprintbtn ----
             okprintbtn.setText("\u0414\u0430");
-            okprintbtn.addActionListener(e1 -> okprintbtnActionPerformed());
+            okprintbtn.addActionListener(e -> okprintbtnActionPerformed());
             printdialogContentPane.add(okprintbtn);
             okprintbtn.setBounds(25, 90, 95, okprintbtn.getPreferredSize().height);
 
@@ -141,5 +143,7 @@ class PrintReport extends JFrame {
     private JButton reptbtn4;
     private JDialog printdialog;
     private JLabel printlbl;
+    private JButton okprintbtn;
+    private JButton noprintbtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
