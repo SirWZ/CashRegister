@@ -11,14 +11,15 @@ import java.awt.Insets;
 
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import java.awt.Font;
 
-public class CheckPanel extends JPanel {
+public class ButtonsPanelForBigPay extends JPanel {
 	private JTextField textField;
 
 	/**
 	 * Create the panel.
 	 */
-	public CheckPanel() {
+	public ButtonsPanelForBigPay() {
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel buttonsPanel = new JPanel();
@@ -32,6 +33,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.setLayout(gbl_panel);
 
 		JButton buttonOne = new JButton("1");
+		buttonOne.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonOne = new GridBagConstraints();
 		gbc_buttonOne.fill = GridBagConstraints.BOTH;
 		gbc_buttonOne.insets = new Insets(0, 0, 5, 5);
@@ -40,6 +42,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonOne, gbc_buttonOne);
 
 		JButton buttonTwo = new JButton("2");
+		buttonTwo.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonTwo = new GridBagConstraints();
 		gbc_buttonTwo.fill = GridBagConstraints.BOTH;
 		gbc_buttonTwo.insets = new Insets(0, 0, 5, 5);
@@ -48,6 +51,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonTwo, gbc_buttonTwo);
 
 		JButton buttonThree = new JButton("3");
+		buttonThree.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonThree = new GridBagConstraints();
 		gbc_buttonThree.fill = GridBagConstraints.BOTH;
 		gbc_buttonThree.insets = new Insets(0, 0, 5, 5);
@@ -56,6 +60,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonThree, gbc_buttonThree);
 
 		JButton buttonClear = new JButton("Стереть");
+		buttonClear.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_buttonClear = new GridBagConstraints();
 		gbc_buttonClear.fill = GridBagConstraints.BOTH;
 		gbc_buttonClear.insets = new Insets(0, 0, 5, 0);
@@ -64,6 +69,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonClear, gbc_buttonClear);
 
 		JButton buttonFour = new JButton("4");
+		buttonFour.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonFour = new GridBagConstraints();
 		gbc_buttonFour.fill = GridBagConstraints.BOTH;
 		gbc_buttonFour.insets = new Insets(0, 0, 5, 5);
@@ -72,6 +78,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonFour, gbc_buttonFour);
 
 		JButton buttonFive = new JButton("5");
+		buttonFive.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonFive = new GridBagConstraints();
 		gbc_buttonFive.fill = GridBagConstraints.BOTH;
 		gbc_buttonFive.insets = new Insets(0, 0, 5, 5);
@@ -80,6 +87,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonFive, gbc_buttonFive);
 
 		JButton buttonSix = new JButton("6");
+		buttonSix.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonSix = new GridBagConstraints();
 		gbc_buttonSix.fill = GridBagConstraints.BOTH;
 		gbc_buttonSix.insets = new Insets(0, 0, 5, 5);
@@ -88,6 +96,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonSix, gbc_buttonSix);
 
 		JButton buttonCancel = new JButton("Отмена");
+		buttonCancel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_buttonCancel = new GridBagConstraints();
 		gbc_buttonCancel.fill = GridBagConstraints.BOTH;
 		gbc_buttonCancel.insets = new Insets(0, 0, 5, 0);
@@ -96,6 +105,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonCancel, gbc_buttonCancel);
 
 		JButton buttonSeven = new JButton("7");
+		buttonSeven.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonSeven = new GridBagConstraints();
 		gbc_buttonSeven.fill = GridBagConstraints.BOTH;
 		gbc_buttonSeven.insets = new Insets(0, 0, 5, 5);
@@ -104,6 +114,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonSeven, gbc_buttonSeven);
 
 		JButton buttonEight = new JButton("8");
+		buttonEight.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonEight = new GridBagConstraints();
 		gbc_buttonEight.fill = GridBagConstraints.BOTH;
 		gbc_buttonEight.insets = new Insets(0, 0, 5, 5);
@@ -112,6 +123,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonEight, gbc_buttonEight);
 
 		JButton buttonNine = new JButton("9");
+		buttonNine.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonNine = new GridBagConstraints();
 		gbc_buttonNine.fill = GridBagConstraints.BOTH;
 		gbc_buttonNine.insets = new Insets(0, 0, 5, 5);
@@ -120,6 +132,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonNine, gbc_buttonNine);
 
 		JButton btnNewButton_12 = new JButton("Колличество");
+		btnNewButton_12.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_btnNewButton_12 = new GridBagConstraints();
 		gbc_btnNewButton_12.gridheight = 2;
 		gbc_btnNewButton_12.fill = GridBagConstraints.BOTH;
@@ -128,6 +141,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(btnNewButton_12, gbc_btnNewButton_12);
 
 		JButton buttonZerro = new JButton("0");
+		buttonZerro.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonZero = new GridBagConstraints();
 		gbc_buttonZero.fill = GridBagConstraints.BOTH;
 		gbc_buttonZero.insets = new Insets(0, 0, 0, 5);
@@ -136,6 +150,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonZerro, gbc_buttonZero);
 
 		JButton buttonDoubleZerro = new JButton("00");
+		buttonDoubleZerro.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonDoubleZerro = new GridBagConstraints();
 		gbc_buttonDoubleZerro.fill = GridBagConstraints.BOTH;
 		gbc_buttonDoubleZerro.insets = new Insets(0, 0, 0, 5);
@@ -144,6 +159,7 @@ public class CheckPanel extends JPanel {
 		buttonsPanel.add(buttonDoubleZerro, gbc_buttonDoubleZerro);
 
 		JButton buttonTod = new JButton(".");
+		buttonTod.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_buttonTod = new GridBagConstraints();
 		gbc_buttonTod.fill = GridBagConstraints.BOTH;
 		gbc_buttonTod.insets = new Insets(0, 0, 0, 5);
@@ -169,6 +185,7 @@ public class CheckPanel extends JPanel {
 		add(textFieldPanel, BorderLayout.NORTH);
 		textFieldPanel.setLayout(new BorderLayout(0, 0));
 		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		textField.setBackground(Color.WHITE);
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setEditable(false);

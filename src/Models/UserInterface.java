@@ -18,8 +18,7 @@ public class UserInterface extends JFrame {
 
     private void loggBtnActionPerformed() {
         new CashierViewWindow();
-        this.setVisible(false);
-         //new CashInOut("Выплата").setVisible(true);
+        this.dispose();
     }
 
     private void passwordFieldKeyPressed(KeyEvent e) {
