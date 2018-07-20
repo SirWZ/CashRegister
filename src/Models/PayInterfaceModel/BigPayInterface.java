@@ -14,26 +14,6 @@ public class BigPayInterface {
 
 	private JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-	/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					//BigPayInterface window = new BigPayInterface();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
-	 * Create the application.
-	 */
 	public BigPayInterface() {
 		initialize();frame.setVisible(true);
 	}
@@ -43,7 +23,7 @@ public class BigPayInterface {
 	 */
 	private void initialize() {
 		frame = new JFrame("Bying field");
-		frame.setBounds(100, 100, 450, 300);
+		//frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
