@@ -92,7 +92,8 @@ class CashierViewWindow {
 		// Конпка Выход
 		JButton exitButton = new JButton("Выход");
 		exitButton.addActionListener(e -> {
-
+            frame.dispose();
+            new UserInterface().setVisible(true);
 		});
 		arrayOfButtons[1][4] = exitButton;
 
