@@ -12,7 +12,7 @@ import javax.swing.border.*;
  * @author Gevtsi Yurii
  */
  class FinishWork extends JDialog {
-     Frame frame;
+     private Frame frame;
     FinishWork(Frame owner) {
         super(owner);
         frame = owner;

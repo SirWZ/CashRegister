@@ -11,8 +11,8 @@ import net.miginfocom.swing.*;
 /**
  * @author Gevtsi Yurii
  */
-public class WriteOffProd extends JFrame {
-    public WriteOffProd() {
+class WriteOffProd extends JFrame {
+    WriteOffProd() {
         initComponents();
     }
 
@@ -24,7 +24,6 @@ public class WriteOffProd extends JFrame {
     private void okbtn2ActionPerformed() {
         nobtn2ActionPerformed();
         this.dispose();
-        //new CashierViewWindow();
     }
 
     private void nobtn2ActionPerformed() {
@@ -34,24 +33,26 @@ public class WriteOffProd extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        namelabel = new JLabel();
+        // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+        JLabel namelabel = new JLabel();
         nametextField = new JTextField();
-        codelabel = new JLabel();
-        codetextField = new JTextField();
-        countlabel = new JLabel();
-        counttextField = new JTextField();
-        reasonlabel = new JLabel();
-        scrollPane1 = new JScrollPane();
-        reasontextArea = new JTextArea();
-        panel1 = new JPanel();
-        okbtn = new JButton();
+        JLabel codelabel = new JLabel();
+        JTextField codetextField = new JTextField();
+        JLabel countlabel = new JLabel();
+        JTextField counttextField = new JTextField();
+        JLabel reasonlabel = new JLabel();
+        JScrollPane scrollPane1 = new JScrollPane();
+        JTextArea reasontextArea = new JTextArea();
+        JPanel panel1 = new JPanel();
+        JButton okbtn = new JButton();
         writeoffdialog = new JDialog();
-        panel2 = new JPanel();
-        label4 = new JLabel();
+        JPanel panel2 = new JPanel();
+        JLabel label4 = new JLabel();
         masseglabel = new JLabel();
-        panel3 = new JPanel();
-        okbtn2 = new JButton();
-        nobtn2 = new JButton();
+        JPanel panel3 = new JPanel();
+        JButton okbtn2 = new JButton();
+        JButton nobtn2 = new JButton();
 
         //======== this ========
         setTitle("\u0421\u043f\u0438\u0441\u0430\u0442\u044c \u0442\u043e\u0432\u0430\u0440");
@@ -108,7 +109,7 @@ public class WriteOffProd extends JFrame {
                 new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
                     "", javax.swing.border.TitledBorder.CENTER,
                     javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                    java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+                    java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
 
             panel1.setLayout(new MigLayout(
                 "hidemode 3",
@@ -148,7 +149,7 @@ public class WriteOffProd extends JFrame {
                     new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
                         "", javax.swing.border.TitledBorder.CENTER,
                         javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), panel2.getBorder())); panel2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+                        java.awt.Color.red), panel2.getBorder())); panel2.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
 
                 panel2.setLayout(new MigLayout(
                     "hidemode 3",
@@ -213,25 +214,8 @@ public class WriteOffProd extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-    private JLabel namelabel;
     private JTextField nametextField;
-    private JLabel codelabel;
-    private JTextField codetextField;
-    private JLabel countlabel;
-    private JTextField counttextField;
-    private JLabel reasonlabel;
-    private JScrollPane scrollPane1;
-    private JTextArea reasontextArea;
-    private JPanel panel1;
-    private JButton okbtn;
     private JDialog writeoffdialog;
-    private JPanel panel2;
-    private JLabel label4;
     private JLabel masseglabel;
-    private JPanel panel3;
-    private JButton okbtn2;
-    private JButton nobtn2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

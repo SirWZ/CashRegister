@@ -5,7 +5,6 @@
 package Models;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -19,36 +18,38 @@ class ReturnProduct extends JFrame {
         this.dispose();
     }
 
-    private void returnbtnActionPerformed(ActionEvent e) {
+    private void returnbtnActionPerformed() {
         this.dispose();
     }
 
-    private void exitbtn2ActionPerformed(ActionEvent e) {
+    private void exitbtn2ActionPerformed() {
         firstdialog.dispose();
     }
 
-    private void nextbtn2ActionPerformed(ActionEvent e) {
+    private void nextbtn2ActionPerformed() {
         firstdialog.dispose();
         this.setVisible(true);
     }
 
-    private void exitbtnActionPerformed(ActionEvent e) {
+    private void exitbtnActionPerformed() {
         this.dispose();
     }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        findbtn = new JTextField();
-        scrollPane1 = new JScrollPane();
-        producttable = new JTable();
-        returnbtn = new JButton();
-        exitbtn = new JButton();
+        // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+        JTextField findbtn = new JTextField();
+        JScrollPane scrollPane1 = new JScrollPane();
+        JTable producttable = new JTable();
+        JButton returnbtn = new JButton();
+        JButton exitbtn = new JButton();
         firstdialog = new JDialog();
-        label1 = new JLabel();
-        pargonnumtextfield = new JTextField();
-        exitbtn2 = new JButton();
-        nextbtn2 = new JButton();
+        JLabel label1 = new JLabel();
+        JTextField pargonnumtextfield = new JTextField();
+        JButton exitbtn2 = new JButton();
+        JButton nextbtn2 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -85,11 +86,11 @@ class ReturnProduct extends JFrame {
 
         //---- returnbtn ----
         returnbtn.setText("\u0412\u0435\u0440\u043d\u0443\u0442\u044c \u0442\u043e\u0432\u0430\u0440\u044b");
-        returnbtn.addActionListener(e -> returnbtnActionPerformed(e));
+        returnbtn.addActionListener(e -> returnbtnActionPerformed());
 
         //---- exitbtn ----
         exitbtn.setText("\u0422\u0443\u0442 \u0431\u0443\u0434\u0435\u0442 \u0438\u043a\u043e\u043d\u043a\u0430");
-        exitbtn.addActionListener(e -> exitbtnActionPerformed(e));
+        exitbtn.addActionListener(e -> exitbtnActionPerformed());
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
@@ -135,11 +136,11 @@ class ReturnProduct extends JFrame {
 
             //---- exitbtn2 ----
             exitbtn2.setText("\u0412\u044b\u0445\u043e\u0434");
-            exitbtn2.addActionListener(e -> exitbtn2ActionPerformed(e));
+            exitbtn2.addActionListener(e -> exitbtn2ActionPerformed());
 
             //---- nextbtn2 ----
             nextbtn2.setText("\u0414\u0430\u043b\u0435");
-            nextbtn2.addActionListener(e -> nextbtn2ActionPerformed(e));
+            nextbtn2.addActionListener(e -> nextbtn2ActionPerformed());
 
             GroupLayout firstdialogContentPaneLayout = new GroupLayout(firstdialogContentPane);
             firstdialogContentPane.setLayout(firstdialogContentPaneLayout);
@@ -180,17 +181,6 @@ class ReturnProduct extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-    private JTextField findbtn;
-    private JScrollPane scrollPane1;
-    private JTable producttable;
-    private JButton returnbtn;
-    private JButton exitbtn;
     private JDialog firstdialog;
-    private JLabel label1;
-    private JTextField pargonnumtextfield;
-    private JButton exitbtn2;
-    private JButton nextbtn2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

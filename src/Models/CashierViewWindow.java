@@ -29,12 +29,6 @@ class CashierViewWindow {
 		this.frame.setVisible(true);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	/**
-	 * 
-	 */
 	private void initialize() {
 		frame = new JFrame("Интерфейс касира");
 		frame.setBounds(100, 100, 581, 472);
@@ -48,32 +42,22 @@ class CashierViewWindow {
 
 		// Кнопка Продажи
 		JButton sellingButton = new JButton("Продажа");
-		sellingButton.addActionListener(e -> {
-			new BigPayInterface();
-		});
+		sellingButton.addActionListener(e -> new BigPayInterface());
 		arrayOfButtons[0][0] = sellingButton;
 
 		// Кнопка Вплаты
 		JButton payInButton = new JButton("Вплата");
-		payInButton.addActionListener(e -> {
-			new CashInOut("Вплата").setVisible(true);
-
-		});
+		payInButton.addActionListener(e -> new CashInOut("Вплата").setVisible(true));
 		arrayOfButtons[0][1] = payInButton;
 
 		// Кнопка выплаты
 		JButton payOffButton = new JButton("Выплата");
-		payOffButton.addActionListener(e -> {
-			new CashInOut("Выплата").setVisible(true);
-
-		});
+		payOffButton.addActionListener(e -> new CashInOut("Выплата").setVisible(true));
 		arrayOfButtons[0][2] = payOffButton;
 
 		// Кнопка Закончить смену
 		JButton endSessionButton = new JButton("Закончить смену");
-		endSessionButton.addActionListener(e -> {
-			new FinishWork(frame).setVisible(true);
-		});
+		endSessionButton.addActionListener(e -> new FinishWork(frame).setVisible(true));
 		arrayOfButtons[0][3] = endSessionButton;
 
 		// Кнопка Мой магазин
@@ -85,9 +69,7 @@ class CashierViewWindow {
 
 		// Кнопка Возврат товара
 		JButton retrieveGoodsButton = new JButton("Возврат товара");
-		retrieveGoodsButton.addActionListener(e -> {
-			new ReturnProduct();
-		});
+		retrieveGoodsButton.addActionListener(e -> new ReturnProduct());
 		arrayOfButtons[1][0] = retrieveGoodsButton;
 
 		// Кнопка принять доставку
@@ -99,16 +81,12 @@ class CashierViewWindow {
 
 		// Кнопка списать товар
 		JButton deleteGoodsButton = new JButton("Списать товар");
-		deleteGoodsButton.addActionListener(e -> {
-   			new WriteOffProd().setVisible(true);
-		});
+		deleteGoodsButton.addActionListener(e -> new WriteOffProd().setVisible(true));
 		arrayOfButtons[1][2] = deleteGoodsButton;
 
 		// Кнопка напечатать отчёт
 		JButton printDeclarationButton = new JButton("Напечатать отчёт");
-		printDeclarationButton.addActionListener(e -> {
-			new PrintReport().setVisible(true);
-		});
+		printDeclarationButton.addActionListener(e -> new PrintReport().setVisible(true));
 		arrayOfButtons[1][3] = printDeclarationButton;
 
 		// Конпка Выход

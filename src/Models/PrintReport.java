@@ -5,50 +5,49 @@
 package Models;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 
 /**
  * @author Gevtsi Yurii
  */
-public class PrintReport extends JFrame {
-    public PrintReport() {
+class PrintReport extends JFrame {
+    PrintReport() {
         initComponents();
         this.setTitle("Выбор чека");
     }
 
 
-    private void reptbtn1ActionPerformed(ActionEvent e) {
+    private void reptbtn1ActionPerformed() {
         this.dispose();
         printdialog.setVisible(true);
         printlbl.setText(printlbl.getText() +" : "+ reptbtn1.getText());
     }
 
-    private void reptbtn2ActionPerformed(ActionEvent e) {
+    private void reptbtn2ActionPerformed() {
         this.dispose();
         printdialog.setVisible(true);
         printlbl.setText(printlbl.getText() +" : "+ reptbtn2.getText());
     }
 
-    private void reptbtn3ActionPerformed(ActionEvent e) {
+    private void reptbtn3ActionPerformed() {
         this.dispose();
         printdialog.setVisible(true);
         printlbl.setText(printlbl.getText() +" : "+ reptbtn3.getText());
     }
 
-    private void reptbtn4ActionPerformed(ActionEvent e) {
+    private void reptbtn4ActionPerformed() {
         this.dispose();
         printdialog.setVisible(true);
         printlbl.setText(printlbl.getText() +" : "+ reptbtn4.getText());
     }
 
-    private void noprintbtnActionPerformed(ActionEvent e) {
+    private void noprintbtnActionPerformed() {
         printdialog.dispose();
     }
 
-    private void okprintbtnActionPerformed(ActionEvent e) {
-        noprintbtnActionPerformed(e);
+    private void okprintbtnActionPerformed() {
+        noprintbtnActionPerformed();
     }
 
     private void initComponents() {
@@ -60,8 +59,8 @@ public class PrintReport extends JFrame {
         reptbtn4 = new JButton();
         printdialog = new JDialog();
         printlbl = new JLabel();
-        okprintbtn = new JButton();
-        noprintbtn = new JButton();
+        JButton okprintbtn = new JButton();
+        JButton noprintbtn = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -85,22 +84,22 @@ public class PrintReport extends JFrame {
 
         //---- reptbtn1 ----
         reptbtn1.setText("\u041e\u0442\u0447\u0435\u0442 1");
-        reptbtn1.addActionListener(e -> reptbtn1ActionPerformed(e));
+        reptbtn1.addActionListener(e -> reptbtn1ActionPerformed());
         contentPane.add(reptbtn1, "cell 1 1");
 
         //---- reptbtn2 ----
         reptbtn2.setText("\u041e\u0442\u0447\u0435\u0442 2");
-        reptbtn2.addActionListener(e -> reptbtn2ActionPerformed(e));
+        reptbtn2.addActionListener(e -> reptbtn2ActionPerformed());
         contentPane.add(reptbtn2, "cell 3 1");
 
         //---- reptbtn3 ----
         reptbtn3.setText("\u041e\u0442\u0447\u0435\u0442 3");
-        reptbtn3.addActionListener(e -> reptbtn3ActionPerformed(e));
+        reptbtn3.addActionListener(e -> reptbtn3ActionPerformed());
         contentPane.add(reptbtn3, "cell 1 5");
 
         //---- reptbtn4 ----
         reptbtn4.setText("\u041e\u0442\u0447\u0435\u0442 4");
-        reptbtn4.addActionListener(e -> reptbtn4ActionPerformed(e));
+        reptbtn4.addActionListener(e -> reptbtn4ActionPerformed());
         contentPane.add(reptbtn4, "cell 3 5");
         setSize(400, 300);
         setLocationRelativeTo(getOwner());
@@ -117,13 +116,13 @@ public class PrintReport extends JFrame {
 
             //---- okprintbtn ----
             okprintbtn.setText("\u0414\u0430");
-            okprintbtn.addActionListener(e -> okprintbtnActionPerformed(e));
+            okprintbtn.addActionListener(e1 -> okprintbtnActionPerformed());
             printdialogContentPane.add(okprintbtn);
             okprintbtn.setBounds(25, 90, 95, okprintbtn.getPreferredSize().height);
 
             //---- noprintbtn ----
             noprintbtn.setText("\u041d\u0435\u0442");
-            noprintbtn.addActionListener(e -> noprintbtnActionPerformed(e));
+            noprintbtn.addActionListener(e -> noprintbtnActionPerformed());
             printdialogContentPane.add(noprintbtn);
             noprintbtn.setBounds(150, 90, 88, noprintbtn.getPreferredSize().height);
 
@@ -142,7 +141,5 @@ public class PrintReport extends JFrame {
     private JButton reptbtn4;
     private JDialog printdialog;
     private JLabel printlbl;
-    private JButton okprintbtn;
-    private JButton noprintbtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
