@@ -1,3 +1,4 @@
+
 package Models;
 
 import javax.swing.JFrame;
@@ -69,7 +70,7 @@ class CashierViewWindow {
 		// Кнопка Закончить смену
 		JButton endSessionButton = new JButton("Закончить смену");
 		endSessionButton.addActionListener(e -> {
-		new FinishWork(frame).setVisible(true);
+
 		});
 		arrayOfButtons[0][3] = endSessionButton;
 
@@ -82,7 +83,9 @@ class CashierViewWindow {
 
 		// Кнопка Возврат товара
 		JButton retrieveGoodsButton = new JButton("Возврат товара");
-		retrieveGoodsButton.addActionListener(e -> new ReturnProduct());
+		retrieveGoodsButton.addActionListener(e -> {
+
+		});
 		arrayOfButtons[1][0] = retrieveGoodsButton;
 
 		// Кнопка принять доставку
@@ -94,8 +97,7 @@ class CashierViewWindow {
 
 		// Кнопка списать товар
 		JButton deleteGoodsButton = new JButton("Списать товар");
-		deleteGoodsButton.addActionListener(e -> {new WriteOffProd().setVisible(true);
-		//frame.dispose();
+		deleteGoodsButton.addActionListener(e -> {
 
 		});
 		arrayOfButtons[1][2] = deleteGoodsButton;
@@ -103,15 +105,13 @@ class CashierViewWindow {
 		// Кнопка напечатать отчёт
 		JButton printDeclarationButton = new JButton("Напечатать отчёт");
 		printDeclarationButton.addActionListener(e -> {
-			this.frame.dispose();
-			new PrintReport().setVisible(true);
+
 		});
 		arrayOfButtons[1][3] = printDeclarationButton;
 
 		// Конпка Выход
 		JButton exitButton = new JButton("Выход");
-		exitButton.addActionListener(e -> {frame.dispose();
-		new UserInterface().setVisible(true);
+		exitButton.addActionListener(e -> {
 
 		});
 		arrayOfButtons[1][4] = exitButton;
@@ -147,18 +147,14 @@ class CashierViewWindow {
 	 * P.S.S. Хотя насчёт бага я хуй знает, может его и не будет)
 	 */
 
-	/*
-	 * INFO для Макса Создай обработку івентов для всих кнопок, для кнопок
-	 * вплата/виплата тіло методи містить тіки одну строчку --------- new
-	 * CashInOut("Вплата"/"Выплата").setVisible(true);---------
-	 */
+	
 	private void setFocusEvent(JButton[][] buttons) {
 		for (int i = 0; i < buttons.length; i++) {
 			for (int j = 0; j < buttons[i].length; j++) {
 				final int curColumn = i;
 				final int curRow = j;
 
-				// Установка одинакового размера в зависимости от buttonSize
+				// Установка одинакового размера текста в зависимости от buttonSize
 				int buttonSize = 22;
 				buttons[i][j].setFont(new Font("Tahoma", Font.PLAIN, buttonSize));
 
