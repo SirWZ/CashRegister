@@ -45,7 +45,6 @@ public class PrintReport extends JFrame {
 
     private void noprintbtnActionPerformed(ActionEvent e) {
         printdialog.dispose();
-        new CashierViewWindow();
     }
 
     private void okprintbtnActionPerformed(ActionEvent e) {

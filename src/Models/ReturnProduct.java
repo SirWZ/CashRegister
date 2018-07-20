@@ -16,6 +16,7 @@ class ReturnProduct extends JFrame {
     ReturnProduct() {
         initComponents();
         firstdialog.setVisible(true);
+        this.dispose();
     }
 
     private void returnbtnActionPerformed(ActionEvent e) {
@@ -50,6 +51,7 @@ class ReturnProduct extends JFrame {
         nextbtn2 = new JButton();
 
         //======== this ========
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
 
         //---- findbtn ----

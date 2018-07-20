@@ -1,6 +1,8 @@
 
 package Models;
 
+import Models.PayInterfaceModel.BigPayInterface;
+
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
@@ -47,7 +49,7 @@ class CashierViewWindow {
 		// Кнопка Продажи
 		JButton sellingButton = new JButton("Продажа");
 		sellingButton.addActionListener(e -> {
-
+			new BigPayInterface();
 		});
 		arrayOfButtons[0][0] = sellingButton;
 
@@ -70,7 +72,7 @@ class CashierViewWindow {
 		// Кнопка Закончить смену
 		JButton endSessionButton = new JButton("Закончить смену");
 		endSessionButton.addActionListener(e -> {
-
+			new FinishWork(frame).setVisible(true);
 		});
 		arrayOfButtons[0][3] = endSessionButton;
 
@@ -84,7 +86,7 @@ class CashierViewWindow {
 		// Кнопка Возврат товара
 		JButton retrieveGoodsButton = new JButton("Возврат товара");
 		retrieveGoodsButton.addActionListener(e -> {
-
+			new ReturnProduct();
 		});
 		arrayOfButtons[1][0] = retrieveGoodsButton;
 
@@ -98,14 +100,14 @@ class CashierViewWindow {
 		// Кнопка списать товар
 		JButton deleteGoodsButton = new JButton("Списать товар");
 		deleteGoodsButton.addActionListener(e -> {
-
+   			new WriteOffProd().setVisible(true);
 		});
 		arrayOfButtons[1][2] = deleteGoodsButton;
 
 		// Кнопка напечатать отчёт
 		JButton printDeclarationButton = new JButton("Напечатать отчёт");
 		printDeclarationButton.addActionListener(e -> {
-
+			new PrintReport().setVisible(true);
 		});
 		arrayOfButtons[1][3] = printDeclarationButton;
 

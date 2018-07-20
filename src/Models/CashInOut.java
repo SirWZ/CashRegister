@@ -28,10 +28,10 @@ class CashInOut extends JFrame {
                 infolabel.setText(this.getTitle() + " : ");
                 masegelable.setText( inOuttextField.getText());
                 komentlableright.setText(komenttextField.getText());
-            }else JOptionPane.showMessageDialog(this,"toze idite na huj","Ошибка",JOptionPane.ERROR_MESSAGE);
+            }else JOptionPane.showMessageDialog(this,"Some ERROR","Ошибка",JOptionPane.ERROR_MESSAGE);
         }
         catch (Exception k){
-            JOptionPane.showMessageDialog(this,"idite na huj","Ошибка",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Some ERROR","Ошибка",JOptionPane.ERROR_MESSAGE);
         }
 
 
