@@ -28,7 +28,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "okbtn"
 				"text": "Подтвердить"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okbtnActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okbtnActionPerformed", false ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
@@ -61,12 +61,12 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "yesbtn"
 				"text": "Да"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "yesbtnActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "yesbtnActionPerformed", false ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "nobtn"
 				"text": "Нет"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nobtnActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nobtnActionPerformed", false ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 235, 240 )
