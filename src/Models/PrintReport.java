@@ -7,7 +7,6 @@ package Models;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import net.miginfocom.swing.*;
 
 /**
  * @author Gevtsi Yurii
@@ -51,10 +50,12 @@ class PrintReport extends JFrame {
         noprintbtnActionPerformed();
     }
 
-
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+        panel2 = new JPanel();
+        label1 = new JLabel();
+        panel1 = new JPanel();
         reptbtn1 = new JButton();
         reptbtn2 = new JButton();
         reptbtn3 = new JButton();
@@ -67,43 +68,71 @@ class PrintReport extends JFrame {
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
-        contentPane.setLayout(new MigLayout(
-            "insets 0,hidemode 3,gap 0 0",
-            // columns
-            "[grow,fill]" +
-            "[grow,fill]" +
-            "[grow,fill]" +
-            "[grow,fill]" +
-            "[grow,fill]",
-            // rows
-            "[]" +
-            "[47,grow,fill]" +
-            "[]" +
-            "[31]" +
-            "[16]" +
-            "[42,grow,fill]" +
-            "[12]"));
+        contentPane.setLayout(new GridLayout(2, 0));
 
-        //---- reptbtn1 ----
-        reptbtn1.setText("\u041e\u0442\u0447\u0435\u0442 1");
-        reptbtn1.addActionListener(e -> reptbtn1ActionPerformed());
-        contentPane.add(reptbtn1, "cell 1 1");
+        //======== panel2 ========
+        {
 
-        //---- reptbtn2 ----
-        reptbtn2.setText("\u041e\u0442\u0447\u0435\u0442 2");
-        reptbtn2.addActionListener(e -> reptbtn2ActionPerformed());
-        contentPane.add(reptbtn2, "cell 3 1");
+            // JFormDesigner evaluation mark
+            panel2.setBorder(new javax.swing.border.CompoundBorder(
+                new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                    "", javax.swing.border.TitledBorder.CENTER,
+                    javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                    java.awt.Color.red), panel2.getBorder())); panel2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
-        //---- reptbtn3 ----
-        reptbtn3.setText("\u041e\u0442\u0447\u0435\u0442 3");
-        reptbtn3.addActionListener(e -> reptbtn3ActionPerformed());
-        contentPane.add(reptbtn3, "cell 1 5");
+            panel2.setLayout(new GridBagLayout());
+            ((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {142, 0};
+            ((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {63, 0};
+            ((GridBagLayout)panel2.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+            ((GridBagLayout)panel2.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
 
-        //---- reptbtn4 ----
-        reptbtn4.setText("\u041e\u0442\u0447\u0435\u0442 4");
-        reptbtn4.addActionListener(e -> reptbtn4ActionPerformed());
-        contentPane.add(reptbtn4, "cell 3 5");
-        setSize(400, 300);
+            //---- label1 ----
+            label1.setText("\u0412\u044b\u0431\u043e\u0440 \u043e\u0442\u0447\u0435\u0442\u0430");
+            label1.setFont(new Font("Segoe UI", Font.PLAIN, 30));
+            panel2.add(label1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                new Insets(0, 0, 0, 0), 0, 0));
+        }
+        contentPane.add(panel2);
+
+        //======== panel1 ========
+        {
+            panel1.setLayout(new GridBagLayout());
+            ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {0, 132, 0, 129, 0, 0};
+            ((GridBagLayout)panel1.getLayout()).rowHeights = new int[] {79, 73, 0};
+            ((GridBagLayout)panel1.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0, 0.0, 1.0E-4};
+            ((GridBagLayout)panel1.getLayout()).rowWeights = new double[] {1.0, 1.0, 1.0E-4};
+
+            //---- reptbtn1 ----
+            reptbtn1.setText("\u041e\u0442\u0447\u0435\u0442 1");
+            reptbtn1.addActionListener(e -> reptbtn1ActionPerformed());
+            panel1.add(reptbtn1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 5), 0, 0));
+
+            //---- reptbtn2 ----
+            reptbtn2.setText("\u041e\u0442\u0447\u0435\u0442 2");
+            reptbtn2.addActionListener(e -> reptbtn2ActionPerformed());
+            panel1.add(reptbtn2, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 5), 0, 0));
+
+            //---- reptbtn3 ----
+            reptbtn3.setText("\u041e\u0442\u0447\u0435\u0442 3");
+            reptbtn3.addActionListener(e -> reptbtn3ActionPerformed());
+            panel1.add(reptbtn3, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 5), 0, 0));
+
+            //---- reptbtn4 ----
+            reptbtn4.setText("\u041e\u0442\u0447\u0435\u0442 4");
+            reptbtn4.addActionListener(e -> reptbtn4ActionPerformed());
+            panel1.add(reptbtn4, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 5), 0, 0));
+        }
+        contentPane.add(panel1);
+        setSize(350, 375);
         setLocationRelativeTo(getOwner());
 
         //======== printdialog ========
@@ -137,6 +166,9 @@ class PrintReport extends JFrame {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+    private JPanel panel2;
+    private JLabel label1;
+    private JPanel panel1;
     private JButton reptbtn1;
     private JButton reptbtn2;
     private JButton reptbtn3;

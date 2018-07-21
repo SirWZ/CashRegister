@@ -75,6 +75,7 @@ class CashierViewWindow {
 		// Кнопка принять доставку
 		JButton acceptDeliveryButton = new JButton("Принять доставку");
 		acceptDeliveryButton.addActionListener(e -> {
+			new RegisterDelivery();
 
 		});
 		arrayOfButtons[1][1] = acceptDeliveryButton;
