@@ -10,6 +10,9 @@ new FormModel {
 			name: "this"
 			"$sizePolicy": 1
 			"defaultCloseOperation": 2
+			auxiliary() {
+				"JavaCodeGenerator.variableLocal": true
+			}
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "findbtn"
 				"text": "Поиск товара в чеке"

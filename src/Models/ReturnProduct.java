@@ -89,7 +89,7 @@ class ReturnProduct extends JFrame {
         returnbtn.addActionListener(e -> returnbtnActionPerformed());
 
         //---- exitbtn ----
-        exitbtn.setText("\u0422\u0443\u0442 \u0431\u0443\u0434\u0435\u0442 \u0438\u043a\u043e\u043d\u043a\u0430");
+        exitbtn.setText("Выход");
         exitbtn.addActionListener(e -> exitbtnActionPerformed());
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
