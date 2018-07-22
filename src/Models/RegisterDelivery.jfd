@@ -153,7 +153,7 @@ new FormModel {
 				"gridy": 1
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "0, 0:1.0, 27, 190:1.0, 33, 0:1.0, 30, 0:1.0, 0"
+				"$columnSpecs": "72, 41:1.0, 67, 64:1.0, 85"
 				"$rowSpecs": "0"
 				"$hGap": 5
 				"$vGap": 5
@@ -169,25 +169,11 @@ new FormModel {
 					"gridx": 1
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "registerbtn"
-					"text": "Подтверждение без оплаты"
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "registerbtnMouseClicked", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 3
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "registerandpaybtn"
 					"text": "Подтверждение и оплата"
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "registerandpaybtnMouseClicked", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 5
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "paybtn"
-					"text": "Оплата без подтверждения"
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "paybtnMouseClicked", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 7
+					"gridx": 3
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridy": 3
@@ -246,6 +232,114 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 115, 540 )
 			"size": new java.awt.Dimension( 615, 230 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "0, 0"
+			"$rowSpecs": "0, 37, 44"
+			"$hGap": 5
+			"$vGap": 5
+			"$alignLeft": true
+			"$alignTop": true
+		} ) {
+			name: "firstdialog"
+			"$sizePolicy": 1
+			"defaultCloseOperation": 2
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "Подтверждение доставки."
+				"font": new java.awt.Font( "Segoe UI", 0, 20 )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 1
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0, 110:1.0"
+				"$rowSpecs": "0:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel4"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "firstokbtn"
+					"text": "Подтвердить"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "firstokbtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"hAlign": 5
+					"vAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "firstnobtn"
+					"text": "Отложить"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "firstnobtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"hAlign": 5
+					"vAlign": 0
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 2
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 880, 360 )
+			"size": new java.awt.Dimension( 280, 130 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "5, 144:1.0"
+			"$rowSpecs": "0, 0, 0:1.0"
+			"$hGap": 5
+			"$vGap": 5
+			"$alignLeft": true
+			"$alignTop": true
+		} ) {
+			name: "seconddialog"
+			"$sizePolicy": 1
+			"defaultCloseOperation": 2
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "Оплатить?"
+				"font": new java.awt.Font( "Segoe UI", 0, 20 )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 1
+				"hAlign": 0
+				"vAlign": 0
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0, 0:1.0"
+				"$rowSpecs": "13:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel5"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "secondokbtn"
+					"text": "Да"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "secondokbtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"vAlign": 8
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "secondnobtn"
+					"text": "Нет"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "secondnobtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"vAlign": 8
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 2
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 815, 535 )
+			"size": new java.awt.Dimension( 195, 145 )
 		} )
 	}
 }

@@ -142,6 +142,8 @@ class PrintReport extends JFrame {
 
             //---- printlbl ----
             printlbl.setText("\u041d\u0430\u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c");
+            printlbl.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+            printlbl.setHorizontalAlignment(SwingConstants.CENTER);
             printdialogContentPane.add(printlbl);
             printlbl.setBounds(25, 30, 190, 35);
 

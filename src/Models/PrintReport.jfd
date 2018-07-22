@@ -39,21 +39,21 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "reptbtn1"
 					"text": "Отчет 1"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn1ActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn1ActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "reptbtn2"
 					"text": "Отчет 2"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn2ActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn2ActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 3
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "reptbtn3"
 					"text": "Отчет 3"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn3ActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn3ActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 					"gridy": 1
@@ -61,7 +61,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "reptbtn4"
 					"text": "Отчет 4"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn4ActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn4ActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridy": 1
 					"gridx": 3
@@ -78,6 +78,8 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "printlbl"
 				"text": "Напечатать"
+				"font": new java.awt.Font( "Segoe UI", 0, 20 )
+				"horizontalAlignment": 0
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 25
 				"y": 30
@@ -87,7 +89,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "okprintbtn"
 				"text": "Да"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okprintbtnActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okprintbtnActionPerformed", false ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 25
 				"y": 90
@@ -96,7 +98,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "noprintbtn"
 				"text": "Нет"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "noprintbtnActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "noprintbtnActionPerformed", false ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 150
 				"y": 90

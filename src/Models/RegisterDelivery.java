@@ -56,21 +56,31 @@ public class RegisterDelivery extends JFrame {
         this.dispose();
     }
 
-    private void registerbtnMouseClicked() {
+    private void registerandpaybtnMouseClicked() {
         this.dispose();
-        JOptionPane.showMessageDialog(this,"Доставка зарегистрирована и подтверждена.","",JOptionPane.INFORMATION_MESSAGE);
+        firstdialog.setVisible(true);
     }
 
-    private void paybtnMouseClicked() {
-        this.dispose();
-        JOptionPane.showMessageDialog(this,"Доставка зарегистрирована без подтверждения.","",JOptionPane.INFORMATION_MESSAGE);
+    private void firstokbtnActionPerformed() {
+        JOptionPane.showMessageDialog(this,"Доставка подтверждена.","",JOptionPane.INFORMATION_MESSAGE);
+        firstdialog.dispose();
+        seconddialog.setVisible(true);
+    }
+
+    private void firstnobtnActionPerformed() {
+        JOptionPane.showMessageDialog(this,"Доставка не подтверждена.","",JOptionPane.INFORMATION_MESSAGE);
+        firstdialog.dispose();
+        seconddialog.setVisible(true);
+    }
+
+    private void secondokbtnActionPerformed() {
+        seconddialog.dispose();
         new CashInOut("Выплата").setVisible(true);
     }
 
-    private void registerandpaybtnMouseClicked() {
-        this.dispose();
-        JOptionPane.showMessageDialog(this,"Доставка зарегистрирована и подтверждена.","",JOptionPane.INFORMATION_MESSAGE);
-        new CashInOut("Выплата").setVisible(true);    }
+    private void secondnobtnActionPerformed() {
+        seconddialog.dispose();
+    }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -85,14 +95,22 @@ public class RegisterDelivery extends JFrame {
         deliverytable = new JTable();
         panel3 = new JPanel();
         nobtn = new JButton();
-        registerbtn = new JButton();
         registerandpaybtn = new JButton();
-        paybtn = new JButton();
         deliverydialog = new JDialog();
         label1 = new JLabel();
         deliveryCodetextField = new JTextField();
         skipbtn = new JButton();
         okbtn = new JButton();
+        firstdialog = new JDialog();
+        label2 = new JLabel();
+        panel4 = new JPanel();
+        firstokbtn = new JButton();
+        firstnobtn = new JButton();
+        seconddialog = new JDialog();
+        label3 = new JLabel();
+        panel5 = new JPanel();
+        secondokbtn = new JButton();
+        secondnobtn = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -207,9 +225,9 @@ public class RegisterDelivery extends JFrame {
         //======== panel3 ========
         {
             panel3.setLayout(new GridBagLayout());
-            ((GridBagLayout)panel3.getLayout()).columnWidths = new int[] {0, 0, 32, 195, 38, 0, 35, 0, 0, 0};
+            ((GridBagLayout)panel3.getLayout()).columnWidths = new int[] {77, 46, 72, 69, 85, 0};
             ((GridBagLayout)panel3.getLayout()).rowHeights = new int[] {0, 0};
-            ((GridBagLayout)panel3.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0E-4};
+            ((GridBagLayout)panel3.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)panel3.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
             //---- nobtn ----
@@ -224,18 +242,6 @@ public class RegisterDelivery extends JFrame {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 5), 0, 0));
 
-            //---- registerbtn ----
-            registerbtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435 \u0431\u0435\u0437 \u043e\u043f\u043b\u0430\u0442\u044b");
-            registerbtn.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    registerbtnMouseClicked();
-                }
-            });
-            panel3.add(registerbtn, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 5), 0, 0));
-
             //---- registerandpaybtn ----
             registerandpaybtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435 \u0438 \u043e\u043f\u043b\u0430\u0442\u0430");
             registerandpaybtn.addMouseListener(new MouseAdapter() {
@@ -244,19 +250,7 @@ public class RegisterDelivery extends JFrame {
                     registerandpaybtnMouseClicked();
                 }
             });
-            panel3.add(registerandpaybtn, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 5), 0, 0));
-
-            //---- paybtn ----
-            paybtn.setText("\u041e\u043f\u043b\u0430\u0442\u0430 \u0431\u0435\u0437 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f");
-            paybtn.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    paybtnMouseClicked();
-                }
-            });
-            panel3.add(paybtn, new GridBagConstraints(7, 0, 1, 1, 0.0, 0.0,
+            panel3.add(registerandpaybtn, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 5), 0, 0));
         }
@@ -311,6 +305,116 @@ public class RegisterDelivery extends JFrame {
             deliverydialog.setSize(615, 230);
             deliverydialog.setLocationRelativeTo(deliverydialog.getOwner());
         }
+
+        //======== firstdialog ========
+        {
+            firstdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            firstdialog.setResizable(false);
+            Container firstdialogContentPane = firstdialog.getContentPane();
+            firstdialogContentPane.setLayout(new GridBagLayout());
+            ((GridBagLayout)firstdialogContentPane.getLayout()).columnWidths = new int[] {0, 0, 0};
+            ((GridBagLayout)firstdialogContentPane.getLayout()).rowHeights = new int[] {0, 42, 44, 0};
+            ((GridBagLayout)firstdialogContentPane.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)firstdialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+            //---- label2 ----
+            label2.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438.");
+            label2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+            firstdialogContentPane.add(label2, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //======== panel4 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel4.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel4.getBorder())); panel4.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel4.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel4.getLayout()).columnWidths = new int[] {0, 110, 0};
+                ((GridBagLayout)panel4.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)panel4.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
+                ((GridBagLayout)panel4.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
+
+                //---- firstokbtn ----
+                firstokbtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c");
+                firstokbtn.addActionListener(e -> firstokbtnActionPerformed());
+                panel4.add(firstokbtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- firstnobtn ----
+                firstnobtn.setText("\u041e\u0442\u043b\u043e\u0436\u0438\u0442\u044c");
+                firstnobtn.addActionListener(e -> firstnobtnActionPerformed());
+                panel4.add(firstnobtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            firstdialogContentPane.add(panel4, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+            firstdialog.setSize(280, 130);
+            firstdialog.setLocationRelativeTo(firstdialog.getOwner());
+        }
+
+        //======== seconddialog ========
+        {
+            seconddialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            seconddialog.setResizable(false);
+            Container seconddialogContentPane = seconddialog.getContentPane();
+            seconddialogContentPane.setLayout(new GridBagLayout());
+            ((GridBagLayout)seconddialogContentPane.getLayout()).columnWidths = new int[] {10, 144, 0};
+            ((GridBagLayout)seconddialogContentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)seconddialogContentPane.getLayout()).columnWeights = new double[] {0.0, 1.0, 1.0E-4};
+            ((GridBagLayout)seconddialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0, 1.0E-4};
+
+            //---- label3 ----
+            label3.setText("\u041e\u043f\u043b\u0430\u0442\u0438\u0442\u044c?");
+            label3.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+            seconddialogContentPane.add(label3, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //======== panel5 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel5.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel5.getBorder())); panel5.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel5.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel5.getLayout()).columnWidths = new int[] {0, 0, 0};
+                ((GridBagLayout)panel5.getLayout()).rowHeights = new int[] {13, 0};
+                ((GridBagLayout)panel5.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
+                ((GridBagLayout)panel5.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
+
+                //---- secondokbtn ----
+                secondokbtn.setText("\u0414\u0430");
+                secondokbtn.addActionListener(e -> secondokbtnActionPerformed());
+                panel5.add(secondokbtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.BELOW_BASELINE, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- secondnobtn ----
+                secondnobtn.setText("\u041d\u0435\u0442");
+                secondnobtn.addActionListener(e -> secondnobtnActionPerformed());
+                panel5.add(secondnobtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.BELOW_BASELINE, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            seconddialogContentPane.add(panel5, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+            seconddialog.setSize(195, 145);
+            seconddialog.setLocationRelativeTo(seconddialog.getOwner());
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -326,13 +430,21 @@ public class RegisterDelivery extends JFrame {
     private JTable deliverytable;
     private JPanel panel3;
     private JButton nobtn;
-    private JButton registerbtn;
     private JButton registerandpaybtn;
-    private JButton paybtn;
     private JDialog deliverydialog;
     private JLabel label1;
     private JTextField deliveryCodetextField;
     private JButton skipbtn;
     private JButton okbtn;
+    private JDialog firstdialog;
+    private JLabel label2;
+    private JPanel panel4;
+    private JButton firstokbtn;
+    private JButton firstnobtn;
+    private JDialog seconddialog;
+    private JLabel label3;
+    private JPanel panel5;
+    private JButton secondokbtn;
+    private JButton secondnobtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
