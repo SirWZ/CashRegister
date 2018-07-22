@@ -3,10 +3,13 @@ JFDML JFormDesigner: "6.0.3.0.150" Java: "1.8.0_152-release" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
-		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "hidemode 3"
-			"$columnConstraints": "[4,fill][87,grow,fill][165,grow,fill]"
-			"$rowConstraints": "[][40,grow,fill][42,grow,fill][46,grow,fill][95,grow,fill][39,grow,fill]"
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "5, 109:1.0, 206:1.0"
+			"$rowSpecs": "baseline:0, 50:1.0, 53:1.0, 58:1.0, 119:1.0, 49:1.0"
+			"$hGap": 9
+			"$vGap": 9
+			"$alignTop": true
+			"$alignLeft": true
 		} ) {
 			name: "this"
 			"title": "Списать товар"
@@ -15,41 +18,52 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "namelabel"
 				"text": "Название"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1,alignx center,growx 0"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 1
+				"hAlign": 0
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "nametextField"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": ""
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 2
+				"gridy": 1
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "codelabel"
 				"text": "Код товара"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2,alignx center,growx 0"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 2
+				"hAlign": 0
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "codetextField"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 2"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 2
+				"gridy": 2
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "countlabel"
 				"text": "Количество"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3,alignx center,growx 0"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 3
+				"hAlign": 0
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "counttextField"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 3"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 2
+				"gridy": 3
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "reasonlabel"
 				"text": "Причина"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4,alignx center,growx 0"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 4
+				"hAlign": 0
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
@@ -58,8 +72,9 @@ new FormModel {
 					name: "reasontextArea"
 					"lineWrap": true
 				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 4"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 2
+				"gridy": 4
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
@@ -75,8 +90,9 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 0 2 2"
 				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 5"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 2
+				"gridy": 5
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
