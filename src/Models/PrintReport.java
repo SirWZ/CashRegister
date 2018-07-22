@@ -54,6 +54,8 @@ class PrintReport extends JFrame {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
         panel2 = new JPanel();
+        panel3 = new JPanel();
+        button1 = new JButton();
         label1 = new JLabel();
         panel1 = new JPanel();
         reptbtn1 = new JButton();
@@ -82,16 +84,34 @@ class PrintReport extends JFrame {
 
             panel2.setLayout(new GridBagLayout());
             ((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {142, 0};
-            ((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {63, 0};
+            ((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {0, 68, 0, 0};
             ((GridBagLayout)panel2.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-            ((GridBagLayout)panel2.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
+            ((GridBagLayout)panel2.getLayout()).rowWeights = new double[] {1.0, 1.0, 0.0, 1.0E-4};
+
+            //======== panel3 ========
+            {
+                panel3.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel3.getLayout()).columnWidths = new int[] {97, 265, 0};
+                ((GridBagLayout)panel3.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)panel3.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
+                ((GridBagLayout)panel3.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
+
+                //---- button1 ----
+                button1.setText("\u0412\u044b\u0445\u043e\u0434");
+                panel3.add(button1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
+            }
+            panel2.add(panel3, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
 
             //---- label1 ----
             label1.setText("\u0412\u044b\u0431\u043e\u0440 \u043e\u0442\u0447\u0435\u0442\u0430");
             label1.setFont(new Font("Segoe UI", Font.PLAIN, 30));
-            panel2.add(label1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            panel2.add(label1, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 5, 0), 0, 0));
         }
         contentPane.add(panel2);
 
@@ -132,7 +152,7 @@ class PrintReport extends JFrame {
                 new Insets(0, 0, 0, 5), 0, 0));
         }
         contentPane.add(panel1);
-        setSize(350, 375);
+        setSize(405, 405);
         setLocationRelativeTo(getOwner());
 
         //======== printdialog ========
@@ -169,6 +189,8 @@ class PrintReport extends JFrame {
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
     private JPanel panel2;
+    private JPanel panel3;
+    private JButton button1;
     private JLabel label1;
     private JPanel panel1;
     private JButton reptbtn1;
