@@ -18,6 +18,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "logintextField"
+				auxiliary() {
+					"JavaCodeGenerator.variableModifiers": 1
+				}
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "passwordLabel"

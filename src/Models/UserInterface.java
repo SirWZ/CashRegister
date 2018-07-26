@@ -6,19 +6,58 @@ package Models;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;
+import java.util.Arrays;
 import javax.swing.*;
 
 /**
  * @author Gevtsi Yurii
  */
 public class UserInterface extends JFrame {
+
+    Connection cn;
+    PreparedStatement pr;
+    JTextField logintextField;
+    JPasswordField passwordField;
+
+
     public UserInterface() {
         initComponents();
     }
 
-    private void loggBtnActionPerformed() {
-        new CashierViewWindow();
-        this.dispose();
+    private void loggBtnActionPerformed()  {
+        try {
+            Class.forName("org.postgresql.Driver");
+            cn= DriverManager.getConnection("jdbc:postgresql://25.90.246.178:5432/postgres","postgres","shift");
+            pr = cn.prepareStatement("select password from worker_password where idwor="+logintextField.getText());
+            ResultSet rs =  pr.executeQuery();
+            if (rs.next() ){
+                if (Arrays.equals(rs.getString("password").toCharArray(),passwordField.getPassword())){
+                    new CashierViewWindow();
+                    this.dispose();
+                }else  JOptionPane.showMessageDialog(this,"Неверный пароль","Error",JOptionPane.ERROR_MESSAGE);
+            }else JOptionPane.showMessageDialog(this,"Неверный логин","Error",JOptionPane.ERROR_MESSAGE);
+        }
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
+        }
+        finally {
+            if (cn!=null) {
+                try {
+                    cn.close();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            if (pr!=null) {
+                try {
+                    pr.close();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
     }
 
     private void passwordFieldKeyPressed(KeyEvent e) {
@@ -31,9 +70,9 @@ public class UserInterface extends JFrame {
         // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
         JLabel loginLable = new JLabel();
-        JTextField logintextField = new JTextField();
+        logintextField = new JTextField();
         JLabel passwordLabel = new JLabel();
-        JPasswordField passwordField = new JPasswordField();
+        passwordField = new JPasswordField();
         JPanel spacepanel = new JPanel();
         JPanel loggpanel = new JPanel();
         loggBtn = new JButton();
