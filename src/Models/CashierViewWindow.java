@@ -16,15 +16,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.SystemColor;
 import java.awt.Font;
+import java.sql.Connection;
 
 class CashierViewWindow {
 
 	private JFrame frame;
+	Connection cn;
 
 	/**
 	 * Create the application.
 	 */
-	CashierViewWindow() {
+	CashierViewWindow(Connection cn) {this.cn=cn;
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -57,7 +59,7 @@ class CashierViewWindow {
 
 		// Кнопка Закончить смену
 		JButton endSessionButton = new JButton("Закончить смену");
-		endSessionButton.addActionListener(e -> new FinishWork(frame).setVisible(true));
+		endSessionButton.addActionListener(e -> new FinishWork(frame,cn).setVisible(true));
 		arrayOfButtons[0][3] = endSessionButton;
 
 		// Кнопка Мой магазин
@@ -94,7 +96,7 @@ class CashierViewWindow {
 		JButton exitButton = new JButton("Выход");
 		exitButton.addActionListener(e -> {
             frame.dispose();
-            new UserInterface().setVisible(true);
+            new UserInterface(cn).setVisible(true);
 		});
 		arrayOfButtons[1][4] = exitButton;
 

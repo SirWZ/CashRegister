@@ -12,6 +12,10 @@ new FormModel {
 			"title": "Logg in"
 			"$sizePolicy": 1
 			"resizable": false
+			auxiliary() {
+				"JavaCodeGenerator.variableModifiers": 1
+				"JavaCodeGenerator.variableLocal": true
+			}
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "loginLable"
 				"text": "Login"
@@ -39,12 +43,74 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "loggBtn"
 					"text": "Logg  in"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "loggBtnActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "loggBtnActionPerformed", false ) )
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 0 )
+			"location": new java.awt.Point( 35, 0 )
 			"size": new java.awt.Dimension( 405, 160 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "192:1.0"
+			"$rowSpecs": "0:1.0, 0:1.0"
+			"$hGap": 5
+			"$vGap": 5
+			"$alignLeft": true
+			"$alignTop": true
+		} ) {
+			name: "newworkdialog"
+			"$sizePolicy": 1
+			"defaultCloseOperation": 2
+			"resizable": false
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0, 0:1.0"
+				"$rowSpecs": "0:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panellbl"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "Начать смену?"
+					"font": new java.awt.Font( "Segoe UI", 0, 30 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"vAlign": 5
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0, 0:1.0"
+				"$rowSpecs": "0:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panelbtn"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "okBtn"
+					"text": "Да"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"hAlign": 5
+					"vAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "noBtn"
+					"text": "Нет"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "noBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"vAlign": 0
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 500, 215 )
+			"size": new java.awt.Dimension( 255, 145 )
 		} )
 	}
 }
