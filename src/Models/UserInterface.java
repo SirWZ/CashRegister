@@ -30,20 +30,22 @@ public class UserInterface extends JFrame {
                 if (Arrays.equals(rs.getString("password").toCharArray(),passwordField.getPassword())){
                     this.dispose();
                     newworkdialog.setVisible(true);
-                }else  JOptionPane.showMessageDialog(this,"Неверный пароль","Error",JOptionPane.ERROR_MESSAGE);
-            }else JOptionPane.showMessageDialog(this,"Неверный логин","Error",JOptionPane.ERROR_MESSAGE);
+                }else  {
+                    passwordField.setText("");
+                    JOptionPane.showMessageDialog(this,"Неверный пароль","Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }else {
+                logintextField.setText("");
+                JOptionPane.showMessageDialog(this,"Неверный логин","Error",JOptionPane.ERROR_MESSAGE);
+            }
         }
         catch(Exception e) {
-            JOptionPane.showMessageDialog(this,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Hеверный формат данных","Error",JOptionPane.ERROR_MESSAGE);
+            logintextField.setText("");
+            passwordField.setText("");
         }
         finally {
-            if (cn!=null) {
-                try {
-                    cn.close();
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
-                }
-            }
+
             if (pr!=null) {
                 try {
                     pr.close();
@@ -69,27 +71,41 @@ public class UserInterface extends JFrame {
         newworkdialog.dispose();
     }
 
+    private void thisWindowClosing() {
+        try {
+            cn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        loginLable = new JLabel();
+        JLabel loginLable = new JLabel();
         logintextField = new JTextField();
-        passwordLabel = new JLabel();
+        JLabel passwordLabel = new JLabel();
         passwordField = new JPasswordField();
-        spacepanel = new JPanel();
-        loggpanel = new JPanel();
+        JPanel spacepanel = new JPanel();
+        JPanel loggpanel = new JPanel();
         loggBtn = new JButton();
         newworkdialog = new JDialog();
-        panellbl = new JPanel();
-        label1 = new JLabel();
-        panelbtn = new JPanel();
-        okBtn = new JButton();
-        noBtn = new JButton();
+        JPanel panellbl = new JPanel();
+        JLabel label1 = new JLabel();
+        JPanel panelbtn = new JPanel();
+        JButton okBtn = new JButton();
+        JButton noBtn = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Logg in");
         setResizable(false);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                thisWindowClosing();
+            }
+        });
         Container contentPane = getContentPane();
         contentPane.setLayout(new GridLayout(3, 2));
 
@@ -144,7 +160,6 @@ public class UserInterface extends JFrame {
 
             //======== panellbl ========
             {
-
                 panellbl.setLayout(new GridBagLayout());
                 ((GridBagLayout)panellbl.getLayout()).columnWidths = new int[] {0, 0, 0};
                 ((GridBagLayout)panellbl.getLayout()).rowHeights = new int[] {0, 0};
@@ -195,18 +210,9 @@ public class UserInterface extends JFrame {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-    private JLabel loginLable;
-    public JTextField logintextField;
-    private JLabel passwordLabel;
+    private JTextField logintextField;
     private JPasswordField passwordField;
-    private JPanel spacepanel;
-    private JPanel loggpanel;
     private JButton loggBtn;
     private JDialog newworkdialog;
-    private JPanel panellbl;
-    private JLabel label1;
-    private JPanel panelbtn;
-    private JButton okBtn;
-    private JButton noBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

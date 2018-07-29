@@ -16,19 +16,24 @@ new FormModel {
 				"JavaCodeGenerator.variableModifiers": 1
 				"JavaCodeGenerator.variableLocal": true
 			}
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosing", "thisWindowClosing", false ) )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "loginLable"
 				"text": "Login"
+				auxiliary() {
+					"JavaCodeGenerator.variableModifiers": 0
+					"JavaCodeGenerator.variableLocal": true
+				}
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "logintextField"
-				auxiliary() {
-					"JavaCodeGenerator.variableModifiers": 1
-				}
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "passwordLabel"
 				"text": "Password"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField"
@@ -37,9 +42,15 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
 				name: "spacepanel"
 				"visible": false
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
 				name: "loggpanel"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "loggBtn"
 					"text": "Logg  in"
@@ -71,10 +82,16 @@ new FormModel {
 				"$alignTop": true
 			} ) {
 				name: "panellbl"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label1"
 					"text": "Начать смену?"
 					"font": new java.awt.Font( "Segoe UI", 0, 30 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 					"vAlign": 5
@@ -89,9 +106,15 @@ new FormModel {
 				"$alignTop": true
 			} ) {
 				name: "panelbtn"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "okBtn"
 					"text": "Да"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"hAlign": 5
@@ -100,6 +123,9 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "noBtn"
 					"text": "Нет"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "noBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1

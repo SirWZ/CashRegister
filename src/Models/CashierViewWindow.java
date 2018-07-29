@@ -3,20 +3,15 @@ package Models;
 
 import Models.PayInterfaceModel.BigPayInterface;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
 import java.awt.GridLayout;
-import javax.swing.JButton;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.SystemColor;
 import java.awt.Font;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 class CashierViewWindow {
 
@@ -29,6 +24,16 @@ class CashierViewWindow {
 	CashierViewWindow(Connection cn) {this.cn=cn;
 		initialize();
 		this.frame.setVisible(true);
+		this.frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try {
+					cn.close();
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(frame,ex.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 	}
 
 	private void initialize() {
