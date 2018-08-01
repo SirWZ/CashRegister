@@ -52,9 +52,6 @@ public class BigPayInterface {
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
-		JPanel panel = new JPanel();
-		JPanel panel1 = new JPanel();
-		JPanel panel2 = new JPanel();
 		tabbedPane.addTab("Чек 1", null, new CombinedPanelForBigPay(), null);
 		tabbedPane.addTab("Чек 2", null, new CombinedPanelForBigPay(), null);
 		tabbedPane.addTab("Чек 3", null, new CombinedPanelForBigPay(), null);
@@ -73,7 +70,7 @@ public class BigPayInterface {
 		bottomPanel.add(dateLabel, BorderLayout.EAST);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
-		//frame.setUndecorated(true);
+
 	}
 
 	private void setLabelAsTimer(JLabel label) {

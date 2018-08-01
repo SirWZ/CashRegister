@@ -24,16 +24,17 @@ public class RightPanelForBigPay extends JPanel {
 	 */
 	public RightPanelForBigPay() {
 		setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panel = new JPanel();
+		panel.setMinimumSize(new Dimension(200, 200));
 		add(panel, BorderLayout.SOUTH);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_panel.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-		
+
 		JButton btnNewButton = new JButton("Поиск по коду");
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
@@ -42,8 +43,8 @@ public class RightPanelForBigPay extends JPanel {
 		gbc_btnNewButton.gridx = 0;
 		gbc_btnNewButton.gridy = 0;
 		panel.add(btnNewButton, gbc_btnNewButton);
-		
-		JButton btnNewButton_3 = new JButton("Орехи");
+
+		JButton btnNewButton_3 = new JButton("Категории");
 		btnNewButton_3.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
 		gbc_btnNewButton_3.fill = GridBagConstraints.BOTH;
@@ -51,8 +52,8 @@ public class RightPanelForBigPay extends JPanel {
 		gbc_btnNewButton_3.gridx = 1;
 		gbc_btnNewButton_3.gridy = 0;
 		panel.add(btnNewButton_3, gbc_btnNewButton_3);
-		
-		JButton btnNewButton_6 = new JButton("Булки");
+
+		JButton btnNewButton_6 = new JButton("Отложить чек");
 		btnNewButton_6.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_btnNewButton_6 = new GridBagConstraints();
 		gbc_btnNewButton_6.fill = GridBagConstraints.BOTH;
@@ -60,7 +61,7 @@ public class RightPanelForBigPay extends JPanel {
 		gbc_btnNewButton_6.gridx = 2;
 		gbc_btnNewButton_6.gridy = 0;
 		panel.add(btnNewButton_6, gbc_btnNewButton_6);
-		
+
 		JButton btnNewButton_1 = new JButton("Проверить цену");
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
@@ -69,8 +70,8 @@ public class RightPanelForBigPay extends JPanel {
 		gbc_btnNewButton_1.gridx = 0;
 		gbc_btnNewButton_1.gridy = 1;
 		panel.add(btnNewButton_1, gbc_btnNewButton_1);
-		
-		JButton btnNewButton_4 = new JButton("Ещё одна");
+
+		JButton btnNewButton_4 = new JButton("Выход");
 		btnNewButton_4.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
 		gbc_btnNewButton_4.fill = GridBagConstraints.BOTH;
@@ -78,8 +79,8 @@ public class RightPanelForBigPay extends JPanel {
 		gbc_btnNewButton_4.gridx = 1;
 		gbc_btnNewButton_4.gridy = 1;
 		panel.add(btnNewButton_4, gbc_btnNewButton_4);
-		
-		JButton btnNewButton_7 = new JButton("Овощи");
+
+		JButton btnNewButton_7 = new JButton("Продать со скидкой");
 		btnNewButton_7.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		GridBagConstraints gbc_btnNewButton_7 = new GridBagConstraints();
 		gbc_btnNewButton_7.fill = GridBagConstraints.BOTH;
@@ -87,14 +88,14 @@ public class RightPanelForBigPay extends JPanel {
 		gbc_btnNewButton_7.gridx = 2;
 		gbc_btnNewButton_7.gridy = 1;
 		panel.add(btnNewButton_7, gbc_btnNewButton_7);
-		
+
 		JButton btnNewButton_5 = new JButton("Оплата");
 		btnNewButton_5.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		
+
 		JLabel label = new JLabel(" Всего:");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		label.setHorizontalAlignment(SwingConstants.LEFT);
@@ -110,22 +111,22 @@ public class RightPanelForBigPay extends JPanel {
 		gbc_btnNewButton_5.gridx = 1;
 		gbc_btnNewButton_5.gridy = 2;
 		panel.add(btnNewButton_5, gbc_btnNewButton_5);
-		
+
 		JPanel panel_2 = new JPanel();
 		add(panel_2, BorderLayout.NORTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
-		
+
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		textField.setText("Поиск товара");
 		panel_2.add(textField);
 		textField.setColumns(10);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane, BorderLayout.CENTER);
-		
+
 		JList list = new JList();
-		list.setMaximumSize(new Dimension(0, 200));
+		list.setMaximumSize(new Dimension(0, 0));
 		list.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		scrollPane.setViewportView(list);
 

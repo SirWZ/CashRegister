@@ -195,8 +195,8 @@ public class ButtonsPanelForBigPay extends JPanel {
 
 	private void clearTextByButton(JButton button) {
 		button.addActionListener(e -> {
-			if(textField.getText().length() > 0)
-			textField.setText(textField.getText().substring(0, textField.getText().length() - 1));
+			if (textField.getText().length() > 0)
+				textField.setText(textField.getText().substring(0, textField.getText().length() - 1));
 		});
 	}
 
