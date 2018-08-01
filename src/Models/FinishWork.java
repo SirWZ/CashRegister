@@ -5,6 +5,8 @@
 package Models;
 
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -12,9 +14,10 @@ import javax.swing.border.*;
  * @author Gevtsi Yurii
  */
  class FinishWork extends JDialog {
-     Frame frame;
-    FinishWork(Frame owner) {
-        super(owner);
+    Connection cn;
+     private Frame frame;
+    FinishWork(Frame owner,Connection cn) {
+        super(owner);this.cn=cn;
         frame = owner;
         initComponents();
         this.setResizable(false);
@@ -48,7 +51,12 @@ import javax.swing.border.*;
     private void cancelButton3ActionPerformed() {
         printdialog.dispose();
         JOptionPane.showMessageDialog(this,"Смена закончена","",JOptionPane.INFORMATION_MESSAGE);
-        new UserInterface().setVisible(true);
+        try {
+            cn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+        new UserInterface(cn).setVisible(true);
     }
 
     private void okButton4ActionPerformed() {

@@ -9,6 +9,10 @@ new FormModel {
 		} ) {
 			name: "this"
 			"$sizePolicy": 1
+			"defaultCloseOperation": 2
+			auxiliary() {
+				"JavaCodeGenerator.variableLocal": true
+			}
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "findbtn"
 				"text": "Поиск товара в чеке"
@@ -97,12 +101,12 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "returnbtn"
 				"text": "Вернуть товары"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "returnbtnActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "returnbtnActionPerformed", false ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "exitbtn"
-				"text": "Тут будет иконка"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtnActionPerformed", true ) )
+				"text": "Выход"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtnActionPerformed", false ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
@@ -123,12 +127,12 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "exitbtn2"
 				"text": "Выход"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtn2ActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtn2ActionPerformed", false ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "nextbtn2"
 				"text": "Дале"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nextbtn2ActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nextbtn2ActionPerformed", false ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 190, 410 )

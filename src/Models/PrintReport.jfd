@@ -3,45 +3,91 @@ JFDML JFormDesigner: "6.0.3.0.150" Java: "1.8.0_152-release" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
-		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "insets 0,hidemode 3,gap 0 0"
-			"$columnConstraints": "[grow,fill][fill][grow,fill][fill][grow,fill]"
-			"$rowConstraints": "[][47,grow,fill][][31][16][42,grow,fill][12]"
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.GridLayout ) {
+			"rows": 2
 		} ) {
 			name: "this"
 			"$sizePolicy": 1
 			"defaultCloseOperation": 2
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "reptbtn1"
-				"text": "Отчет 1"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn1ActionPerformed", true ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "142:1.0"
+				"$rowSpecs": "0:1.0, 63:1.0, 0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel2"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "92:1.0, 265:1.0"
+					"$rowSpecs": "0:1.0"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "panel3"
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button1"
+						"text": "Выход"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"vAlign": 5
+						"hAlign": 5
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "Выбор отчета"
+					"font": new java.awt.Font( "Segoe UI", 0, 30 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"hAlign": 0
+					"vAlign": 0
+					"gridy": 1
+				} )
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "reptbtn2"
-				"text": "Отчет 2"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn2ActionPerformed", true ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 1"
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "reptbtn3"
-				"text": "Отчет 3"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn3ActionPerformed", true ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5"
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "reptbtn4"
-				"text": "Отчет 4"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn4ActionPerformed", true ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 5"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0, 127:1.0, 0, 124:1.0, 0"
+				"$rowSpecs": "74:1.0, 73:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "reptbtn1"
+					"text": "Отчет 1"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn1ActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "reptbtn2"
+					"text": "Отчет 2"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn2ActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 3
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "reptbtn3"
+					"text": "Отчет 3"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn3ActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "reptbtn4"
+					"text": "Отчет 4"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reptbtn4ActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
+					"gridx": 3
+				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 15, 5 )
-			"size": new java.awt.Dimension( 400, 300 )
+			"size": new java.awt.Dimension( 405, 405 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
 			"autoSize": false
@@ -50,6 +96,8 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "printlbl"
 				"text": "Напечатать"
+				"font": new java.awt.Font( "Segoe UI", 0, 20 )
+				"horizontalAlignment": 0
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 25
 				"y": 30
@@ -59,7 +107,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "okprintbtn"
 				"text": "Да"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okprintbtnActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okprintbtnActionPerformed", false ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 25
 				"y": 90
@@ -68,7 +116,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "noprintbtn"
 				"text": "Нет"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "noprintbtnActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "noprintbtnActionPerformed", false ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 150
 				"y": 90

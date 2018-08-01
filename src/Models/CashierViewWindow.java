@@ -1,38 +1,41 @@
 
 package Models;
 
-import javax.swing.JFrame;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import java.awt.GridLayout;
-import javax.swing.JButton;
+import Models.PayInterfaceModel.BigPayInterface;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+
+import java.awt.event.*;
 import java.awt.SystemColor;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 class CashierViewWindow {
 
 	private JFrame frame;
+	Connection cn;
 
 	/**
 	 * Create the application.
 	 */
-	CashierViewWindow() {
+	CashierViewWindow(Connection cn) {this.cn=cn;
 		initialize();
 		this.frame.setVisible(true);
+		this.frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try {
+					cn.close();
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(frame,ex.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	/**
-	 * 
-	 */
 	private void initialize() {
 		frame = new JFrame("Интерфейс касира");
 		frame.setBounds(100, 100, 581, 472);
@@ -46,32 +49,22 @@ class CashierViewWindow {
 
 		// Кнопка Продажи
 		JButton sellingButton = new JButton("Продажа");
-		sellingButton.addActionListener(e -> {
-
-		});
+		sellingButton.addActionListener(e -> new BigPayInterface());
 		arrayOfButtons[0][0] = sellingButton;
 
 		// Кнопка Вплаты
 		JButton payInButton = new JButton("Вплата");
-		payInButton.addActionListener(e -> {
-			new CashInOut("Вплата").setVisible(true);
-
-		});
+		payInButton.addActionListener(e -> new CashInOut("Вплата").setVisible(true));
 		arrayOfButtons[0][1] = payInButton;
 
 		// Кнопка выплаты
 		JButton payOffButton = new JButton("Выплата");
-		payOffButton.addActionListener(e -> {
-			new CashInOut("Выплата").setVisible(true);
-
-		});
+		payOffButton.addActionListener(e -> new CashInOut("Выплата").setVisible(true));
 		arrayOfButtons[0][2] = payOffButton;
 
 		// Кнопка Закончить смену
 		JButton endSessionButton = new JButton("Закончить смену");
-		endSessionButton.addActionListener(e -> {
-
-		});
+		endSessionButton.addActionListener(e -> new FinishWork(frame,cn).setVisible(true));
 		arrayOfButtons[0][3] = endSessionButton;
 
 		// Кнопка Мой магазин
@@ -83,36 +76,32 @@ class CashierViewWindow {
 
 		// Кнопка Возврат товара
 		JButton retrieveGoodsButton = new JButton("Возврат товара");
-		retrieveGoodsButton.addActionListener(e -> {
-
-		});
+		retrieveGoodsButton.addActionListener(e -> new ReturnProduct());
 		arrayOfButtons[1][0] = retrieveGoodsButton;
 
 		// Кнопка принять доставку
 		JButton acceptDeliveryButton = new JButton("Принять доставку");
 		acceptDeliveryButton.addActionListener(e -> {
+			new RegisterDelivery();
 
 		});
 		arrayOfButtons[1][1] = acceptDeliveryButton;
 
 		// Кнопка списать товар
 		JButton deleteGoodsButton = new JButton("Списать товар");
-		deleteGoodsButton.addActionListener(e -> {
-
-		});
+		deleteGoodsButton.addActionListener(e -> new WriteOffProd(cn).setVisible(true));
 		arrayOfButtons[1][2] = deleteGoodsButton;
 
 		// Кнопка напечатать отчёт
 		JButton printDeclarationButton = new JButton("Напечатать отчёт");
-		printDeclarationButton.addActionListener(e -> {
-
-		});
+		printDeclarationButton.addActionListener(e -> new PrintReport().setVisible(true));
 		arrayOfButtons[1][3] = printDeclarationButton;
 
 		// Конпка Выход
 		JButton exitButton = new JButton("Выход");
 		exitButton.addActionListener(e -> {
-
+            frame.dispose();
+            new UserInterface(cn).setVisible(true);
 		});
 		arrayOfButtons[1][4] = exitButton;
 
