@@ -159,10 +159,16 @@ new FormModel {
 				"$alignTop": true
 			} ) {
 				name: "panel1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "moneylbl"
 					"text": "Внести деньги?"
 					"font": new java.awt.Font( "Segoe UI", 0, 30 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )
@@ -176,6 +182,9 @@ new FormModel {
 				"$alignTop": true
 			} ) {
 				name: "panel2"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "okbtn"
 					"text": "Да"
@@ -223,10 +232,16 @@ new FormModel {
 				"$alignTop": true
 			} ) {
 				name: "panel3"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "reportlbl"
 					"text": "Напечатать отчет?"
 					"font": new java.awt.Font( "Segoe UI", 0, 30 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"hAlign": 0
 				} )
@@ -240,6 +255,9 @@ new FormModel {
 				"$alignTop": true
 			} ) {
 				name: "panel4"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "okreptbtn"
 					"text": "Да"

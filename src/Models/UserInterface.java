@@ -7,7 +7,10 @@ package Models;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import javax.swing.*;
 
 /**
@@ -24,12 +27,36 @@ public class UserInterface extends JFrame {
 
     private void loggBtnActionPerformed()  {
         try {
-            pr = cn.prepareStatement("select password from worker_password where idwor="+logintextField.getText());
+            String idwork = logintextField.getText();
+           // SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            pr = cn.prepareStatement("select password from worker_password where idwor="+idwork);
             ResultSet rs =  pr.executeQuery();
             if (rs.next() ){
                 if (Arrays.equals(rs.getString("password").toCharArray(),passwordField.getPassword())){
-                    this.dispose();
-                    newworkdialog.setVisible(true);
+                    pr = cn.prepareStatement("SELECT idShift from shift where endingTime is null ");
+                    rs = pr.executeQuery();
+                    if (rs.next())//если смена начата
+                    {
+                        int idShift = rs.getInt("idshift");
+                        int idshiftworker=-1;
+                        pr = cn.prepareStatement("SELECT max (idshiftworker) from shift_worker where logouttime is null ");
+                        rs = pr.executeQuery();
+                        if (rs.next())idshiftworker = rs.getInt(1);
+                        idshiftworker++;
+                        pr = cn.prepareStatement(
+                                "insert into shift_worker(idwor,idshift,idshiftworker,logintime)" +
+                                "values (" + idwork + ","+idShift+ ","+idshiftworker+",'"+java.time.LocalDate.now()+"')"
+                        );
+                        pr.executeUpdate();
+                        pr.clearBatch();
+                        this.dispose();
+                        new CashierViewWindow(cn);
+                    }
+                    else {
+                        this.dispose();
+                        newworkdialog.setVisible(true);
+                    }
+
                 }else  {
                     passwordField.setText("");
                     JOptionPane.showMessageDialog(this,"Неверный пароль","Error",JOptionPane.ERROR_MESSAGE);
@@ -40,7 +67,8 @@ public class UserInterface extends JFrame {
             }
         }
         catch(Exception e) {
-            JOptionPane.showMessageDialog(this,"Hеверный формат данных","Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
             logintextField.setText("");
             passwordField.setText("");
         }
@@ -62,8 +90,33 @@ public class UserInterface extends JFrame {
     }
 
     private void okBtnActionPerformed() {
-        moneydialog.setVisible(true);
         newworkdialog.dispose();
+        String idwork = logintextField.getText();
+        try{
+            ResultSet rs;
+            pr = cn.prepareStatement(
+                    "insert into shift(idshift,beginingtime) values (1,"+"'" + java.time.LocalDate.now() + "')"
+            );
+            pr.executeUpdate();
+            pr = cn.prepareStatement(
+                    "select idshift from shift where endingtime is null "
+            );
+            rs = pr.executeQuery();
+            int idshift;
+            if (rs.next()){
+                idshift=rs.getInt("idshift");
+                pr = cn.prepareStatement(
+                        "insert into shift_worker(idwor,idshift,idshiftworker,logintime)" +
+                                "values (" + idwork + ","+idshift+ ","+1+",'2018-08-04')"
+                );
+                pr.executeUpdate();
+                pr.clearBatch();
+                this.dispose();
+            }
+        }catch (Exception e){
+
+        }
+        moneydialog.setVisible(true);
     }
 
     private void noBtnActionPerformed() {
@@ -118,15 +171,15 @@ public class UserInterface extends JFrame {
         JButton okBtn = new JButton();
         JButton noBtn = new JButton();
         moneydialog = new JDialog();
-        panel1 = new JPanel();
-        moneylbl = new JLabel();
-        panel2 = new JPanel();
+        JPanel panel1 = new JPanel();
+        JLabel moneylbl = new JLabel();
+        JPanel panel2 = new JPanel();
         JButton okbtn = new JButton();
         JButton nobtn = new JButton();
         printreptdialog = new JDialog();
-        panel3 = new JPanel();
-        reportlbl = new JLabel();
-        panel4 = new JPanel();
+        JPanel panel3 = new JPanel();
+        JLabel reportlbl = new JLabel();
+        JPanel panel4 = new JPanel();
         JButton okreptbtn = new JButton();
         JButton noreptbtn = new JButton();
 
@@ -164,6 +217,14 @@ public class UserInterface extends JFrame {
         //======== spacepanel ========
         {
             spacepanel.setVisible(false);
+
+            // JFormDesigner evaluation mark
+            spacepanel.setBorder(new javax.swing.border.CompoundBorder(
+                new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                    "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                    javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                    java.awt.Color.red), spacepanel.getBorder())); spacepanel.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
             spacepanel.setLayout(new FlowLayout());
         }
         contentPane.add(spacepanel);
@@ -194,6 +255,14 @@ public class UserInterface extends JFrame {
 
             //======== panellbl ========
             {
+
+                // JFormDesigner evaluation mark
+                panellbl.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panellbl.getBorder())); panellbl.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
                 panellbl.setLayout(new GridBagLayout());
                 ((GridBagLayout)panellbl.getLayout()).columnWidths = new int[] {0, 0, 0};
                 ((GridBagLayout)panellbl.getLayout()).rowHeights = new int[] {0, 0};
@@ -253,6 +322,14 @@ public class UserInterface extends JFrame {
 
             //======== panel1 ========
             {
+
+                // JFormDesigner evaluation mark
+                panel1.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
                 panel1.setLayout(new GridBagLayout());
                 ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {14, 0, 0};
                 ((GridBagLayout)panel1.getLayout()).rowHeights = new int[] {0, 0};
@@ -313,6 +390,14 @@ public class UserInterface extends JFrame {
 
             //======== panel3 ========
             {
+
+                // JFormDesigner evaluation mark
+                panel3.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel3.getBorder())); panel3.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
                 panel3.setLayout(new GridBagLayout());
                 ((GridBagLayout)panel3.getLayout()).columnWidths = new int[] {0, 0};
                 ((GridBagLayout)panel3.getLayout()).rowHeights = new int[] {0, 0};
@@ -368,12 +453,6 @@ public class UserInterface extends JFrame {
     private JButton loggBtn;
     private JDialog newworkdialog;
     private JDialog moneydialog;
-    private JPanel panel1;
-    private JLabel moneylbl;
-    private JPanel panel2;
     private JDialog printreptdialog;
-    private JPanel panel3;
-    private JLabel reportlbl;
-    private JPanel panel4;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
