@@ -7,10 +7,7 @@ package Models;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import javax.swing.*;
 
 /**
@@ -20,6 +17,7 @@ public class UserInterface extends JFrame {
 
     Connection cn;
     PreparedStatement pr;
+    public static int idwor;
 
     public UserInterface(Connection cn) {this.cn=cn;
         initComponents();
@@ -27,9 +25,9 @@ public class UserInterface extends JFrame {
 
     private void loggBtnActionPerformed()  {
         try {
-            String idwork = logintextField.getText();
+            idwor = Integer.parseInt(logintextField.getText());
            // SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            pr = cn.prepareStatement("select password from worker_password where idwor="+idwork);
+            pr = cn.prepareStatement("select password from worker_password where idwor="+idwor);
             ResultSet rs =  pr.executeQuery();
             if (rs.next() ){
                 if (Arrays.equals(rs.getString("password").toCharArray(),passwordField.getPassword())){
@@ -38,17 +36,7 @@ public class UserInterface extends JFrame {
                     if (rs.next())//если смена начата
                     {
                         int idShift = rs.getInt("idshift");
-                        int idshiftworker=-1;
-                        pr = cn.prepareStatement("SELECT max (idshiftworker) from shift_worker where logouttime is null ");
-                        rs = pr.executeQuery();
-                        if (rs.next())idshiftworker = rs.getInt(1);
-                        idshiftworker++;
-                        pr = cn.prepareStatement(
-                                "insert into shift_worker(idwor,idshift,idshiftworker,logintime)" +
-                                "values (" + idwork + ","+idShift+ ","+idshiftworker+",'"+java.time.LocalDate.now()+"')"
-                        );
-                        pr.executeUpdate();
-                        pr.clearBatch();
+                        createShiftWorker(idShift);
                         this.dispose();
                         new CashierViewWindow(cn);
                     }
@@ -91,37 +79,61 @@ public class UserInterface extends JFrame {
 
     private void okBtnActionPerformed() {
         newworkdialog.dispose();
-        String idwork = logintextField.getText();
         try{
-            ResultSet rs;
-            pr = cn.prepareStatement(
-                    "insert into shift(idshift,beginingtime) values (1,"+"'" + java.time.LocalDate.now() + "')"
-            );
+            pr = cn.prepareStatement("insert into shift(beginingtime) values (?)");
+            pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
             pr.executeUpdate();
-            pr = cn.prepareStatement(
-                    "select idshift from shift where endingtime is null "
-            );
-            rs = pr.executeQuery();
-            int idshift;
-            if (rs.next()){
-                idshift=rs.getInt("idshift");
-                pr = cn.prepareStatement(
-                        "insert into shift_worker(idwor,idshift,idshiftworker,logintime)" +
-                                "values (" + idwork + ","+idshift+ ","+1+",'2018-08-04')"
-                );
-                pr.executeUpdate();
-                pr.clearBatch();
-                this.dispose();
-            }
+            createShiftWorker(0);
+            this.dispose();
         }catch (Exception e){
-
+            JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
         }
         moneydialog.setVisible(true);
+    }
+
+    private void createShiftWorker(int idshift)  {
+        try {
+            if (idshift == 0) {
+                pr = cn.prepareStatement("select idshift from shift where endingtime is null ");
+                ResultSet rs = pr.executeQuery();
+                rs.next();
+                idshift = rs.getInt("idshift");
+            }
+            pr = cn.prepareStatement(
+                    "insert into shift_worker(idwor,idshift,logintime)" +
+                            "values (?,?,?)"
+            );
+            pr.setInt(1, Integer.parseInt(logintextField.getText()));
+            pr.setInt(2, idshift);
+            pr.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            pr.executeUpdate();
+            pr.clearBatch();
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void noBtnActionPerformed() {
         new CashierViewWindow(cn);
         newworkdialog.dispose();
+    }
+
+    static void finishShiftWork(Connection cn) {
+        try {
+            PreparedStatement pr = cn.prepareStatement("select idshiftworker from shift_worker where logouttime is null and idwor = ?");
+            pr.setInt(1,UserInterface.idwor);
+            ResultSet rs = pr.executeQuery();
+            rs.next();
+            int idshiftworker = rs.getInt(1);
+            pr = cn.prepareStatement(
+                    "update shift_worker set logouttime = ?  where idshiftworker = ?");
+            pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
+            pr.setInt(2,idshiftworker);
+            pr.executeUpdate();
+
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
     }
 
     private void thisWindowClosing() {
@@ -133,11 +145,10 @@ public class UserInterface extends JFrame {
     }
 
     private void okbtnActionPerformed() {
-        moneydialog.dispose();printreptdialog.setVisible(true);
-       CashInOut cio = new CashInOut("Вплата");
-       cio.setVisible(true);
-
-
+        moneydialog.dispose();
+        printreptdialog.setVisible(true);
+        CashInOut cio = new CashInOut("Вплата", cn);
+        cio.setVisible(true);
     }
 
     private void nobtnActionPerformed() {

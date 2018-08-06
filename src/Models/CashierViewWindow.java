@@ -10,8 +10,7 @@ import java.awt.GridLayout;
 import java.awt.event.*;
 import java.awt.SystemColor;
 import java.awt.Font;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 
 class CashierViewWindow {
 
@@ -28,6 +27,7 @@ class CashierViewWindow {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				try {
+					UserInterface.finishShiftWork(cn);
 					cn.close();
 				} catch (SQLException ex) {
 					JOptionPane.showMessageDialog(frame,ex.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -54,12 +54,12 @@ class CashierViewWindow {
 
 		// Кнопка Вплаты
 		JButton payInButton = new JButton("Вплата");
-		payInButton.addActionListener(e -> new CashInOut("Вплата").setVisible(true));
+		payInButton.addActionListener(e -> new CashInOut("Вплата",cn).setVisible(true));
 		arrayOfButtons[0][1] = payInButton;
 
 		// Кнопка выплаты
 		JButton payOffButton = new JButton("Выплата");
-		payOffButton.addActionListener(e -> new CashInOut("Выплата").setVisible(true));
+		payOffButton.addActionListener(e -> new CashInOut("Выплата",cn).setVisible(true));
 		arrayOfButtons[0][2] = payOffButton;
 
 		// Кнопка Закончить смену
@@ -82,7 +82,7 @@ class CashierViewWindow {
 		// Кнопка принять доставку
 		JButton acceptDeliveryButton = new JButton("Принять доставку");
 		acceptDeliveryButton.addActionListener(e -> {
-			new RegisterDelivery();
+			new RegisterDelivery(cn);
 
 		});
 		arrayOfButtons[1][1] = acceptDeliveryButton;
@@ -99,10 +99,7 @@ class CashierViewWindow {
 
 		// Конпка Выход
 		JButton exitButton = new JButton("Выход");
-		exitButton.addActionListener(e -> {
-            frame.dispose();
-            new UserInterface(cn).setVisible(true);
-		});
+		exitButton.addActionListener(e -> actionPerformed());
 		arrayOfButtons[1][4] = exitButton;
 
 		setFocusEvent(arrayOfButtons);
@@ -227,4 +224,9 @@ class CashierViewWindow {
 		}
 	};
 
+	private void actionPerformed() {
+		frame.dispose();
+		UserInterface.finishShiftWork(cn);
+		new UserInterface(cn).setVisible(true);
+	}
 }

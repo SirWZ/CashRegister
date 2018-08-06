@@ -5,6 +5,7 @@
 package Models;
 
 import java.awt.*;
+import java.sql.*;
 import javax.swing.*;
 
 import static java.lang.Double.parseDouble;
@@ -13,7 +14,9 @@ import static java.lang.Double.parseDouble;
  * @author Gevtsi Yurii
  */
 class CashInOut extends JFrame {
-    CashInOut(String name) {
+    Connection cn;
+    CashInOut(String name, Connection cn) {
+        this.cn = cn;
         initComponents();
         this.setTitle(name);
     }
@@ -39,6 +42,22 @@ class CashInOut extends JFrame {
     }
 
     private void yesbtnActionPerformed() {
+        PreparedStatement pr;
+        try {
+            pr = cn.prepareStatement("select idshift from shift where endingtime is null ");
+            ResultSet rs = pr.executeQuery();
+            rs.next();
+            int idshift = rs.getInt("idshift");
+            pr = cn.prepareStatement("insert into financial_Operations(idshift,time,type,comment) values (?,?,?,?)");
+            pr.setInt(1,idshift);
+            pr.setTimestamp(2,new Timestamp(System.currentTimeMillis()));
+            pr.setString(3,this.getTitle());
+            pr.setString(4,komentlableright.getText());
+            pr.executeUpdate();
+            pr.clearBatch();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
+        }
         InOutdialog.dispose();
         dispose();
     }

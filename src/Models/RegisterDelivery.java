@@ -6,6 +6,7 @@ package Models;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -15,7 +16,9 @@ import static java.lang.Integer.parseInt;
  * @author Gevtsi Yurii
  */
 public class RegisterDelivery extends JFrame {
-    public RegisterDelivery() {
+    Connection cn;
+    public RegisterDelivery(Connection cn) {
+        this.cn=cn;
         initComponents();
         deliverydialog.setVisible(true);
     }
@@ -75,7 +78,7 @@ public class RegisterDelivery extends JFrame {
 
     private void secondokbtnActionPerformed() {
         seconddialog.dispose();
-        new CashInOut("Выплата").setVisible(true);
+        new CashInOut("Выплата", cn).setVisible(true);
     }
 
     private void secondnobtnActionPerformed() {
