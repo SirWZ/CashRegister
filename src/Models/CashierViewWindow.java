@@ -70,7 +70,8 @@ class CashierViewWindow {
 		// Кнопка Мой магазин
 		JButton myShopButton = new JButton("Мой магазин");
 		myShopButton.addActionListener(e -> {
-
+			this.frame.dispose();
+			new MyShop(cn).setVisible(true);
 		});
 		arrayOfButtons[0][4] = myShopButton;
 
