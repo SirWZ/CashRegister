@@ -174,14 +174,12 @@ new FormModel {
 					"hAlign": 4
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label1"
+					name: "namelbl"
 					"text": "text"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": true
-					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridy": 1
 					"vAlign": 3
+					"hAlign": 4
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridy": 2

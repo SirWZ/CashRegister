@@ -228,6 +228,6 @@ class CashierViewWindow {
 	private void actionPerformed() {
 		frame.dispose();
 		UserInterface.finishShiftWork(cn);
-		new UserInterface(cn).setVisible(true);
+		new UserInterface().setVisible(true);
 	}
 }

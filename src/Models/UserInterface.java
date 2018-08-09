@@ -15,12 +15,19 @@ import javax.swing.*;
  */
 public class UserInterface extends JFrame {
 
-    Connection cn;
-    PreparedStatement pr;
-    public static int idwor;
+    private Connection cn;
+    private PreparedStatement pr;
+    private static int idwor;
 
-    public UserInterface(Connection cn) {this.cn=cn;
-        initComponents();
+    public UserInterface() {
+        try {
+            Class.forName("org.postgresql.Driver");
+            cn= DriverManager.getConnection("jdbc:postgresql://25.90.246.178:5432/postgres","postgres","shift");
+            initComponents();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     private void loggBtnActionPerformed()  {

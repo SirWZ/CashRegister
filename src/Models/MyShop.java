@@ -8,23 +8,26 @@ import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import javax.swing.*;
 
 /**
  * @author Yurii
  */
 class MyShop extends JFrame {
-    Connection cn;
+    private Connection cn;
     MyShop(Connection cn) {
         initComponents();
         this.cn=cn;
         try {
-            /*
-            PreparedStatement pr = cn.prepareStatement("");
-            ResultSet rs = pr.executeQuery();
-            rs.next();*/
-        }catch (Exception e){
 
+            PreparedStatement pr = cn.prepareStatement("select surname from \"Worker\" where idwor in (select idwor from \"shift_worker\" where logouttime is null) ");
+            ResultSet rs = pr.executeQuery();
+            rs.next();
+            String name = rs.getString(1);
+            namelbl.setText(name + " " + LocalDate.now());
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"",JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -51,7 +54,7 @@ class MyShop extends JFrame {
         JButton providerBtn = new JButton();
         JPanel panel3 = new JPanel();
         JButton messageBtn = new JButton();
-        JLabel label1 = new JLabel();
+        namelbl = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -64,14 +67,6 @@ class MyShop extends JFrame {
 
         //======== panel1 ========
         {
-
-            // JFormDesigner evaluation mark
-            panel1.setBorder(new javax.swing.border.CompoundBorder(
-                new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                    "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
-                    javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                    java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
-
             panel1.setLayout(new GridBagLayout());
             ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {104, 0, 217, 0};
             ((GridBagLayout)panel1.getLayout()).rowHeights = new int[] {19, 50, 0};
@@ -172,10 +167,10 @@ class MyShop extends JFrame {
                 GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 5, 0), 0, 0));
 
-            //---- label1 ----
-            label1.setText("text");
-            panel3.add(label1, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-                GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
+            //---- namelbl ----
+            namelbl.setText("text");
+            panel3.add(namelbl, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
                 new Insets(0, 0, 0, 5), 0, 0));
         }
         contentPane.add(panel3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
@@ -188,5 +183,6 @@ class MyShop extends JFrame {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - Yurii
+    private JLabel namelbl;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

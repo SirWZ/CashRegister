@@ -5,8 +5,7 @@
 package Models;
 
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -14,7 +13,7 @@ import javax.swing.border.*;
  * @author Gevtsi Yurii
  */
  class FinishWork extends JDialog {
-    Connection cn;
+    private Connection cn;
      private Frame frame;
     FinishWork(Frame owner,Connection cn) {
         super(owner);this.cn=cn;
@@ -33,43 +32,70 @@ import javax.swing.border.*;
         this.dispose();
     }
 
-    private void okButton2ActionPerformed() {
-
+    private void okCountbtnActionPerformed() {
         countcashdialog.dispose();
         countcashdialog2.setVisible(true);
     }
 
-    private void cancelButton2ActionPerformed() {
+    private void noCountBtnActionPerformed() {
         countcashdialog.dispose();
         printdialog.setVisible(true);
     }
 
-    private void okButton3ActionPerformed() {
-        cancelButton3ActionPerformed();
-    }
-
-    private void cancelButton3ActionPerformed() {
-        printdialog.dispose();
-        JOptionPane.showMessageDialog(this,"Смена закончена","",JOptionPane.INFORMATION_MESSAGE);
-        try {
-            cn.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+    private void okSummBtnActionPerformed() {
+        PreparedStatement pr;
+        ResultSet rs;
+        try{
+            int sum = Integer.parseInt(summtextField.getText());
+            int idshift;
+            pr = cn.prepareStatement("select idshift from shift where endingtime is null ");
+            rs=pr.executeQuery();
+            rs.next();
+            idshift = rs.getInt(1);
+            if (sum<=0)JOptionPane.showMessageDialog(this,"Отрицательное значение ","",JOptionPane.INFORMATION_MESSAGE);
+            pr = cn.prepareStatement("insert into financial_operations(idshift, time, type, comment)values (?,?,?,?)");
+            pr.setInt(1,idshift);
+            pr.setTimestamp(2,new Timestamp(System.currentTimeMillis()));
+            pr.setString(3,"Выплата");
+            pr.setString(4,"Подсчет кассы");
+            pr.executeUpdate();
+            pr.clearBatch();
+            countcashdialog2.dispose();
+            printdialog.setVisible(true);
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,"Неверный формат","",JOptionPane.ERROR_MESSAGE);
         }
-        new UserInterface(cn).setVisible(true);
+
     }
 
-    private void okButton4ActionPerformed() {
-        countcashdialog2.dispose();
-        printdialog.setVisible(true);
+    private void okPrintBtnActionPerformed() {
+        noPrintBtnActionPerformed();
+    }
+
+    private void noPrintBtnActionPerformed() {
+        PreparedStatement pr;
+        try{
+            pr = cn.prepareStatement("update shift set  endingtime = ? where endingtime is null ");
+            pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
+            pr.executeUpdate();
+
+            pr = cn.prepareStatement("update shift_worker set  logouttime = ? where logouttime is null ");
+            pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
+            pr.executeUpdate();
+            pr.clearBatch();
+            printdialog.dispose();
+            JOptionPane.showMessageDialog(this,"Смена закончена","",JOptionPane.INFORMATION_MESSAGE);
+            cn.close();
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"",JOptionPane.ERROR_MESSAGE);
+        }
+        new UserInterface().setVisible(true);
     }
 
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+        // Generated using JFormDesigner Evaluation license - Yurii
         JPanel dialogPane = new JPanel();
         JPanel contentPanel = new JPanel();
         JLabel textlabel = new JLabel();
@@ -77,7 +103,6 @@ import javax.swing.border.*;
         JButton okEndBtn = new JButton();
         JButton noEndBtn = new JButton();
         countcashdialog = new JDialog();
-        countcashdialog.setResizable(false);
         JPanel dialogPane2 = new JPanel();
         JPanel contentPanel2 = new JPanel();
         JLabel textlabel2 = new JLabel();
@@ -85,7 +110,6 @@ import javax.swing.border.*;
         JButton okCountbtn = new JButton();
         JButton noCountBtn = new JButton();
         printdialog = new JDialog();
-        printdialog.setResizable(false);
         JPanel dialogPane3 = new JPanel();
         JPanel contentPanel3 = new JPanel();
         JLabel textlabel3 = new JLabel();
@@ -93,30 +117,22 @@ import javax.swing.border.*;
         JButton okPrintBtn = new JButton();
         JButton noPrintBtn = new JButton();
         countcashdialog2 = new JDialog();
-        countcashdialog2.setResizable(false);
-
         JPanel dialogPane4 = new JPanel();
         JPanel contentPanel4 = new JPanel();
         JLabel label1 = new JLabel();
-        JTextField textField1 = new JTextField();
+        summtextField = new JTextField();
         JPanel buttonBar4 = new JPanel();
         JButton okSummBtn = new JButton();
 
         //======== this ========
+        setResizable(false);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-
-            // JFormDesigner evaluation mark
-            dialogPane.setBorder(new javax.swing.border.CompoundBorder(
-                new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                    "", javax.swing.border.TitledBorder.CENTER,
-                    javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                    java.awt.Color.red), dialogPane.getBorder())); dialogPane.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
-
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
@@ -151,7 +167,7 @@ import javax.swing.border.*;
 
                 //---- okEndBtn ----
                 okEndBtn.setText("\u0414\u0430");
-                okEndBtn.addActionListener(e ->okEndBtnActionPerformed());
+                okEndBtn.addActionListener(e -> okEndBtnActionPerformed());
                 buttonBar.add(okEndBtn);
 
                 //---- noEndBtn ----
@@ -162,25 +178,19 @@ import javax.swing.border.*;
             dialogPane.add(buttonBar, BorderLayout.SOUTH);
         }
         contentPane.add(dialogPane, BorderLayout.CENTER);
-        pack();
+        setSize(315, 140);
         setLocationRelativeTo(getOwner());
 
         //======== countcashdialog ========
         {
+            countcashdialog.setResizable(false);
+            countcashdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             Container countcashdialogContentPane = countcashdialog.getContentPane();
             countcashdialogContentPane.setLayout(new GridLayout());
 
             //======== dialogPane2 ========
             {
                 dialogPane2.setBorder(new EmptyBorder(12, 12, 12, 12));
-
-                // JFormDesigner evaluation mark
-                dialogPane2.setBorder(new javax.swing.border.CompoundBorder(
-                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "", javax.swing.border.TitledBorder.CENTER,
-                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), dialogPane2.getBorder())); dialogPane2.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
-
                 dialogPane2.setLayout(new BorderLayout());
 
                 //======== contentPanel2 ========
@@ -215,39 +225,30 @@ import javax.swing.border.*;
 
                     //---- okCountbtn ----
                     okCountbtn.setText("\u0414\u0430");
-                    okCountbtn.addActionListener(e ->okButton2ActionPerformed());
+                    okCountbtn.addActionListener(e -> okCountbtnActionPerformed());
                     buttonBar2.add(okCountbtn);
 
                     //---- noCountBtn ----
                     noCountBtn.setText("\u041d\u0435\u0442");
-                    noCountBtn.addActionListener(e -> {
-			cancelButtonActionPerformed();
-			cancelButton2ActionPerformed();
-		});
+                    noCountBtn.addActionListener(e -> noCountBtnActionPerformed());
                     buttonBar2.add(noCountBtn);
                 }
                 dialogPane2.add(buttonBar2, BorderLayout.SOUTH);
             }
             countcashdialogContentPane.add(dialogPane2);
-            countcashdialog.pack();
+            countcashdialog.setSize(330, 145);
             countcashdialog.setLocationRelativeTo(countcashdialog.getOwner());
         }
 
         //======== printdialog ========
         {
+            printdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             Container printdialogContentPane = printdialog.getContentPane();
             printdialogContentPane.setLayout(new GridLayout());
 
             //======== dialogPane3 ========
             {
                 dialogPane3.setBorder(new EmptyBorder(12, 12, 12, 12));
-
-                // JFormDesigner evaluation mark
-                dialogPane3.setBorder(new javax.swing.border.CompoundBorder(
-                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "", javax.swing.border.TitledBorder.CENTER,
-                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), dialogPane3.getBorder())); dialogPane3.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
 
                 dialogPane3.setLayout(new BorderLayout());
 
@@ -283,16 +284,12 @@ import javax.swing.border.*;
 
                     //---- okPrintBtn ----
                     okPrintBtn.setText("\u0414\u0430");
-                    okPrintBtn.addActionListener(e ->okButton3ActionPerformed());
+                    okPrintBtn.addActionListener(e -> okPrintBtnActionPerformed());
                     buttonBar3.add(okPrintBtn);
 
                     //---- noPrintBtn ----
                     noPrintBtn.setText("\u041d\u0435\u0442");
-                    noPrintBtn.addActionListener(e -> {
-			cancelButtonActionPerformed();
-			cancelButton2ActionPerformed();
-			cancelButton3ActionPerformed();
-		});
+                    noPrintBtn.addActionListener(e -> noPrintBtnActionPerformed());
                     buttonBar3.add(noPrintBtn);
                 }
                 dialogPane3.add(buttonBar3, BorderLayout.SOUTH);
@@ -304,20 +301,14 @@ import javax.swing.border.*;
 
         //======== countcashdialog2 ========
         {
+            countcashdialog2.setResizable(false);
+            countcashdialog2.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             Container countcashdialog2ContentPane = countcashdialog2.getContentPane();
             countcashdialog2ContentPane.setLayout(new GridLayout());
 
             //======== dialogPane4 ========
             {
                 dialogPane4.setBorder(new EmptyBorder(12, 12, 12, 12));
-
-                // JFormDesigner evaluation mark
-                dialogPane4.setBorder(new javax.swing.border.CompoundBorder(
-                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "", javax.swing.border.TitledBorder.CENTER,
-                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), dialogPane4.getBorder())); dialogPane4.addPropertyChangeListener(e -> {if("border".equals(e.getPropertyName()))throw new RuntimeException();});
-
                 dialogPane4.setLayout(new BorderLayout());
 
                 //======== contentPanel4 ========
@@ -334,7 +325,7 @@ import javax.swing.border.*;
                                 .addContainerGap()
                                 .addComponent(label1, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(summtextField, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(27, Short.MAX_VALUE))
                     );
                     contentPanel4Layout.setVerticalGroup(
@@ -343,7 +334,7 @@ import javax.swing.border.*;
                                 .addContainerGap(11, Short.MAX_VALUE)
                                 .addGroup(contentPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                     .addComponent(label1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(summtextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap())
                     );
                 }
@@ -356,11 +347,7 @@ import javax.swing.border.*;
 
                     //---- okSummBtn ----
                     okSummBtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c");
-                    okSummBtn.addActionListener(e -> {
-
-			okButton2ActionPerformed();
-			okButton4ActionPerformed();
-		});
+                    okSummBtn.addActionListener(e -> okSummBtnActionPerformed());
                     buttonBar4.add(okSummBtn);
                 }
                 dialogPane4.add(buttonBar4, BorderLayout.SOUTH);
@@ -372,8 +359,11 @@ import javax.swing.border.*;
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
+    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+    // Generated using JFormDesigner Evaluation license - Yurii
     private JDialog countcashdialog;
     private JDialog printdialog;
     private JDialog countcashdialog2;
+    private JTextField summtextField;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
