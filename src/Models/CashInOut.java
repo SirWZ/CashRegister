@@ -25,7 +25,7 @@ class CashInOut extends JFrame {
 
     private void okbtnActionPerformed() {
         try{summ = new BigDecimal(parseDouble(inOuttextField.getText()));
-            if (summ.signum()==1){
+            if (summ.signum()>=0){
                 InOutdialog.setVisible(true);
                 infolabel.setText(this.getTitle() + " : ");
                 masegelable.setText( inOuttextField.getText());
@@ -58,14 +58,17 @@ class CashInOut extends JFrame {
                 pr.clearBatch();
                 InOutdialog.dispose();
                 dispose();
-            }
-            if (countcash(summ,cn)){
+            }else if (countcash(summ,cn)){
                 pr.setBigDecimal(5,summ.negate());
                 pr.executeUpdate();
                 pr.clearBatch();
                 InOutdialog.dispose();
                 dispose();
-            }else JOptionPane.showMessageDialog(this,"Недостаточно средств в кассе","Error",JOptionPane.ERROR_MESSAGE);
+            }else {
+                InOutdialog.dispose();
+                inOuttextField.setText("");
+                JOptionPane.showMessageDialog(this,"Недостаточно средств в кассе","Error",JOptionPane.ERROR_MESSAGE);
+            }
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
@@ -84,23 +87,23 @@ class CashInOut extends JFrame {
         else return false;
     }
 
+
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        JLabel inoutlabel = new JLabel();
+        // Generated using JFormDesigner Evaluation license - Yurii
+        inoutlabel = new JLabel();
         inOuttextField = new JTextField();
-        JLabel komentlabel = new JLabel();
+        komentlabel = new JLabel();
         komenttextField = new JTextField();
-        JButton okbtn = new JButton();
+        okbtn = new JButton();
         InOutdialog = new JDialog();
         infolabel = new JLabel();
         masegelable = new JLabel();
-        JLabel komentlableleft = new JLabel();
+        komentlableleft = new JLabel();
         komentlableright = new JLabel();
-        JButton yesbtn = new JButton();
-        JButton nobtn = new JButton();
+        yesbtn = new JButton();
+        nobtn = new JButton();
 
         //======== this ========
         setResizable(false);
@@ -127,7 +130,6 @@ class CashInOut extends JFrame {
         //======== InOutdialog ========
         {
             InOutdialog.setTitle("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435");
-            InOutdialog.setAlwaysOnTop(true);
             InOutdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             InOutdialog.setResizable(false);
             Container InOutdialogContentPane = InOutdialog.getContentPane();
@@ -142,7 +144,7 @@ class CashInOut extends JFrame {
 
             //---- yesbtn ----
             yesbtn.setText("\u0414\u0430");
-            yesbtn.addActionListener(e1 -> yesbtnActionPerformed());
+            yesbtn.addActionListener(e -> yesbtnActionPerformed());
             InOutdialogContentPane.add(yesbtn);
 
             //---- nobtn ----
@@ -155,11 +157,19 @@ class CashInOut extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
+    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+    // Generated using JFormDesigner Evaluation license - Yurii
+    private JLabel inoutlabel;
     private JTextField inOuttextField;
+    private JLabel komentlabel;
     private JTextField komenttextField;
+    private JButton okbtn;
     private JDialog InOutdialog;
     private JLabel infolabel;
     private JLabel masegelable;
+    private JLabel komentlableleft;
     private JLabel komentlableright;
+    private JButton yesbtn;
+    private JButton nobtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

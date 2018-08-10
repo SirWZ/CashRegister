@@ -104,11 +104,6 @@ public class UserInterface extends JFrame {
             ResultSet rs = pr.executeQuery();
             rs.next();
             idshift = rs.getInt("idshift");
-
-            pr = cn.prepareStatement("select idshiftworker from shift_worker where logouttime is null ");
-            rs = pr.executeQuery();
-            rs.next();
-            idshift_worker = rs.getInt(1);
             pr.clearBatch();
             pr = cn.prepareStatement(
                     "insert into shift_worker(idwor,idshift,logintime)" +
@@ -119,8 +114,13 @@ public class UserInterface extends JFrame {
             pr.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
             pr.executeUpdate();
             pr.clearBatch();
+            pr = cn.prepareStatement("select idshiftworker from shift_worker where logouttime is null ");
+            rs = pr.executeQuery();
+            rs.next();
+            idshift_worker = rs.getInt(1);
         }catch (Exception e){
             JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
@@ -131,17 +131,15 @@ public class UserInterface extends JFrame {
 
     static void finishShiftWork(Connection cn) {
         try {
-            PreparedStatement pr = cn.prepareStatement("select idshiftworker from shift_worker where logouttime is null and idwor = ?");
-            pr.setInt(1,UserInterface.idwor);
-            ResultSet rs = pr.executeQuery();
-            rs.next();
-            int idshiftworker = rs.getInt(1);
+            PreparedStatement pr;
             pr = cn.prepareStatement(
                     "update shift_worker set logouttime = ?  where idshiftworker = ?");
             pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
-            pr.setInt(2,idshiftworker);
+            pr.setInt(2,UserInterface.idshift_worker);
             pr.executeUpdate();
-
+System.out.println(UserInterface.idshift_worker);
+System.out.println(UserInterface.idshift);
+System.out.println(UserInterface.idwor);
         } catch (SQLException e1) {
             e1.printStackTrace();
         }

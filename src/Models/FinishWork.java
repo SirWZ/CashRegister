@@ -45,12 +45,11 @@ import javax.swing.border.*;
 
     private void okSummBtnActionPerformed() {
         PreparedStatement pr;
-        ResultSet rs;
-        try{
+                try{
             BigDecimal summ = new BigDecimal(Double.parseDouble(summtextField.getText()));
             int idshift;
             idshift = UserInterface.idshift;
-            if (summ.signum()!=1)JOptionPane.showMessageDialog(this,"Отрицательное значение ","",JOptionPane.INFORMATION_MESSAGE);
+            if (summ.signum()<0)JOptionPane.showMessageDialog(this,"Отрицательное значение ","",JOptionPane.INFORMATION_MESSAGE);
             else {
                 if (CashInOut.countcash(summ,cn)) {
                     pr = cn.prepareStatement("insert into financial_operations(idshift, time, type, comment,summ)values (?,?,?,?,?)");
@@ -64,7 +63,9 @@ import javax.swing.border.*;
                     countcashdialog2.dispose();
                     printdialog.setVisible(true);
                 }
-                else JOptionPane.showMessageDialog(this,"Недостаточно денег в кассе","",JOptionPane.ERROR_MESSAGE);
+                else {
+                    JOptionPane.showMessageDialog(this,"Недостаточно денег в кассе","",JOptionPane.ERROR_MESSAGE);
+                }
             }
         }catch (Exception e){
             JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"",JOptionPane.ERROR_MESSAGE);
@@ -79,7 +80,7 @@ import javax.swing.border.*;
     private void noPrintBtnActionPerformed() {
         PreparedStatement pr;
         try{
-            pr = cn.prepareStatement("update shift set  endingtime = ? where shift =? ");
+            pr = cn.prepareStatement("update shift set  endingtime = ? where idshift =? ");
             pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
             pr.setInt(2,UserInterface.idshift);
             pr.executeUpdate();
