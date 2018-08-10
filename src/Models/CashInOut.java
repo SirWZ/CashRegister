@@ -5,6 +5,7 @@
 package Models;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.sql.*;
 import javax.swing.*;
 
@@ -15,6 +16,7 @@ import static java.lang.Double.parseDouble;
  */
 class CashInOut extends JFrame {
     Connection cn;
+    BigDecimal summ;
     CashInOut(String name, Connection cn) {
         this.cn = cn;
         initComponents();
@@ -22,8 +24,8 @@ class CashInOut extends JFrame {
     }
 
     private void okbtnActionPerformed() {
-        try{
-            if (parseDouble(inOuttextField.getText())>0){
+        try{summ = new BigDecimal(parseDouble(inOuttextField.getText()));
+            if (summ.signum()==1){
                 InOutdialog.setVisible(true);
                 infolabel.setText(this.getTitle() + " : ");
                 masegelable.setText( inOuttextField.getText());
@@ -44,22 +46,42 @@ class CashInOut extends JFrame {
     private void yesbtnActionPerformed() {
         PreparedStatement pr;
         try {
-            pr = cn.prepareStatement("select idshift from shift where endingtime is null ");
-            ResultSet rs = pr.executeQuery();
-            rs.next();
-            int idshift = rs.getInt("idshift");
-            pr = cn.prepareStatement("insert into financial_Operations(idshift,time,type,comment) values (?,?,?,?)");
+            int idshift = UserInterface.idshift;
+            pr = cn.prepareStatement("insert into financial_Operations(idshift,time,type,comment,summ) values (?,?,?,?,?)");
             pr.setInt(1,idshift);
             pr.setTimestamp(2,new Timestamp(System.currentTimeMillis()));
             pr.setString(3,this.getTitle());
             pr.setString(4,komentlableright.getText());
-            pr.executeUpdate();
-            pr.clearBatch();
+            if (this.getTitle().equals("Вплата")){
+                pr.setBigDecimal(5,summ);
+                pr.executeUpdate();
+                pr.clearBatch();
+                InOutdialog.dispose();
+                dispose();
+            }
+            if (countcash(summ,cn)){
+                pr.setBigDecimal(5,summ.negate());
+                pr.executeUpdate();
+                pr.clearBatch();
+                InOutdialog.dispose();
+                dispose();
+            }else JOptionPane.showMessageDialog(this,"Недостаточно средств в кассе","Error",JOptionPane.ERROR_MESSAGE);
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
         }
-        InOutdialog.dispose();
-        dispose();
+
+    }
+
+    public static boolean countcash(BigDecimal summ, Connection cn) throws SQLException {
+        PreparedStatement pr;
+        ResultSet rs;
+        pr = cn.prepareStatement("select sum(summ) from financial_operations where idshift = ?");
+        pr.setInt(1,UserInterface.idshift);
+        rs=pr.executeQuery();
+        rs.next();
+        if (rs.getBigDecimal(1).compareTo(summ)>=0) return true;
+        else return false;
     }
 
     private void initComponents() {

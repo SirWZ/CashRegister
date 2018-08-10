@@ -5,6 +5,7 @@
 package Models;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -46,24 +47,27 @@ import javax.swing.border.*;
         PreparedStatement pr;
         ResultSet rs;
         try{
-            int sum = Integer.parseInt(summtextField.getText());
+            BigDecimal summ = new BigDecimal(Double.parseDouble(summtextField.getText()));
             int idshift;
-            pr = cn.prepareStatement("select idshift from shift where endingtime is null ");
-            rs=pr.executeQuery();
-            rs.next();
-            idshift = rs.getInt(1);
-            if (sum<=0)JOptionPane.showMessageDialog(this,"Отрицательное значение ","",JOptionPane.INFORMATION_MESSAGE);
-            pr = cn.prepareStatement("insert into financial_operations(idshift, time, type, comment)values (?,?,?,?)");
-            pr.setInt(1,idshift);
-            pr.setTimestamp(2,new Timestamp(System.currentTimeMillis()));
-            pr.setString(3,"Выплата");
-            pr.setString(4,"Подсчет кассы");
-            pr.executeUpdate();
-            pr.clearBatch();
-            countcashdialog2.dispose();
-            printdialog.setVisible(true);
+            idshift = UserInterface.idshift;
+            if (summ.signum()!=1)JOptionPane.showMessageDialog(this,"Отрицательное значение ","",JOptionPane.INFORMATION_MESSAGE);
+            else {
+                if (CashInOut.countcash(summ,cn)) {
+                    pr = cn.prepareStatement("insert into financial_operations(idshift, time, type, comment,summ)values (?,?,?,?,?)");
+                    pr.setInt(1, idshift);
+                    pr.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+                    pr.setString(3, "Выплата");
+                    pr.setString(4, "Подсчет кассы");
+                    pr.setBigDecimal(5, summ.negate());
+                    pr.executeUpdate();
+                    pr.clearBatch();
+                    countcashdialog2.dispose();
+                    printdialog.setVisible(true);
+                }
+                else JOptionPane.showMessageDialog(this,"Недостаточно денег в кассе","",JOptionPane.ERROR_MESSAGE);
+            }
         }catch (Exception e){
-            JOptionPane.showMessageDialog(this,"Неверный формат","",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"",JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -75,12 +79,14 @@ import javax.swing.border.*;
     private void noPrintBtnActionPerformed() {
         PreparedStatement pr;
         try{
-            pr = cn.prepareStatement("update shift set  endingtime = ? where endingtime is null ");
+            pr = cn.prepareStatement("update shift set  endingtime = ? where shift =? ");
             pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
+            pr.setInt(2,UserInterface.idshift);
             pr.executeUpdate();
 
-            pr = cn.prepareStatement("update shift_worker set  logouttime = ? where logouttime is null ");
+            pr = cn.prepareStatement("update shift_worker set  logouttime = ? where idshiftworker =? ");
             pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
+            pr.setInt(2,UserInterface.idshift_worker);
             pr.executeUpdate();
             pr.clearBatch();
             printdialog.dispose();

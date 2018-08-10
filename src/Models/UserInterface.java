@@ -17,7 +17,7 @@ public class UserInterface extends JFrame {
 
     private Connection cn;
     private PreparedStatement pr;
-    private static int idwor;
+    public static int idwor, idshift,idshift_worker;
 
     public UserInterface() {
         try {
@@ -42,8 +42,7 @@ public class UserInterface extends JFrame {
                     rs = pr.executeQuery();
                     if (rs.next())//если смена начата
                     {
-                        int idShift = rs.getInt("idshift");
-                        createShiftWorker(idShift);
+                        createShiftWorker();
                         this.dispose();
                         new CashierViewWindow(cn);
                     }
@@ -90,7 +89,7 @@ public class UserInterface extends JFrame {
             pr = cn.prepareStatement("insert into shift(beginingtime) values (?)");
             pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
             pr.executeUpdate();
-            createShiftWorker(0);
+            createShiftWorker();
             this.dispose();
         }catch (Exception e){
             JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
@@ -98,14 +97,19 @@ public class UserInterface extends JFrame {
         moneydialog.setVisible(true);
     }
 
-    private void createShiftWorker(int idshift)  {
+    private void createShiftWorker()  {
         try {
-            if (idshift == 0) {
-                pr = cn.prepareStatement("select idshift from shift where endingtime is null ");
-                ResultSet rs = pr.executeQuery();
-                rs.next();
-                idshift = rs.getInt("idshift");
-            }
+            idwor = Integer.parseInt(logintextField.getText());
+            pr = cn.prepareStatement("select idshift from shift where endingtime is null ");
+            ResultSet rs = pr.executeQuery();
+            rs.next();
+            idshift = rs.getInt("idshift");
+
+            pr = cn.prepareStatement("select idshiftworker from shift_worker where logouttime is null ");
+            rs = pr.executeQuery();
+            rs.next();
+            idshift_worker = rs.getInt(1);
+            pr.clearBatch();
             pr = cn.prepareStatement(
                     "insert into shift_worker(idwor,idshift,logintime)" +
                             "values (?,?,?)"

@@ -43,7 +43,6 @@ new FormModel {
 			"$sizePolicy": 1
 			"title": "Подтвердить действие"
 			"$locationPolicy": 1
-			"alwaysOnTop": true
 			"defaultCloseOperation": 2
 			"resizable": false
 			add( new FormComponent( "javax.swing.JLabel" ) {
