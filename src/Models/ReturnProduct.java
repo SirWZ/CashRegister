@@ -5,6 +5,10 @@
 package Models;
 
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -12,13 +16,33 @@ import javax.swing.table.*;
  * @author Gevtsi Yurii
  */
 class ReturnProduct extends JFrame {
-    ReturnProduct() {
+
+    Connection cn;
+    int pargon;
+    ReturnProduct(Connection cn) {
+        this.cn = cn;
         initComponents();
         firstdialog.setVisible(true);
         this.dispose();
     }
 
     private void returnbtnActionPerformed() {
+        String name, reson;
+        double price, count, returned;
+
+        for (int i = 0; i<producttable.getModel().getRowCount(); i++){
+           if(producttable.getModel().getValueAt(i,3)!=null){
+               try {
+                   returned = Double.parseDouble(producttable.getModel().getValueAt(i, 4).toString());
+                   name = producttable.getModel().getValueAt(i, 0).toString();
+                   price = Double.parseDouble(producttable.getModel().getValueAt(i, 3).toString());
+               }catch (Exception e){
+                   JOptionPane.showMessageDialog(this,"Неверное значение","Ошибка",JOptionPane.ERROR_MESSAGE);
+               }
+
+           }
+        }
+        System.out.println(producttable.getModel().getValueAt(1,3));
         this.dispose();
     }
 
@@ -27,8 +51,40 @@ class ReturnProduct extends JFrame {
     }
 
     private void nextbtn2ActionPerformed() {
-        firstdialog.dispose();
-        this.setVisible(true);
+        try {
+            pargon = Integer.parseInt(pargonnumtextfield.getText());
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,"Неверное значение","Ошибка",JOptionPane.ERROR_MESSAGE);
+            pargonnumtextfield.setText("");
+            return;
+        }
+        try{
+            PreparedStatement pr;
+            ResultSet rs;
+            pr = cn.prepareStatement("select idselling from \"Selling_Operation\" where idselling = ?");
+            pr.setInt(1,pargon);
+            rs = pr.executeQuery();
+            pr.clearBatch();
+            if (rs.next()){
+                pr = cn.prepareStatement("select  pr.name, b.\"Count\" , p.price from \"Product\" pr,\"Bucket\" b, \"Price\" p where b.\"idSelling\" = ? and p.\"idProduct\" = b.\"idProduct\" and  pr.\"idProduct\" = b.\"idProduct\" group by pr.name,b.\"Count\", p.price");
+                pr.setInt(1,pargon);
+                rs = pr.executeQuery();
+                while (rs.next()){
+                    ((DefaultTableModel)producttable.getModel()).addRow( new Object[]{rs.getString(1), rs.getDouble(2),rs.getDouble(3)} );
+                }
+
+                firstdialog.dispose();
+                this.setVisible(true);
+            }else {
+                JOptionPane.showMessageDialog(this,"Чек не найден","Ошибка",JOptionPane.ERROR_MESSAGE);
+                pargonnumtextfield.setText("");
+                return;
+            }
+
+        }catch (Exception e){
+
+        }
+
     }
 
     private void exitbtnActionPerformed() {
@@ -37,23 +93,21 @@ class ReturnProduct extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
-        JTextField findbtn = new JTextField();
-        JScrollPane scrollPane1 = new JScrollPane();
-        JTable producttable = new JTable();
-        JButton returnbtn = new JButton();
-        JButton exitbtn = new JButton();
+        // Generated using JFormDesigner Evaluation license - Yurii
+        findbtn = new JTextField();
+        scrollPane1 = new JScrollPane();
+        producttable = new JTable();
+        returnbtn = new JButton();
+        exitbtn = new JButton();
         firstdialog = new JDialog();
-        JLabel label1 = new JLabel();
-        JTextField pargonnumtextfield = new JTextField();
-        JButton exitbtn2 = new JButton();
-        JButton nextbtn2 = new JButton();
+        label1 = new JLabel();
+        pargonnumtextfield = new JTextField();
+        exitbtn2 = new JButton();
+        nextbtn2 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        Container contentPane = getContentPane();
+        var contentPane = getContentPane();
 
         //---- findbtn ----
         findbtn.setText("\u041f\u043e\u0438\u0441\u043a \u0442\u043e\u0432\u0430\u0440\u0430 \u0432 \u0447\u0435\u043a\u0435");
@@ -64,22 +118,24 @@ class ReturnProduct extends JFrame {
             //---- producttable ----
             producttable.setModel(new DefaultTableModel(
                 new Object[][] {
-                    {"", "", "", "", ""},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
                 },
                 new String[] {
-                    "\u0422\u043e\u0432\u0430\u0440", "\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e", "\u0426\u0435\u043d\u0430", "\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u0430", "\u041f\u0440\u0438\u0447\u0438\u043d\u0430(\u043e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e)"
+                    "\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435", "\u041a\u043e\u043b\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e", "\u0426\u0435\u043d\u0430", "\u0421\u0443\u043c\u043c\u0430", "\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0432\u043e\u0437\u0440\u0430\u0442\u0430", "\u041f\u0440\u0438\u0447\u0438\u043d\u0430(\u043e\u043f\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e)"
                 }
-            ));
+            ) {
+                Class<?>[] columnTypes = new Class<?>[] {
+                    String.class, Double.class, Double.class, Double.class, Double.class, String.class
+                };
+                @Override
+                public Class<?> getColumnClass(int columnIndex) {
+                    return columnTypes[columnIndex];
+                }
+            });
             {
                 TableColumnModel cm = producttable.getColumnModel();
-                cm.getColumn(3).setPreferredWidth(150);
-                cm.getColumn(4).setPreferredWidth(155);
+                cm.getColumn(0).setPreferredWidth(265);
+                cm.getColumn(4).setPreferredWidth(120);
+                cm.getColumn(5).setPreferredWidth(150);
             }
             scrollPane1.setViewportView(producttable);
         }
@@ -89,7 +145,7 @@ class ReturnProduct extends JFrame {
         returnbtn.addActionListener(e -> returnbtnActionPerformed());
 
         //---- exitbtn ----
-        exitbtn.setText("Выход");
+        exitbtn.setText("\u0412\u044b\u0445\u043e\u0434");
         exitbtn.addActionListener(e -> exitbtnActionPerformed());
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
@@ -98,16 +154,19 @@ class ReturnProduct extends JFrame {
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
                     .addGap(35, 35, 35)
-                    .addComponent(exitbtn, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
-                    .addComponent(findbtn, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
-                    .addGap(68, 68, 68))
-                .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addGap(97, 97, 97)
-                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                        .addComponent(returnbtn, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 646, GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(115, Short.MAX_VALUE))
+                    .addGroup(contentPaneLayout.createParallelGroup()
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addGap(560, 560, 560)
+                            .addComponent(returnbtn, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap(115, Short.MAX_VALUE))
+                        .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                .addComponent(scrollPane1, GroupLayout.DEFAULT_SIZE, 755, Short.MAX_VALUE)
+                                .addGroup(GroupLayout.Alignment.LEADING, contentPaneLayout.createSequentialGroup()
+                                    .addComponent(exitbtn, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
+                                    .addComponent(findbtn, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)))
+                            .addGap(68, 68, 68))))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
@@ -129,7 +188,7 @@ class ReturnProduct extends JFrame {
 
         //======== firstdialog ========
         {
-            Container firstdialogContentPane = firstdialog.getContentPane();
+            var firstdialogContentPane = firstdialog.getContentPane();
 
             //---- label1 ----
             label1.setText("\u041d\u043e\u043c\u0435\u0440 \u0447\u0435\u043a\u0430");
@@ -181,6 +240,17 @@ class ReturnProduct extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
+    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+    // Generated using JFormDesigner Evaluation license - Yurii
+    private JTextField findbtn;
+    private JScrollPane scrollPane1;
+    private JTable producttable;
+    private JButton returnbtn;
+    private JButton exitbtn;
     private JDialog firstdialog;
+    private JLabel label1;
+    private JTextField pargonnumtextfield;
+    private JButton exitbtn2;
+    private JButton nextbtn2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -77,7 +77,7 @@ class CashierViewWindow {
 
 		// Кнопка Возврат товара
 		JButton retrieveGoodsButton = new JButton("Возврат товара");
-		retrieveGoodsButton.addActionListener(e -> new ReturnProduct());
+		retrieveGoodsButton.addActionListener(e -> new ReturnProduct(cn));
 		arrayOfButtons[1][0] = retrieveGoodsButton;
 
 		// Кнопка принять доставку
