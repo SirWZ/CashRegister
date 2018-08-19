@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "6.0.3.0.150" Java: "1.8.0_152-release" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.0.0.117" Java: "1.8.0_152-release" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -78,17 +78,27 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[fill][fill][52,fill]"
-				"$rowConstraints": "[fill][grow,fill][][]"
+				"$columnConstraints": "[fill][grow,fill][fill][52,fill][fill][grow,fill]"
+				"$rowConstraints": "[42,grow,fill][grow,fill][][]"
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "okbtn"
 					"text": "Списать"
 					"horizontalAlignment": 2
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okbtnActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okbtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 1 0 2 2"
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "exitbtn"
+					"text": "Выход"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 5 0"
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridx": 2
@@ -135,14 +145,14 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "okbtn2"
 					"text": "Да"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okbtn2ActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okbtn2ActionPerformed", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 1"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "nobtn2"
 					"text": "Нет"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nobtn2ActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nobtn2ActionPerformed", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 4 1"
 				} )
