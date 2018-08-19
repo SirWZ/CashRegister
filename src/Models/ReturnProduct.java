@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -19,6 +21,7 @@ class ReturnProduct extends JFrame {
 
     Connection cn;
     int pargon;
+    Map products;
     ReturnProduct(Connection cn) {
         this.cn = cn;
         initComponents();
@@ -31,18 +34,48 @@ class ReturnProduct extends JFrame {
         double price, count, returned;
 
         for (int i = 0; i<producttable.getModel().getRowCount(); i++){
-           if(producttable.getModel().getValueAt(i,3)!=null){
+           if(producttable.getModel().getValueAt(i,4)!=null){
                try {
                    returned = Double.parseDouble(producttable.getModel().getValueAt(i, 4).toString());
                    name = producttable.getModel().getValueAt(i, 0).toString();
-                   price = Double.parseDouble(producttable.getModel().getValueAt(i, 3).toString());
+                   price = Double.parseDouble(producttable.getModel().getValueAt(i, 2).toString());
+                   count = Double.parseDouble(producttable.getModel().getValueAt(i, 1).toString());
+                   if (returned>count){
+                       JOptionPane.showMessageDialog(this,"Неверное значение","Ошибка",JOptionPane.ERROR_MESSAGE);
+                       return;
+                   }
                }catch (Exception e){
                    JOptionPane.showMessageDialog(this,"Неверное значение","Ошибка",JOptionPane.ERROR_MESSAGE);
+                    return;
+               }
+               try {
+                   PreparedStatement pr = cn.prepareStatement("update \"Selling_Operation\" set summ=summ - ?");
+                   pr.setDouble(1,price*returned);
+                   pr.executeUpdate();
+
+                   pr = cn.prepareStatement("select p.\"idProduct\" from \"Product\" p, \"Bucket\" b where p.name like ? and p.\"idProduct\" = b.\"idProduct\"");
+                   pr.setString(1,name);
+                   ResultSet rs = pr.executeQuery();
+                   rs.next();
+                   int id = rs.getInt(1);
+                   if (returned!=count) {
+                       pr = cn.prepareStatement("update \"Bucket\" set \"Count\"=? where \"idSelling\"=? and \"idProduct\"=?");
+                       pr.setDouble(1, count - returned);
+                       pr.setInt(2, pargon);
+                       pr.setInt(3, id);
+                       pr.executeUpdate();
+                       pr.clearBatch();
+                   }else{
+                       pr = cn.prepareStatement("delete from \"Bucket\" where \"idProduct\" = ?");
+                       pr.setInt(1,id);
+                       pr.executeUpdate();
+                   }
+               }catch (Exception e){
+                   JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Ошибка",JOptionPane.ERROR_MESSAGE);
                }
 
            }
         }
-        System.out.println(producttable.getModel().getValueAt(1,3));
         this.dispose();
     }
 
@@ -59,6 +92,7 @@ class ReturnProduct extends JFrame {
             return;
         }
         try{
+           products= new HashMap<String,Integer>();
             PreparedStatement pr;
             ResultSet rs;
             pr = cn.prepareStatement("select idselling from \"Selling_Operation\" where idselling = ?");
@@ -66,12 +100,15 @@ class ReturnProduct extends JFrame {
             rs = pr.executeQuery();
             pr.clearBatch();
             if (rs.next()){
-                pr = cn.prepareStatement("select  pr.name, b.\"Count\" , p.price from \"Product\" pr,\"Bucket\" b, \"Price\" p where b.\"idSelling\" = ? and p.\"idProduct\" = b.\"idProduct\" and  pr.\"idProduct\" = b.\"idProduct\" group by pr.name,b.\"Count\", p.price");
+                pr = cn.prepareStatement("select  pr.name, b.\"Count\" , p.price , pr.\"idProduct\" from \"Product\" pr,\"Bucket\" b, \"Price\" p where b.\"idSelling\" = ? and p.\"idProduct\" = b.\"idProduct\" and  pr.\"idProduct\" = b.\"idProduct\" group by pr.name,b.\"Count\", p.price,pr.\"idProduct\"");
                 pr.setInt(1,pargon);
                 rs = pr.executeQuery();
                 while (rs.next()){
+                    int id = rs.getInt(4);
                     double price = rs.getDouble(3);
                     double count = rs.getDouble(2);
+                    String name = rs.getString(1);
+                    //products.put(name,id);
                     ((DefaultTableModel)producttable.getModel()).addRow( new Object[]{rs.getString(1), count,price, count*price} );
                 }
 
