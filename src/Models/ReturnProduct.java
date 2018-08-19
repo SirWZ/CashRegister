@@ -73,7 +73,7 @@ class ReturnProduct extends JFrame {
            }
         }
         this.dispose();
-       CashInOut cio = new CashInOut("Возврат денег",cn);
+       CashInOut cio = new CashInOut("Выплата",cn);
        cio.inOuttextField.setText(String.valueOf(returnedprice));
        cio.inOuttextField.setEditable(false);
        cio.setVisible(true);
@@ -162,9 +162,16 @@ class ReturnProduct extends JFrame {
                 Class<?>[] columnTypes = new Class<?>[] {
                     String.class, Double.class, Double.class, Double.class, Double.class, String.class
                 };
+                boolean[] columnEditable = new boolean[] {
+                    false, false, false, true, true, true
+                };
                 @Override
                 public Class<?> getColumnClass(int columnIndex) {
                     return columnTypes[columnIndex];
+                }
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return columnEditable[columnIndex];
                 }
             });
             {

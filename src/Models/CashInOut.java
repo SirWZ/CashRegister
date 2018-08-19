@@ -76,15 +76,21 @@ class CashInOut extends JFrame {
 
     }
 
-    public static boolean countcash(BigDecimal summ, Connection cn) throws SQLException {
+    public static boolean countcash(BigDecimal summ, Connection cn)  {
         PreparedStatement pr;
         ResultSet rs;
-        pr = cn.prepareStatement("select sum(summ) from financial_operations where idshift = ?");
-        pr.setInt(1,UserInterface.idshift);
-        rs=pr.executeQuery();
-        rs.next();
-        if (rs.getBigDecimal(1).compareTo(summ)>=0) return true;
-        else return false;
+        try {
+
+
+            pr = cn.prepareStatement("select sum(summ) from financial_operations where idshift = ?");
+            pr.setInt(1, UserInterface.idshift);
+            rs = pr.executeQuery();
+            rs.next();
+            if (rs.getBigDecimal(1).compareTo(summ) >= 0) return true;
+        }catch (Exception e){
+           e.printStackTrace();
+        }
+        return false;
     }
 
 
