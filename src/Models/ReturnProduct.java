@@ -4,13 +4,9 @@
 
 package Models;
 
-import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -21,7 +17,7 @@ class ReturnProduct extends JFrame {
 
     Connection cn;
     int pargon;
-    Map products;
+
     ReturnProduct(Connection cn) {
         this.cn = cn;
         initComponents();
@@ -31,7 +27,7 @@ class ReturnProduct extends JFrame {
 
     private void returnbtnActionPerformed() {
         String name, reson;
-        double price, count, returned;
+        double price, count, returned, returnedprice = 0;
 
         for (int i = 0; i<producttable.getModel().getRowCount(); i++){
            if(producttable.getModel().getValueAt(i,4)!=null){
@@ -49,6 +45,7 @@ class ReturnProduct extends JFrame {
                     return;
                }
                try {
+                   returnedprice+=price*returned;
                    PreparedStatement pr = cn.prepareStatement("update \"Selling_Operation\" set summ=summ - ?");
                    pr.setDouble(1,price*returned);
                    pr.executeUpdate();
@@ -64,19 +61,22 @@ class ReturnProduct extends JFrame {
                        pr.setInt(2, pargon);
                        pr.setInt(3, id);
                        pr.executeUpdate();
-                       pr.clearBatch();
                    }else{
                        pr = cn.prepareStatement("delete from \"Bucket\" where \"idProduct\" = ?");
                        pr.setInt(1,id);
                        pr.executeUpdate();
                    }
+                   pr.clearBatch();
                }catch (Exception e){
                    JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Ошибка",JOptionPane.ERROR_MESSAGE);
                }
-
            }
         }
         this.dispose();
+       CashInOut cio = new CashInOut("Возврат денег",cn);
+       cio.inOuttextField.setText(String.valueOf(returnedprice));
+       cio.inOuttextField.setEditable(false);
+       cio.setVisible(true);
     }
 
     private void exitbtn2ActionPerformed() {
@@ -92,7 +92,7 @@ class ReturnProduct extends JFrame {
             return;
         }
         try{
-           products= new HashMap<String,Integer>();
+
             PreparedStatement pr;
             ResultSet rs;
             pr = cn.prepareStatement("select idselling from \"Selling_Operation\" where idselling = ?");
@@ -104,11 +104,10 @@ class ReturnProduct extends JFrame {
                 pr.setInt(1,pargon);
                 rs = pr.executeQuery();
                 while (rs.next()){
-                    int id = rs.getInt(4);
+                   // int id = rs.getInt(4);
                     double price = rs.getDouble(3);
                     double count = rs.getDouble(2);
-                    String name = rs.getString(1);
-                    //products.put(name,id);
+                    //String name = rs.getString(1);
                     ((DefaultTableModel)producttable.getModel()).addRow( new Object[]{rs.getString(1), count,price, count*price} );
                 }
 
@@ -117,11 +116,9 @@ class ReturnProduct extends JFrame {
             }else {
                 JOptionPane.showMessageDialog(this,"Чек не найден","Ошибка",JOptionPane.ERROR_MESSAGE);
                 pargonnumtextfield.setText("");
-                return;
             }
-
         }catch (Exception e){
-
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Ошибка",JOptionPane.ERROR_MESSAGE);
         }
 
     }

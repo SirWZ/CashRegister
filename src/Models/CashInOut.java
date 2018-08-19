@@ -107,7 +107,7 @@ class CashInOut extends JFrame {
 
         //======== this ========
         setResizable(false);
-        Container contentPane = getContentPane();
+        var contentPane = getContentPane();
         contentPane.setLayout(new GridLayout(3, 2));
 
         //---- inoutlabel ----
@@ -132,7 +132,7 @@ class CashInOut extends JFrame {
             InOutdialog.setTitle("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435");
             InOutdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             InOutdialog.setResizable(false);
-            Container InOutdialogContentPane = InOutdialog.getContentPane();
+            var InOutdialogContentPane = InOutdialog.getContentPane();
             InOutdialogContentPane.setLayout(new GridLayout(3, 2));
             InOutdialogContentPane.add(infolabel);
             InOutdialogContentPane.add(masegelable);
@@ -160,7 +160,7 @@ class CashInOut extends JFrame {
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - Yurii
     private JLabel inoutlabel;
-    private JTextField inOuttextField;
+    public JTextField inOuttextField;
     private JLabel komentlabel;
     private JTextField komenttextField;
     private JButton okbtn;
