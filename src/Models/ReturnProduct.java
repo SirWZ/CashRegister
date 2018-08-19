@@ -70,7 +70,9 @@ class ReturnProduct extends JFrame {
                 pr.setInt(1,pargon);
                 rs = pr.executeQuery();
                 while (rs.next()){
-                    ((DefaultTableModel)producttable.getModel()).addRow( new Object[]{rs.getString(1), rs.getDouble(2),rs.getDouble(3)} );
+                    double price = rs.getDouble(3);
+                    double count = rs.getDouble(2);
+                    ((DefaultTableModel)producttable.getModel()).addRow( new Object[]{rs.getString(1), count,price, count*price} );
                 }
 
                 firstdialog.dispose();
