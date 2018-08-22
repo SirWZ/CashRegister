@@ -1,0 +1,542 @@
+JFDML JFormDesigner: "7.0.0.0.117" Java: "1.8.0_152-release" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "0:1.0"
+			"$rowSpecs": "24, 0, 0, 108:1.0, 0, 0, 0"
+			"$hGap": 5
+			"$vGap": 5
+			"$alignLeft": true
+			"$alignTop": true
+		} ) {
+			name: "this"
+			"$sizePolicy": 1
+			"defaultCloseOperation": 2
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "65:1.0, 61:1.0, 188:1.0, 0:1.0, 154:1.0, 0:1.0, 0:1.0"
+				"$rowSpecs": "0:1.0, 0:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "firstpanel"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "exitBtn"
+					"text": "Крестик"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "numlabel"
+					"text": "Номер"
+					"font": new java.awt.Font( "Segoe UI", 1, 16 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"hAlign": 4
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "numbertextField"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 2
+					"hAlign": 5
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "datelbl"
+					"text": "От"
+					"font": new java.awt.Font( "Segoe UI", 1, 16 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 3
+					"hAlign": 4
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "noBtn"
+					"text": "Отложить"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 6
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "printBtn"
+					"text": "Принтер"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "deliverylbl"
+					"text": "Поставщик"
+					"font": new java.awt.Font( "Segoe UI", 1, 16 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 1
+					"hAlign": 4
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "deliverytextField"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 2
+					"gridy": 1
+					"hAlign": 5
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "numdelLbl"
+					"text": "Номер доставки"
+					"font": new java.awt.Font( "Segoe UI", 1, 16 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 3
+					"gridy": 1
+					"hAlign": 4
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "deliveryNumtextField"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 4
+					"gridy": 1
+					"hAlign": 5
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "contactlbl"
+					"text": "Контакты"
+					"font": new java.awt.Font( "Segoe UI", 1, 16 )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 5
+					"gridy": 1
+					"hAlign": 4
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "contacttextField"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 6
+					"gridy": 1
+					"hAlign": 5
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0, 0:1.0, 0:1.0, 0:1.0, 0:1.0, 0:1.0, 0:1.0, 0:1.0"
+				"$rowSpecs": "0, 0:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "secondpanel"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "addrowBtn"
+					"text": "Плюс"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addrowBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 1
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "deleteBtn"
+					"text": "Крестик"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "deleteBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 1
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "upBtn"
+					"text": "Вверх"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 2
+					"gridy": 1
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "downbtn"
+					"text": "Вниз"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 3
+					"gridy": 1
+					"hAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "writepricebtn"
+					"text": "Заполнить пустоту внутри меня"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 4
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "addComentBtn"
+					"text": "Добавить коментарий"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 5
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "payBtn"
+					"text": "Оплата"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "payBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 6
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "anotherBtn"
+					"text": "Дополнительно"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 7
+					"gridy": 1
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 2
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0"
+				"$rowSpecs": "0:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "tablepanel"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane1"
+					add( new FormComponent( "javax.swing.JTable" ) {
+						name: "table"
+						"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+							add( new java.util.Vector {
+								add( 1 )
+								add( "Cocaine" )
+								add( 1.0 )
+								add( "gramm" )
+								add( 200.0 )
+								add( 20.0 )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( 2 )
+								add( "Slut" )
+								add( 2.0 )
+								add( "girl" )
+								add( 400.0 )
+								add( 1.0 )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+						}, new java.util.Vector {
+							add( "Номер" )
+							add( "Товар" )
+							add( "Кол-во" )
+							add( "Ед.из." )
+							add( "Цена\\шт." )
+							add( "Ставка НДС" )
+							add( "Сумма" )
+							add( "НДС" )
+						}, new java.util.Vector {
+							add( class java.lang.Integer )
+							add( null )
+							add( class java.lang.Double )
+							add( class java.lang.String )
+							add( class java.lang.Double )
+							add( class java.lang.Double )
+							add( class java.lang.Double )
+							add( class java.lang.Double )
+						}, new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						}, new java.util.Vector {
+							add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 265, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 55, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 45, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 70, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 35, 0, 0, false ) )
+						} )
+						"font": new java.awt.Font( "Segoe UI", 0, 14 )
+						"autoCreateRowSorter": true
+						addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "tableKeyPressed", true ) )
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"vAlign": 5
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 3
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "247, 82"
+				"$rowSpecs": "0:1.0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel4"
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "checkBox"
+					"text": "Поступления одной датой"
+					"font": new java.awt.Font( "Segoe UI", 1, 16 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 4
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0, 0:1.0"
+				"$rowSpecs": "0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "lastpanel"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "0, 0, 69, 54, 0, 0"
+					"$rowSpecs": "37:1.0, 0:1.0, 0:1.0, 0:1.0"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "panel5"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "itogolbl"
+						"text": "Итого"
+						"font": new java.awt.Font( "Segoe UI", 1, 20 )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"hAlign": 0
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "etapslbl"
+						"text": "Этапы оплаты"
+						"font": new java.awt.Font( "Segoe UI", 1, 20 )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+						"hAlign": 0
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "suminfolbl"
+						"text": "Сумма :"
+						"font": &Font0 new java.awt.Font( "Segoe UI", 1, 16 )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 1
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "summlbl"
+						"font": #Font0
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 1
+						"hAlign": 2
+						"gridx": 2
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "avansinfolbl"
+						"text": "Аванс"
+						"font": &Font1 new java.awt.Font( "Segoe UI", 1, 16 )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+						"gridy": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "avanslbl"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 5
+						"gridy": 1
+						"hAlign": 2
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "ndsinfolbl"
+						"text": "НДС :"
+						"font": #Font0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 2
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "ndslbl"
+						"font": #Font0
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 2
+						"hAlign": 2
+						"gridx": 2
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "nextinfolbl"
+						"text": "В момент доставки"
+						"font": #Font1
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+						"gridy": 2
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "ondeliverlbl"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 5
+						"gridy": 2
+						"hAlign": 2
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "countinfolbl"
+						"text": "Сумма с НДС :"
+						"font": #Font0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 3
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "countlbl"
+						"font": #Font0
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 3
+						"hAlign": 2
+						"gridx": 2
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "creditinfo"
+						"text": "Кредит"
+						"font": #Font1
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": true
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+						"gridy": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "creditlbl"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 5
+						"gridy": 3
+						"hAlign": 2
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "216:1.0"
+					"$rowSpecs": "85:1.0"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "panel7"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "okbtn"
+						"text": "Подтвердить заказ"
+						"font": new java.awt.Font( "Segoe UI", 1, 20 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"hAlign": 0
+					"vAlign": 0
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 5
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
+				name: "vSpacer2"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 5
+				"gridheight": 2
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 945, 600 )
+		} )
+	}
+}
