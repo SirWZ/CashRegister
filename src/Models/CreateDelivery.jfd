@@ -13,7 +13,7 @@ new FormModel {
 		} ) {
 			name: "this"
 			"$sizePolicy": 1
-			"defaultCloseOperation": 2
+			"defaultCloseOperation": 3
 			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
 				name: "vSpacer1"
 				auxiliary() {
@@ -21,7 +21,7 @@ new FormModel {
 				}
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "65:1.0, 61:1.0, 188:1.0, 0:1.0, 154:1.0, 0:1.0, 0:1.0"
+				"$columnSpecs": "65:1.0, 61:1.0, 188:1.0, 0:1.0, 154:1.0, 67:1.0, 150:1.0"
 				"$rowSpecs": "0:1.0, 0:1.0"
 				"$hGap": 5
 				"$vGap": 5
@@ -32,6 +32,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "exitBtn"
 					"text": "Крестик"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"hAlign": 0
 				} )
@@ -48,6 +49,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
 					name: "numbertextField"
+					"editable": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
 					"hAlign": 5
@@ -86,16 +88,21 @@ new FormModel {
 					"gridy": 1
 					"hAlign": 4
 				} )
-				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "deliverytextField"
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "deliveryBox"
+					"maximumRowCount": 40
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: " "
+						addElement( " " )
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "deliveryBoxActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
 					"gridy": 1
-					"hAlign": 5
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "numdelLbl"
-					"text": "Номер доставки"
+					"text": "Место доставки"
 					"font": new java.awt.Font( "Segoe UI", 1, 16 )
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
@@ -106,7 +113,7 @@ new FormModel {
 					"hAlign": 4
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "deliveryNumtextField"
+					name: "deliveryPlacetextField"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 4
 					"gridy": 1
@@ -178,13 +185,6 @@ new FormModel {
 					"gridx": 3
 					"gridy": 1
 					"hAlign": 0
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "writepricebtn"
-					"text": "Заполнить пустоту внутри меня"
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 4
-					"gridy": 1
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "addComentBtn"
@@ -317,7 +317,8 @@ new FormModel {
 						} )
 						"font": new java.awt.Font( "Segoe UI", 0, 14 )
 						"autoCreateRowSorter": true
-						addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "tableKeyPressed", true ) )
+						"rowSelectionAllowed": false
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "tableMouseClicked", false ) )
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"vAlign": 5
@@ -535,8 +536,75 @@ new FormModel {
 				"gridheight": 2
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 0 )
+			"location": new java.awt.Point( 0, 5 )
 			"size": new java.awt.Dimension( 945, 600 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "0:1.0"
+			"$rowSpecs": "213, 0"
+			"$hGap": 5
+			"$vGap": 5
+			"$alignLeft": true
+			"$alignTop": true
+		} ) {
+			name: "addProdDialog"
+			"$sizePolicy": 1
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane2"
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "prodtable"
+					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+						add( "Номер" )
+						add( "Название" )
+						add( "Цена" )
+						add( "НДС" )
+					}, new java.util.Vector {
+						add( class java.lang.Integer )
+						add( class java.lang.String )
+						add( class java.lang.Double )
+						add( class java.lang.Double )
+					}, new java.util.Vector {
+						add( false )
+						add( false )
+						add( false )
+						add( false )
+					}, new java.util.Vector {
+						add( null )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 265, 0, 0, true ) )
+						add( null )
+						add( null )
+					} )
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0, 0, 0, 0, 0, 0, 0, 0, 0"
+				"$rowSpecs": "0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button1"
+					"text": "Выход"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 4
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button2"
+					"text": "Добавить продукт"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button2ActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 8
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 1260, 120 )
+			"size": new java.awt.Dimension( 485, 280 )
 		} )
 	}
 }

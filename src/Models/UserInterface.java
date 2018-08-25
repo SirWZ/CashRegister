@@ -4,11 +4,14 @@
 
 package Models;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.*;
 import java.util.Arrays;
-import javax.swing.*;
 
 /**
  * @author Gevtsi Yurii
@@ -19,15 +22,16 @@ public class UserInterface extends JFrame {
     private PreparedStatement pr;
     public static int idwor, idshift,idshift_worker;
 
-    public UserInterface() {new  CreateDelivery().setVisible(true);
-        /*try {
+    public UserInterface() {
+        try {
             Class.forName("org.postgresql.Driver");
             cn= DriverManager.getConnection("jdbc:postgresql://25.90.246.178:5432/postgres","postgres","shift");
-            initComponents();
+            //initComponents();
+            new  CreateDelivery(cn).setVisible(true);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
-*/
+
     }
 
     private void loggBtnActionPerformed()  {
