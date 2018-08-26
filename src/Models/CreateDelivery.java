@@ -20,16 +20,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
  * @author Yurii
  */
-public class CreateDelivery extends JFrame {
-    Connection cn;
-    int idDelivery;
-    String email;
-    public CreateDelivery(Connection cn) {
+class CreateDelivery extends JFrame {
+    private Connection cn;
+    private int idDelivery;
+    CreateDelivery(Connection cn) {
         initComponents();
         this.cn = cn;
         try {
@@ -97,21 +97,20 @@ public class CreateDelivery extends JFrame {
                 double count = (double) table.getModel().getValueAt(i, 2);
                 double price = (double) table.getModel().getValueAt(i, 4);
                 double nds = (double) table.getModel().getValueAt(i, 6);
-                summ += count *( price + price*nds/100);
+                summ += count * price;
                 summNDS+=price*nds*count/100;
-                table.getModel().setValueAt(count *( price + price*nds/100),i,7);
-                table.getModel().setValueAt(price*nds*count/100,i,8);
+                table.getModel().setValueAt(count *price,i,7);
+                //table.getModel().setValueAt(price*nds*count/100,i,7);
             }
         }
         summlbl.setText(summ + "");
         ndslbl.setText(summNDS +"");
-        countlbl.setText(summ+ summNDS+"");
     }
 
     private void deliveryBoxActionPerformed() {
         try {
             PreparedStatement pr = cn.prepareStatement("select \"idProvider\", e_mail from \"Provider\" where name like ?");
-            pr.setString(1,deliveryBox.getSelectedItem().toString());
+            pr.setString(1,Objects.requireNonNull(deliveryBox.getSelectedItem()).toString());
             ResultSet rs = pr.executeQuery();
             rs.next();
             idDelivery = rs.getInt(1);
@@ -170,7 +169,7 @@ public class CreateDelivery extends JFrame {
         noBtn = new JButton();
         printBtn = new JButton();
         var deliverylbl = new JLabel();
-        deliveryBox = new JComboBox<>();
+        deliveryBox = new JComboBox();
         var numdelLbl = new JLabel();
         deliveryPlacetextField = new JTextField();
         var contactlbl = new JLabel();
@@ -200,8 +199,6 @@ public class CreateDelivery extends JFrame {
         ndslbl = new JLabel();
         var nextinfolbl = new JLabel();
         ondeliverlbl = new JLabel();
-        var countinfolbl = new JLabel();
-        countlbl = new JLabel();
         var creditinfo = new JLabel();
         creditlbl = new JLabel();
         var panel7 = new JPanel();
@@ -293,9 +290,6 @@ public class CreateDelivery extends JFrame {
 
             //---- deliveryBox ----
             deliveryBox.setMaximumRowCount(40);
-            deliveryBox.setModel(new DefaultComboBoxModel<>(new String[] {
-                " "
-            }));
             deliveryBox.addActionListener(e -> deliveryBoxActionPerformed());
             firstpanel.add(deliveryBox, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -396,14 +390,14 @@ public class CreateDelivery extends JFrame {
                 //---- table ----
                 table.setModel(new DefaultTableModel(
                     new Object[][] {
-                        {null, null, null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null, null},
                     },
                     new String[] {
-                        "\u041d\u043e\u043c\u0435\u0440", "\u0422\u043e\u0432\u0430\u0440", "\u041a\u043e\u043b-\u0432\u043e", "\u0415\u0434.\u0438\u0437.", "\u0426\u0435\u043d\u0430\\\u0448\u0442.", "\u0412\u0430\u043b\u044e\u0442\u0430", "\u0421\u0442\u0430\u0432\u043a\u0430 \u041d\u0414\u0421", "\u0421\u0443\u043c\u043c\u0430", "\u041d\u0414\u0421"
+                        "\u041d\u043e\u043c\u0435\u0440", "\u0422\u043e\u0432\u0430\u0440", "\u041a\u043e\u043b-\u0432\u043e", "\u0415\u0434.\u0438\u0437.", "\u0426\u0435\u043d\u0430\\\u0448\u0442.", "\u0412\u0430\u043b\u044e\u0442\u0430", "\u0412 \u043d\u0435\u043c \u041d\u0414\u0421", "\u0421\u0443\u043c\u043c\u0430"
                     }
                 ) {
                     Class<?>[] columnTypes = new Class<?>[] {
-                        Integer.class, Object.class, Double.class, String.class, Double.class, String.class, Double.class, Double.class, Double.class
+                        Integer.class, Object.class, Double.class, String.class, Double.class, String.class, Double.class, Double.class
                     };
                     @Override
                     public Class<?> getColumnClass(int columnIndex) {
@@ -424,8 +418,6 @@ public class CreateDelivery extends JFrame {
                     cm.getColumn(6).setPreferredWidth(70);
                     cm.getColumn(7).setResizable(false);
                     cm.getColumn(7).setPreferredWidth(50);
-                    cm.getColumn(8).setResizable(false);
-                    cm.getColumn(8).setPreferredWidth(35);
                 }
                 table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
                 table.setAutoCreateRowSorter(true);
@@ -519,7 +511,7 @@ public class CreateDelivery extends JFrame {
                     new Insets(0, 0, 5, 0), 0, 0));
 
                 //---- ndsinfolbl ----
-                ndsinfolbl.setText("\u041d\u0414\u0421 :");
+                ndsinfolbl.setText("\u0412 \u043d\u0435\u043c \u041d\u0414\u0421 :");
                 ndsinfolbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
                 panel5.add(ndsinfolbl, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -540,19 +532,6 @@ public class CreateDelivery extends JFrame {
                 panel5.add(ondeliverlbl, new GridBagConstraints(5, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 0), 0, 0));
-
-                //---- countinfolbl ----
-                countinfolbl.setText("\u0421\u0443\u043c\u043c\u0430 \u0441 \u041d\u0414\u0421 :");
-                countinfolbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
-                panel5.add(countinfolbl, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- countlbl ----
-                countlbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
-                panel5.add(countlbl, new GridBagConstraints(2, 3, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
-                    new Insets(0, 0, 0, 5), 0, 0));
 
                 //---- creditinfo ----
                 creditinfo.setText("\u041a\u0440\u0435\u0434\u0438\u0442");
@@ -709,7 +688,7 @@ public class CreateDelivery extends JFrame {
     private JLabel datelbl;
     private JButton noBtn;
     private JButton printBtn;
-    private JComboBox<String> deliveryBox;
+    private JComboBox deliveryBox;
     private JTextField deliveryPlacetextField;
     private JTextField contacttextField;
     private JButton addrowBtn;
@@ -727,7 +706,6 @@ public class CreateDelivery extends JFrame {
     private JLabel avanslbl;
     private JLabel ndslbl;
     private JLabel ondeliverlbl;
-    private JLabel countlbl;
     private JLabel creditlbl;
     private JButton okbtn;
     private JDialog addProdDialog;
