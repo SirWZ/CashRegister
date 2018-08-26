@@ -60,13 +60,17 @@ public class CreateDelivery extends JFrame {
 
     private void addrowBtnActionPerformed() {
         try {
-            PreparedStatement pr = cn.prepareStatement("select name from \"Product\" where \"idProviderConnectProduct\" in (select \"idProviderConnectProduct\" from \"Provider_Connect_Product\" where \"idProvider\" =?)");
+            PreparedStatement pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.\" currency\", pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
             pr.setInt(1,idDelivery);
             ResultSet rs = pr.executeQuery();
             int i=0;
             while (rs.next()){
                 ((DefaultTableModel)prodtable.getModel()).addRow(new Object[]{});
-                prodtable.getModel().setValueAt(rs.getString(1),i,0);
+                prodtable.getModel().setValueAt(rs.getInt(1),i,0);
+                prodtable.getModel().setValueAt(rs.getString(2),i,1);
+                prodtable.getModel().setValueAt(rs.getDouble(3),i,2);
+                prodtable.getModel().setValueAt(rs.getString(4),i,3);
+                prodtable.getModel().setValueAt(rs.getDouble(5),i,4);
                 i++;
             }
         } catch (SQLException e) {
@@ -89,17 +93,16 @@ public class CreateDelivery extends JFrame {
         double summ=0;
         double summNDS=0;
         for (int i =0; i< table.getRowCount();i++){
-            if (table.getModel().getValueAt(i, 2)!=null && table.getModel().getValueAt(i, 4)!=null && table.getModel().getValueAt(i, 5)!=null) {
+            if (table.getModel().getValueAt(i, 0)!=null && table.getModel().getValueAt(i, 2)!=null) {
                 double count = (double) table.getModel().getValueAt(i, 2);
                 double price = (double) table.getModel().getValueAt(i, 4);
-                double nds = (double) table.getModel().getValueAt(i, 5);
-                summ += count * price;
-                summNDS+=nds*count;
-                table.getModel().setValueAt(count * price,i,6);
-                table.getModel().setValueAt(nds*count,i,7);
+                double nds = (double) table.getModel().getValueAt(i, 6);
+                summ += count *( price + price*nds/100);
+                summNDS+=price*nds*count/100;
+                table.getModel().setValueAt(count *( price + price*nds/100),i,7);
+                table.getModel().setValueAt(price*nds*count/100,i,8);
             }
         }
-        if (table.getModel().getValueAt(table.getRowCount()-1,1)!=null)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
         summlbl.setText(summ + "");
         ndslbl.setText(summNDS +"");
         countlbl.setText(summ+ summNDS+"");
@@ -127,11 +130,31 @@ public class CreateDelivery extends JFrame {
         addProdDialog.dispose();
     }
 
-    private void button2ActionPerformed() {
+    private void addProdActionPerformed() {
         for (int i=0; i<prodtable.getSelectedRows().length;i++){
-            String name = prodtable.getValueAt(prodtable.getSelectedRows()[i],0).toString();
-          //  PreparedStatement pr = cn.prepareStatement();
+            int id = Integer.parseInt(prodtable.getValueAt(prodtable.getSelectedRows()[i],0).toString());
+            String name = prodtable.getValueAt(prodtable.getSelectedRows()[i],1).toString();
+            double price = Double.parseDouble(prodtable.getValueAt(prodtable.getSelectedRows()[i],2).toString());
+            String currency = prodtable.getValueAt(prodtable.getSelectedRows()[i],3).toString();
+            double vat = Double.parseDouble(prodtable.getValueAt(prodtable.getSelectedRows()[i],4).toString());
 
+            String mesuringRate;
+            try {
+                PreparedStatement pr = cn.prepareStatement("select  name_measuring from delivery_measuring_rate d,\"Provider_Product\" p where d.idmeasuringrate=p.\"MeasuringRate\" and p.\"idProviderProduct\" = ?");
+                pr.setInt(1,id);
+                ResultSet rs = pr.executeQuery();
+                rs.next();
+                mesuringRate = rs.getString(1);
+                table.getModel().setValueAt(id,table.getRowCount()-1,0);
+                table.getModel().setValueAt(name,table.getRowCount()-1,1);
+                table.getModel().setValueAt(mesuringRate,table.getRowCount()-1,3);
+                table.getModel().setValueAt(price,table.getRowCount()-1,4);
+                table.getModel().setValueAt(currency,table.getRowCount()-1,5);
+                table.getModel().setValueAt(vat,table.getRowCount()-1,6);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
         }
     }
 
@@ -185,11 +208,14 @@ public class CreateDelivery extends JFrame {
         okbtn = new JButton();
         var vSpacer2 = new JPanel(null);
         addProdDialog = new JDialog();
+        panel2 = new JPanel();
+        exitbtn = new JButton();
+        textField1 = new JTextField();
+        findBtn = new JButton();
         scrollPane2 = new JScrollPane();
         prodtable = new JTable();
         panel1 = new JPanel();
-        button1 = new JButton();
-        button2 = new JButton();
+        addProd = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -370,18 +396,14 @@ public class CreateDelivery extends JFrame {
                 //---- table ----
                 table.setModel(new DefaultTableModel(
                     new Object[][] {
-                        {1, "Cocaine", 1.0, "gramm", 200.0, 20.0, null, null},
-                        {2, "Slut", 2.0, "girl", 400.0, 1.0, null, null},
-                        {null, null, null, null, null, null, null, null},
-                        {null, null, null, null, null, null, null, null},
-                        {null, null, null, null, null, null, null, null},
+                        {null, null, null, null, null, null, null, null, null},
                     },
                     new String[] {
-                        "\u041d\u043e\u043c\u0435\u0440", "\u0422\u043e\u0432\u0430\u0440", "\u041a\u043e\u043b-\u0432\u043e", "\u0415\u0434.\u0438\u0437.", "\u0426\u0435\u043d\u0430\\\u0448\u0442.", "\u0421\u0442\u0430\u0432\u043a\u0430 \u041d\u0414\u0421", "\u0421\u0443\u043c\u043c\u0430", "\u041d\u0414\u0421"
+                        "\u041d\u043e\u043c\u0435\u0440", "\u0422\u043e\u0432\u0430\u0440", "\u041a\u043e\u043b-\u0432\u043e", "\u0415\u0434.\u0438\u0437.", "\u0426\u0435\u043d\u0430\\\u0448\u0442.", "\u0412\u0430\u043b\u044e\u0442\u0430", "\u0421\u0442\u0430\u0432\u043a\u0430 \u041d\u0414\u0421", "\u0421\u0443\u043c\u043c\u0430", "\u041d\u0414\u0421"
                     }
                 ) {
                     Class<?>[] columnTypes = new Class<?>[] {
-                        Integer.class, Object.class, Double.class, String.class, Double.class, Double.class, Double.class, Double.class
+                        Integer.class, Object.class, Double.class, String.class, Double.class, String.class, Double.class, Double.class, Double.class
                     };
                     @Override
                     public Class<?> getColumnClass(int columnIndex) {
@@ -398,12 +420,12 @@ public class CreateDelivery extends JFrame {
                     cm.getColumn(3).setResizable(false);
                     cm.getColumn(3).setPreferredWidth(45);
                     cm.getColumn(4).setResizable(false);
-                    cm.getColumn(5).setResizable(false);
-                    cm.getColumn(5).setPreferredWidth(70);
                     cm.getColumn(6).setResizable(false);
-                    cm.getColumn(6).setPreferredWidth(50);
+                    cm.getColumn(6).setPreferredWidth(70);
                     cm.getColumn(7).setResizable(false);
-                    cm.getColumn(7).setPreferredWidth(35);
+                    cm.getColumn(7).setPreferredWidth(50);
+                    cm.getColumn(8).setResizable(false);
+                    cm.getColumn(8).setPreferredWidth(35);
                 }
                 table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
                 table.setAutoCreateRowSorter(true);
@@ -579,9 +601,45 @@ public class CreateDelivery extends JFrame {
             var addProdDialogContentPane = addProdDialog.getContentPane();
             addProdDialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)addProdDialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
-            ((GridBagLayout)addProdDialogContentPane.getLayout()).rowHeights = new int[] {218, 0, 0};
+            ((GridBagLayout)addProdDialogContentPane.getLayout()).rowHeights = new int[] {0, 218, 0, 0};
             ((GridBagLayout)addProdDialogContentPane.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-            ((GridBagLayout)addProdDialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)addProdDialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+            //======== panel2 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel2.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel2.getBorder())); panel2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel2.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {0, 0, 78, 217, 0, 0};
+                ((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+                ((GridBagLayout)panel2.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)panel2.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+                //---- exitbtn ----
+                exitbtn.setText("\u0412\u044b\u0445\u043e\u0434");
+                exitbtn.addActionListener(e -> button1ActionPerformed());
+                panel2.add(exitbtn, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 5), 0, 0));
+                panel2.add(textField1, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- findBtn ----
+                findBtn.setText("\u041f\u043e\u0438\u0441\u043a");
+                panel2.add(findBtn, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 0), 0, 0));
+            }
+            addProdDialogContentPane.add(panel2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
 
             //======== scrollPane2 ========
             {
@@ -591,14 +649,14 @@ public class CreateDelivery extends JFrame {
                     new Object[][] {
                     },
                     new String[] {
-                        "\u041d\u043e\u043c\u0435\u0440", "\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435", "\u0426\u0435\u043d\u0430", "\u041d\u0414\u0421"
+                        "\u041d\u043e\u043c\u0435\u0440", "\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435", "\u0426\u0435\u043d\u0430", "\u0412\u0430\u043b\u044e\u0442\u0430", "\u041d\u0414\u0421"
                     }
                 ) {
                     Class<?>[] columnTypes = new Class<?>[] {
-                        Integer.class, String.class, Double.class, Double.class
+                        Integer.class, String.class, Double.class, String.class, Double.class
                     };
                     boolean[] columnEditable = new boolean[] {
-                        false, false, false, false
+                        false, false, false, true, false
                     };
                     @Override
                     public Class<?> getColumnClass(int columnIndex) {
@@ -615,44 +673,29 @@ public class CreateDelivery extends JFrame {
                 }
                 scrollPane2.setViewportView(prodtable);
             }
-            addProdDialogContentPane.add(scrollPane2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+            addProdDialogContentPane.add(scrollPane2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //======== panel1 ========
             {
-
-                // JFormDesigner evaluation mark
-                panel1.setBorder(new javax.swing.border.CompoundBorder(
-                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
-                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
-
                 panel1.setLayout(new GridBagLayout());
-                ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {307, 0, 0};
                 ((GridBagLayout)panel1.getLayout()).rowHeights = new int[] {0, 0};
-                ((GridBagLayout)panel1.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)panel1.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)panel1.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-                //---- button1 ----
-                button1.setText("\u0412\u044b\u0445\u043e\u0434");
-                button1.addActionListener(e -> button1ActionPerformed());
-                panel1.add(button1, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- button2 ----
-                button2.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0434\u0443\u043a\u0442");
-                button2.addActionListener(e -> button2ActionPerformed());
-                panel1.add(button2, new GridBagConstraints(8, 0, 1, 1, 0.0, 0.0,
+                //---- addProd ----
+                addProd.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0434\u0443\u043a\u0442");
+                addProd.addActionListener(e -> addProdActionPerformed());
+                panel1.add(addProd, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
-            addProdDialogContentPane.add(panel1, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+            addProdDialogContentPane.add(panel1, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
-            addProdDialog.setSize(485, 280);
+            addProdDialog.setSize(485, 365);
             addProdDialog.setLocationRelativeTo(addProdDialog.getOwner());
         }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -688,10 +731,13 @@ public class CreateDelivery extends JFrame {
     private JLabel creditlbl;
     private JButton okbtn;
     private JDialog addProdDialog;
+    private JPanel panel2;
+    private JButton exitbtn;
+    private JTextField textField1;
+    private JButton findBtn;
     private JScrollPane scrollPane2;
     private JTable prodtable;
     private JPanel panel1;
-    private JButton button1;
-    private JButton button2;
+    private JButton addProd;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

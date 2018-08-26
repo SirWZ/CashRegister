@@ -229,46 +229,7 @@ new FormModel {
 						name: "table"
 						"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 							add( new java.util.Vector {
-								add( 1 )
-								add( "Cocaine" )
-								add( 1.0 )
-								add( "gramm" )
-								add( 200.0 )
-								add( 20.0 )
 								add( null )
-								add( null )
-							} )
-							add( new java.util.Vector {
-								add( 2 )
-								add( "Slut" )
-								add( 2.0 )
-								add( "girl" )
-								add( 400.0 )
-								add( 1.0 )
-								add( null )
-								add( null )
-							} )
-							add( new java.util.Vector {
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-							} )
-							add( new java.util.Vector {
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-							} )
-							add( new java.util.Vector {
 								add( null )
 								add( null )
 								add( null )
@@ -284,6 +245,7 @@ new FormModel {
 							add( "Кол-во" )
 							add( "Ед.из." )
 							add( "Цена\\шт." )
+							add( "Валюта" )
 							add( "Ставка НДС" )
 							add( "Сумма" )
 							add( "НДС" )
@@ -293,10 +255,12 @@ new FormModel {
 							add( class java.lang.Double )
 							add( class java.lang.String )
 							add( class java.lang.Double )
+							add( class java.lang.String )
 							add( class java.lang.Double )
 							add( class java.lang.Double )
 							add( class java.lang.Double )
 						}, new java.util.Vector {
+							add( null )
 							add( null )
 							add( null )
 							add( null )
@@ -311,6 +275,7 @@ new FormModel {
 							add( new com.jformdesigner.model.SwingTableColumn( null, 55, 0, 0, false ) )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 45, 0, 0, false ) )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
+							add( null )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 70, 0, 0, false ) )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, false ) )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 35, 0, 0, false ) )
@@ -541,7 +506,7 @@ new FormModel {
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
 			"$columnSpecs": "0:1.0"
-			"$rowSpecs": "213, 0"
+			"$rowSpecs": "0, 213, 0"
 			"$hGap": 5
 			"$vGap": 5
 			"$alignLeft": true
@@ -549,6 +514,37 @@ new FormModel {
 		} ) {
 			name: "addProdDialog"
 			"$sizePolicy": 1
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0, 0, 73, 212, 0"
+				"$rowSpecs": "0, 0, 0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel2"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "exitbtn"
+					"text": "Выход"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "textField1"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 3
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "findBtn"
+					"text": "Поиск"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 4
+					"gridy": 1
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane2"
 				add( new FormComponent( "javax.swing.JTable" ) {
@@ -557,27 +553,33 @@ new FormModel {
 						add( "Номер" )
 						add( "Название" )
 						add( "Цена" )
+						add( "Валюта" )
 						add( "НДС" )
 					}, new java.util.Vector {
 						add( class java.lang.Integer )
 						add( class java.lang.String )
 						add( class java.lang.Double )
+						add( class java.lang.String )
 						add( class java.lang.Double )
 					}, new java.util.Vector {
 						add( false )
 						add( false )
 						add( false )
+						add( null )
 						add( false )
 					}, new java.util.Vector {
 						add( null )
 						add( new com.jformdesigner.model.SwingTableColumn( null, 265, 0, 0, true ) )
 						add( null )
 						add( null )
+						add( null )
 					} )
 				} )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "0, 0, 0, 0, 0, 0, 0, 0, 0"
+				"$columnSpecs": "302, 0"
 				"$rowSpecs": "0"
 				"$hGap": 5
 				"$vGap": 5
@@ -586,25 +588,18 @@ new FormModel {
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button1"
-					"text": "Выход"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 4
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button2"
+					name: "addProd"
 					"text": "Добавить продукт"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button2ActionPerformed", false ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addProdActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 8
+					"gridx": 1
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 1
+				"gridy": 2
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 1260, 120 )
-			"size": new java.awt.Dimension( 485, 280 )
+			"size": new java.awt.Dimension( 485, 365 )
 		} )
 	}
 }
