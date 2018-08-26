@@ -139,7 +139,7 @@ class CreateDelivery extends JFrame {
 
             String mesuringRate;
             try {
-                PreparedStatement pr = cn.prepareStatement("select  name_measuring from delivery_measuring_rate d,\"Provider_Product\" p where d.idmeasuringrate=p.\"MeasuringRate\" and p.\"idProviderProduct\" = ?");
+                PreparedStatement pr = cn.prepareStatement("select  name_measuring from order_measuring_rate d,\"Provider_Product\" p where d.idmeasuringrate=p.\"MeasuringRate\" and p.\"idProviderProduct\" = ?");
                 pr.setInt(1,id);
                 ResultSet rs = pr.executeQuery();
                 rs.next();
