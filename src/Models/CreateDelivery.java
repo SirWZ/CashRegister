@@ -80,7 +80,12 @@ class CreateDelivery extends JFrame {
     }
 
     private void deleteBtnActionPerformed() {
-            ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());
+            if (table.getSelectedRow()!=-1){
+                ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());
+                if (table.getRowCount()==0)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
+            }
+
+
     }
 
     private void payBtnActionPerformed() {
@@ -155,6 +160,14 @@ class CreateDelivery extends JFrame {
             }
             ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
         }
+    }
+
+    private void upBtnActionPerformed() {
+        if (table.getSelectedRow()>0)table.setRowSelectionInterval(table.getSelectedRow()-1,table.getSelectedRow()-1);
+    }
+
+    private void downbtnActionPerformed() {
+        if (table.getSelectedRow()<table.getRowCount()-1 )table.setRowSelectionInterval(table.getSelectedRow()+1,table.getSelectedRow()+1);
     }
 
     private void initComponents() {
@@ -343,12 +356,14 @@ class CreateDelivery extends JFrame {
 
             //---- upBtn ----
             upBtn.setText("\u0412\u0432\u0435\u0440\u0445");
+            upBtn.addActionListener(e -> upBtnActionPerformed());
             secondpanel.add(upBtn, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 0, 5), 0, 0));
 
             //---- downbtn ----
             downbtn.setText("\u0412\u043d\u0438\u0437");
+            downbtn.addActionListener(e -> downbtnActionPerformed());
             secondpanel.add(downbtn, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 0, 5), 0, 0));
@@ -422,6 +437,7 @@ class CreateDelivery extends JFrame {
                 table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
                 table.setAutoCreateRowSorter(true);
                 table.setRowSelectionAllowed(false);
+                table.setCellSelectionEnabled(true);
                 table.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {

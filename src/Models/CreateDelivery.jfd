@@ -169,6 +169,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "upBtn"
 					"text": "Вверх"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "upBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
 					"gridy": 1
@@ -177,6 +178,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "downbtn"
 					"text": "Вниз"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "downbtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 3
 					"gridy": 1
@@ -274,6 +276,7 @@ new FormModel {
 						"font": new java.awt.Font( "Segoe UI", 0, 14 )
 						"autoCreateRowSorter": true
 						"rowSelectionAllowed": false
+						"cellSelectionEnabled": true
 						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "tableMouseClicked", false ) )
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
