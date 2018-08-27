@@ -41,14 +41,12 @@ class CreateDelivery extends JFrame {
         }
 
         AutoCompleteDecorator.decorate(deliveryBox);
-        UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Сегодня");
         p.put("text.month", "Месяц");
         p.put("text.year", "Год");
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
-        JDatePickerImpl datePicker2 = new JDatePickerImpl(datePanel, new DateComponentFormatter());
+        JDatePickerImpl datePicker = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel(), p), new DateComponentFormatter());
+        JDatePickerImpl datePicker2 = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel(), p), new DateComponentFormatter());
 
         firstpanel.add(datePicker, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -105,7 +103,6 @@ class CreateDelivery extends JFrame {
                 summ += count * price;
                 summNDS+=price*nds*count/100;
                 table.getModel().setValueAt(count *price,i,7);
-                //table.getModel().setValueAt(price*nds*count/100,i,7);
             }
         }
         summlbl.setText(summ + "");
@@ -132,6 +129,7 @@ class CreateDelivery extends JFrame {
 
     private void button1ActionPerformed() {
         addProdDialog.dispose();
+        ((DefaultTableModel)prodtable.getModel()).setRowCount(0);
     }
 
     private void addProdActionPerformed() {
@@ -168,6 +166,19 @@ class CreateDelivery extends JFrame {
 
     private void downbtnActionPerformed() {
         if (table.getSelectedRow()<table.getRowCount()-1 )table.setRowSelectionInterval(table.getSelectedRow()+1,table.getSelectedRow()+1);
+    }
+
+    private void findBtnActionPerformed() {
+        String name = findProdTF.getText();
+        if (!name.equals("")) {
+            findProdTF.setText("");
+            ListSelectionModel model = prodtable.getSelectionModel();
+            model.clearSelection();
+            for (int i = 0; i < prodtable.getRowCount(); i++) {
+                String prod = prodtable.getModel().getValueAt(i, 1).toString();
+                if (prod.lastIndexOf(name) != -1) model.addSelectionInterval(i, i);
+            }
+        }
     }
 
     private void initComponents() {
@@ -220,7 +231,7 @@ class CreateDelivery extends JFrame {
         addProdDialog = new JDialog();
         panel2 = new JPanel();
         exitbtn = new JButton();
-        textField1 = new JTextField();
+        findProdTF = new JTextField();
         findBtn = new JButton();
         scrollPane2 = new JScrollPane();
         prodtable = new JTable();
@@ -256,7 +267,7 @@ class CreateDelivery extends JFrame {
             ((GridBagLayout)firstpanel.getLayout()).rowWeights = new double[] {1.0, 1.0, 1.0E-4};
 
             //---- exitBtn ----
-            exitBtn.setText("\u041a\u0440\u0435\u0441\u0442\u0438\u043a");
+            exitBtn.setIcon(new ImageIcon("E:\\CashRegister\\resources\\exit.png"));
             exitBtn.addActionListener(e -> exitBtnActionPerformed());
             firstpanel.add(exitBtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
@@ -611,7 +622,7 @@ class CreateDelivery extends JFrame {
                         java.awt.Color.red), panel2.getBorder())); panel2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
                 panel2.setLayout(new GridBagLayout());
-                ((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {0, 0, 78, 217, 0, 0};
+                ((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {0, 0, 78, 222, 26, 0};
                 ((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
                 ((GridBagLayout)panel2.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)panel2.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
@@ -622,14 +633,15 @@ class CreateDelivery extends JFrame {
                 panel2.add(exitbtn, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
-                panel2.add(textField1, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
+                panel2.add(findProdTF, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
 
                 //---- findBtn ----
-                findBtn.setText("\u041f\u043e\u0438\u0441\u043a");
+                findBtn.setIcon(UIManager.getIcon("TextField.darcula.search.icon"));
+                findBtn.addActionListener(e -> findBtnActionPerformed());
                 panel2.add(findBtn, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 0), 0, 0));
             }
             addProdDialogContentPane.add(panel2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -727,7 +739,7 @@ class CreateDelivery extends JFrame {
     private JDialog addProdDialog;
     private JPanel panel2;
     private JButton exitbtn;
-    private JTextField textField1;
+    private JTextField findProdTF;
     private JButton findBtn;
     private JScrollPane scrollPane2;
     private JTable prodtable;

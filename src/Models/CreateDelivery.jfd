@@ -31,7 +31,7 @@ new FormModel {
 				name: "firstpanel"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "exitBtn"
-					"text": "Крестик"
+					"icon": new com.jformdesigner.model.SwingIcon( 1, "E:\\CashRegister\\resources\\exit.png" )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"hAlign": 0
@@ -490,7 +490,7 @@ new FormModel {
 			name: "addProdDialog"
 			"$sizePolicy": 1
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "0, 0, 73, 212, 0"
+				"$columnSpecs": "0, 0, 73, 217, center:26"
 				"$rowSpecs": "0, 0, 0"
 				"$hGap": 5
 				"$vGap": 5
@@ -507,16 +507,18 @@ new FormModel {
 					"gridy": 1
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "textField1"
+					name: "findProdTF"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 3
 					"gridy": 1
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "findBtn"
-					"text": "Поиск"
+					"icon": new com.jformdesigner.model.SwingIcon( 2, "TextField.darcula.search.icon" )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "findBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 4
+					"hAlign": 0
 					"gridy": 1
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
