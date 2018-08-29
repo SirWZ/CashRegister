@@ -4,9 +4,8 @@
 
 package Models;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author Gevtsi Yurii
@@ -50,12 +49,16 @@ class PrintReport extends JFrame {
         noprintbtnActionPerformed();
     }
 
+    private void exitbtnActionPerformed() {
+        this.dispose();
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+        // Generated using JFormDesigner Evaluation license - Yurii
         panel2 = new JPanel();
         panel3 = new JPanel();
-        button1 = new JButton();
+        exitbtn = new JButton();
         label1 = new JLabel();
         panel1 = new JPanel();
         reptbtn1 = new JButton();
@@ -69,7 +72,7 @@ class PrintReport extends JFrame {
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        Container contentPane = getContentPane();
+        var contentPane = getContentPane();
         contentPane.setLayout(new GridLayout(2, 0));
 
         //======== panel2 ========
@@ -78,7 +81,7 @@ class PrintReport extends JFrame {
             // JFormDesigner evaluation mark
             panel2.setBorder(new javax.swing.border.CompoundBorder(
                 new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                    "", javax.swing.border.TitledBorder.CENTER,
+                    "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
                     javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
                     java.awt.Color.red), panel2.getBorder())); panel2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
@@ -96,9 +99,13 @@ class PrintReport extends JFrame {
                 ((GridBagLayout)panel3.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
                 ((GridBagLayout)panel3.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
 
-                //---- button1 ----
-                button1.setText("\u0412\u044b\u0445\u043e\u0434");
-                panel3.add(button1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                //---- exitbtn ----
+                exitbtn.setText("\u0412\u044b\u0445\u043e\u0434");
+                exitbtn.addActionListener(e -> {
+			exitbtnActionPerformed();
+			exitbtnActionPerformed();
+		});
+                panel3.add(exitbtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
             }
@@ -157,7 +164,7 @@ class PrintReport extends JFrame {
 
         //======== printdialog ========
         {
-            Container printdialogContentPane = printdialog.getContentPane();
+            var printdialogContentPane = printdialog.getContentPane();
             printdialogContentPane.setLayout(null);
 
             //---- printlbl ----
@@ -187,10 +194,10 @@ class PrintReport extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Gevtsi Yurii
+    // Generated using JFormDesigner Evaluation license - Yurii
     private JPanel panel2;
     private JPanel panel3;
-    private JButton button1;
+    private JButton exitbtn;
     private JLabel label1;
     private JPanel panel1;
     private JButton reptbtn1;

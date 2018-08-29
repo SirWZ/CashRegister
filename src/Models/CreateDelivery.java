@@ -82,8 +82,6 @@ class CreateDelivery extends JFrame {
                 ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());
                 if (table.getRowCount()==0)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
             }
-
-
     }
 
     private void payBtnActionPerformed() {
