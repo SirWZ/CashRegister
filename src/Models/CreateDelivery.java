@@ -179,6 +179,21 @@ class CreateDelivery extends JFrame {
         }
     }
 
+    private void exitbtn2ActionPerformed() {
+        komentdialog.dispose();
+        komentTextArea.setText("");
+    }
+
+    private void okKomentBtnActionPerformed() {
+        String koment = komentTextArea.getText();
+        komentdialog.dispose();
+        komentTextArea.setText("");
+    }
+
+    private void addComentBtnActionPerformed() {
+        komentdialog.setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Yurii
@@ -235,6 +250,14 @@ class CreateDelivery extends JFrame {
         prodtable = new JTable();
         panel1 = new JPanel();
         addProd = new JButton();
+        komentdialog = new JDialog();
+        panel9 = new JPanel();
+        exitbtn2 = new JButton();
+        panel10 = new JPanel();
+        scrollPane3 = new JScrollPane();
+        komentTextArea = new JTextArea();
+        panel11 = new JPanel();
+        okKomentBtn = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -379,6 +402,7 @@ class CreateDelivery extends JFrame {
 
             //---- addComentBtn ----
             addComentBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043a\u043e\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439");
+            addComentBtn.addActionListener(e -> addComentBtnActionPerformed());
             secondpanel.add(addComentBtn, new GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 5), 0, 0));
@@ -703,6 +727,88 @@ class CreateDelivery extends JFrame {
             addProdDialog.setSize(485, 365);
             addProdDialog.setLocationRelativeTo(addProdDialog.getOwner());
         }
+
+        //======== komentdialog ========
+        {
+            komentdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            var komentdialogContentPane = komentdialog.getContentPane();
+            komentdialogContentPane.setLayout(new GridBagLayout());
+            ((GridBagLayout)komentdialogContentPane.getLayout()).columnWidths = new int[] {0, 0, 0};
+            ((GridBagLayout)komentdialogContentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)komentdialogContentPane.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)komentdialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+            //======== panel9 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel9.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel9.getBorder())); panel9.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel9.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel9.getLayout()).columnWidths = new int[] {0, 0, 0};
+                ((GridBagLayout)panel9.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)panel9.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)panel9.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- exitbtn2 ----
+                exitbtn2.setText("\u0412\u044b\u0445\u043e\u0434");
+                exitbtn2.addActionListener(e -> {
+			exitbtn2ActionPerformed();
+			exitbtn2ActionPerformed();
+		});
+                panel9.add(exitbtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
+            }
+            komentdialogContentPane.add(panel9, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 5), 0, 0));
+
+            //======== panel10 ========
+            {
+                panel10.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel10.getLayout()).columnWidths = new int[] {403, 0};
+                ((GridBagLayout)panel10.getLayout()).rowHeights = new int[] {119, 0};
+                ((GridBagLayout)panel10.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+                ((GridBagLayout)panel10.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //======== scrollPane3 ========
+                {
+                    scrollPane3.setViewportView(komentTextArea);
+                }
+                panel10.add(scrollPane3, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            komentdialogContentPane.add(panel10, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 5), 0, 0));
+
+            //======== panel11 ========
+            {
+                panel11.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel11.getLayout()).columnWidths = new int[] {289, 0, 0};
+                ((GridBagLayout)panel11.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)panel11.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)panel11.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- okKomentBtn ----
+                okKomentBtn.setText("\u041e\u043a");
+                okKomentBtn.addActionListener(e -> okKomentBtnActionPerformed());
+                panel11.add(okKomentBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            komentdialogContentPane.add(panel11, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 5), 0, 0));
+            komentdialog.setSize(410, 230);
+            komentdialog.setLocationRelativeTo(komentdialog.getOwner());
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -743,5 +849,13 @@ class CreateDelivery extends JFrame {
     private JTable prodtable;
     private JPanel panel1;
     private JButton addProd;
+    private JDialog komentdialog;
+    private JPanel panel9;
+    private JButton exitbtn2;
+    private JPanel panel10;
+    private JScrollPane scrollPane3;
+    private JTextArea komentTextArea;
+    private JPanel panel11;
+    private JButton okKomentBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -187,6 +187,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "addComentBtn"
 					"text": "Добавить коментарий"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addComentBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 5
 					"gridy": 1
@@ -577,6 +578,74 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 1260, 120 )
 			"size": new java.awt.Dimension( 485, 365 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "0, 0"
+			"$rowSpecs": "0, 0, 0"
+			"$hGap": 5
+			"$vGap": 5
+			"$alignLeft": true
+			"$alignTop": true
+		} ) {
+			name: "komentdialog"
+			"$sizePolicy": 1
+			"defaultCloseOperation": 2
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0, 0"
+				"$rowSpecs": "0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel9"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "exitbtn2"
+					"text": "Выход"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtn2ActionPerformed", false ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtn2ActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "403:1.0"
+				"$rowSpecs": "119"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel10"
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane3"
+					add( new FormComponent( "javax.swing.JTextArea" ) {
+						name: "komentTextArea"
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "284, 0"
+				"$rowSpecs": "0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel11"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "okKomentBtn"
+					"text": "Ок"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okKomentBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 2
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 1380, 490 )
+			"size": new java.awt.Dimension( 410, 230 )
 		} )
 	}
 }
