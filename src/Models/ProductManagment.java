@@ -26,6 +26,7 @@ public class ProductManagment extends JFrame {
 
     private void exitBtnActionPerformed() {
         this.dispose();
+        new MyShop(cn).setVisible(true);
     }
 
     private void initComponents() {

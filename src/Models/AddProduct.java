@@ -12,12 +12,16 @@ import java.sql.Connection;
  * @author Yurii
  */
 public class AddProduct extends JFrame {
+    Connection cn;
+
     public AddProduct(Connection cn) {
         initComponents();
+        this.cn = cn;
     }
 
     private void exitBtnActionPerformed() {
         this.dispose();
+        new ProductManagment(cn).setVisible(true);
     }
 
     private void initComponents() {
