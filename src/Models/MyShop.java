@@ -4,12 +4,12 @@
 
 package Models;
 
+import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import javax.swing.*;
 
 /**
  * @author Yurii
@@ -36,29 +36,34 @@ class MyShop extends JFrame {
         new CashierViewWindow(cn);
     }
 
+    private void productManagmentBtnActionPerformed() {
+        this.dispose();
+        new ProductManagment(cn).setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Yurii
-        JPanel panel1 = new JPanel();
-        JButton backbtn = new JButton();
-        JTextField textField1 = new JTextField();
-        JPanel panel2 = new JPanel();
-        JButton productManagmentBtn = new JButton();
-        JButton selsBtn = new JButton();
-        JButton button4 = new JButton();
-        JButton staffBtn = new JButton();
-        JButton shiftsBtn = new JButton();
-        JButton promoBtn = new JButton();
-        JButton inventoryBtn = new JButton();
-        JButton stockBtn = new JButton();
-        JButton providerBtn = new JButton();
-        JPanel panel3 = new JPanel();
-        JButton messageBtn = new JButton();
+        var panel1 = new JPanel();
+        var backbtn = new JButton();
+        var textField1 = new JTextField();
+        var panel2 = new JPanel();
+        var productManagmentBtn = new JButton();
+        var selsBtn = new JButton();
+        var button4 = new JButton();
+        var staffBtn = new JButton();
+        var shiftsBtn = new JButton();
+        var promoBtn = new JButton();
+        var inventoryBtn = new JButton();
+        var stockBtn = new JButton();
+        var providerBtn = new JButton();
+        var panel3 = new JPanel();
+        var messageBtn = new JButton();
         namelbl = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        Container contentPane = getContentPane();
+        var contentPane = getContentPane();
         contentPane.setLayout(new GridBagLayout());
         ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {718, 0};
         ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
@@ -67,6 +72,14 @@ class MyShop extends JFrame {
 
         //======== panel1 ========
         {
+
+            // JFormDesigner evaluation mark
+            panel1.setBorder(new javax.swing.border.CompoundBorder(
+                new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                    "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                    javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                    java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
             panel1.setLayout(new GridBagLayout());
             ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {104, 0, 217, 0};
             ((GridBagLayout)panel1.getLayout()).rowHeights = new int[] {19, 50, 0};
@@ -97,6 +110,7 @@ class MyShop extends JFrame {
 
             //---- productManagmentBtn ----
             productManagmentBtn.setText("\u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0442\u043e\u0432\u0430\u0440\u0430\u043c\u0438");
+            productManagmentBtn.addActionListener(e -> productManagmentBtnActionPerformed());
             panel2.add(productManagmentBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));

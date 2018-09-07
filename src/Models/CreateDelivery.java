@@ -14,8 +14,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +28,7 @@ import java.util.Properties;
 class CreateDelivery extends JFrame {
     private Connection cn;
     private int idDelivery;
+    private  JComboBox box;
     CreateDelivery(Connection cn) {
         initComponents();
         this.cn = cn;
@@ -36,8 +36,12 @@ class CreateDelivery extends JFrame {
             PreparedStatement pr = cn.prepareStatement("select name from \"Provider\"");
             ResultSet rs = pr.executeQuery();
             while (rs.next())deliveryBox.addItem(rs.getString(1));
+
+            pr = cn.prepareStatement("insert into \"Order\" (\"idDelivery\") values  (default )");
+            pr.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            this.dispose();
         }
 
         AutoCompleteDecorator.decorate(deliveryBox);
@@ -54,9 +58,9 @@ class CreateDelivery extends JFrame {
         panel4.add(datePicker2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
-    }
+        }
 
-    private void addrowBtnActionPerformed() {
+    private void addrowBtnActionPerformed() {((DefaultTableModel)prodtable.getModel()).setRowCount(0);
         try {
             PreparedStatement pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.\" currency\", pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
             pr.setInt(1,idDelivery);
@@ -85,7 +89,7 @@ class CreateDelivery extends JFrame {
     }
 
     private void payBtnActionPerformed() {
-
+        paydialog.setVisible(true);
     }
 
 
@@ -122,6 +126,7 @@ class CreateDelivery extends JFrame {
     }
 
     private void exitBtnActionPerformed() {
+
         this.dispose();
     }
 
@@ -138,15 +143,42 @@ class CreateDelivery extends JFrame {
             String currency = prodtable.getValueAt(prodtable.getSelectedRows()[i],3).toString();
             double vat = Double.parseDouble(prodtable.getValueAt(prodtable.getSelectedRows()[i],4).toString());
 
+            box = new JComboBox();
+
+            box.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    int id =0;
+                     System.out.println(table.getEditingRow() + "//");
+                     box.removeAllItems();
+                    try {
+                        PreparedStatement pr = cn.prepareStatement("select name\n" +
+                                "from \"Provider_product_measuring_rate\" pp,\"Measuring_rate_connect_provider_product\" mr\n" +
+                                "where pp.\"Id_Provider_product_measuring_rate\" = mr.\"id_measuring_rate_connect_provider_product\"\n" +
+                                "      and \"provider_product\" = ?");
+                        pr.setInt(1, table.getEditingRow());
+                        ResultSet rs = pr.executeQuery();
+                        while (rs.next()) {
+                            box.addItem(rs.getString(1));
+                            //System.out.println(rs.getString(1));
+                        }
+                    }catch (Exception ex){
+
+                    }
+                }
+            });
             String mesuringRate;
             try {
-                PreparedStatement pr = cn.prepareStatement("select  name_measuring from order_measuring_rate d,\"Provider_Product\" p where d.idmeasuringrate=p.\"MeasuringRate\" and p.\"idProviderProduct\" = ?");
+                PreparedStatement pr;
+                ResultSet rs;
+                pr = cn.prepareStatement("select p.name from \"Provider_product_measuring_rate\" p, \"Provider_Product\" where \"Id_Provider_product_measuring_rate\" = \"BaseMeasuringRate\" and \"idProviderProduct\" = ?");
                 pr.setInt(1,id);
-                ResultSet rs = pr.executeQuery();
+                rs = pr.executeQuery();
                 rs.next();
                 mesuringRate = rs.getString(1);
                 table.getModel().setValueAt(id,table.getRowCount()-1,0);
                 table.getModel().setValueAt(name,table.getRowCount()-1,1);
+
                 table.getModel().setValueAt(mesuringRate,table.getRowCount()-1,3);
                 table.getModel().setValueAt(price,table.getRowCount()-1,4);
                 table.getModel().setValueAt(currency,table.getRowCount()-1,5);
@@ -155,6 +187,7 @@ class CreateDelivery extends JFrame {
                 e.printStackTrace();
             }
             ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
+
         }
     }
 
@@ -193,6 +226,15 @@ class CreateDelivery extends JFrame {
     private void addComentBtnActionPerformed() {
         komentdialog.setVisible(true);
     }
+
+    private void findProdTFKeyPressed(KeyEvent e) {
+        if (e.getKeyCode() == 10) findBtn.doClick();
+    }
+
+    private void addProdDialogKeyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
+    }
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -258,6 +300,16 @@ class CreateDelivery extends JFrame {
         komentTextArea = new JTextArea();
         panel11 = new JPanel();
         okKomentBtn = new JButton();
+        paydialog = new JDialog();
+        panel3 = new JPanel();
+        button1 = new JButton();
+        panel6 = new JPanel();
+        label1 = new JLabel();
+        textField1 = new JTextField();
+        label2 = new JLabel();
+        textField2 = new JTextField();
+        label3 = new JLabel();
+        textField3 = new JTextField();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -447,9 +499,16 @@ class CreateDelivery extends JFrame {
                     Class<?>[] columnTypes = new Class<?>[] {
                         Integer.class, Object.class, Double.class, String.class, Double.class, String.class, Double.class, Double.class
                     };
+                    boolean[] columnEditable = new boolean[] {
+                        false, false, true, true, false, true, false, false
+                    };
                     @Override
                     public Class<?> getColumnClass(int columnIndex) {
                         return columnTypes[columnIndex];
+                    }
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return columnEditable[columnIndex];
                     }
                 });
                 {
@@ -626,6 +685,12 @@ class CreateDelivery extends JFrame {
 
         //======== addProdDialog ========
         {
+            addProdDialog.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    addProdDialogKeyPressed(e);
+                }
+            });
             var addProdDialogContentPane = addProdDialog.getContentPane();
             addProdDialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)addProdDialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
@@ -655,6 +720,14 @@ class CreateDelivery extends JFrame {
                 panel2.add(exitbtn, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- findProdTF ----
+                findProdTF.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        findProdTFKeyPressed(e);
+                    }
+                });
                 panel2.add(findProdTF, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
@@ -809,6 +882,83 @@ class CreateDelivery extends JFrame {
             komentdialog.setSize(410, 230);
             komentdialog.setLocationRelativeTo(komentdialog.getOwner());
         }
+
+        //======== paydialog ========
+        {
+            var paydialogContentPane = paydialog.getContentPane();
+            paydialogContentPane.setLayout(new GridBagLayout());
+            ((GridBagLayout)paydialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
+            ((GridBagLayout)paydialogContentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+            ((GridBagLayout)paydialogContentPane.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+            ((GridBagLayout)paydialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+            //======== panel3 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel3.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel3.getBorder())); panel3.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel3.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel3.getLayout()).columnWidths = new int[] {0, 0};
+                ((GridBagLayout)panel3.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)panel3.getLayout()).columnWeights = new double[] {0.0, 1.0E-4};
+                ((GridBagLayout)panel3.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- button1 ----
+                button1.setText("text");
+                panel3.add(button1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            paydialogContentPane.add(panel3, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //======== panel6 ========
+            {
+                panel6.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel6.getLayout()).columnWidths = new int[] {153, 62, 0};
+                ((GridBagLayout)panel6.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+                ((GridBagLayout)panel6.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)panel6.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+                //---- label1 ----
+                label1.setText("\u0410\u0432\u0430\u043d\u0441");
+                panel6.add(label1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 5), 0, 0));
+                panel6.add(textField1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 0), 0, 0));
+
+                //---- label2 ----
+                label2.setText("\u0412 \u043c\u043e\u043c\u0435\u043d\u0442 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438");
+                panel6.add(label2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 5), 0, 0));
+                panel6.add(textField2, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 0), 0, 0));
+
+                //---- label3 ----
+                label3.setText("\u041a\u0440\u0435\u0434\u0438\u0442/\u043e\u0442\u0441\u0440\u043e\u0447\u043a\u0430");
+                panel6.add(label3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
+                panel6.add(textField3, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            paydialogContentPane.add(panel6, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+            paydialog.setSize(425, 315);
+            paydialog.setLocationRelativeTo(paydialog.getOwner());
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -857,5 +1007,15 @@ class CreateDelivery extends JFrame {
     private JTextArea komentTextArea;
     private JPanel panel11;
     private JButton okKomentBtn;
+    private JDialog paydialog;
+    private JPanel panel3;
+    private JButton button1;
+    private JPanel panel6;
+    private JLabel label1;
+    private JTextField textField1;
+    private JLabel label2;
+    private JTextField textField2;
+    private JLabel label3;
+    private JTextField textField3;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
