@@ -15,10 +15,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -27,8 +27,9 @@ import java.util.Properties;
  */
 class CreateDelivery extends JFrame {
     private Connection cn;
-    private int idDelivery;
+    private int idOrder, idProvider;
     private  JComboBox box;
+    private JDatePickerImpl dateOfCreatePicker, dateOfWishingPicker;
     CreateDelivery(Connection cn) {
         initComponents();
         this.cn = cn;
@@ -36,9 +37,11 @@ class CreateDelivery extends JFrame {
             PreparedStatement pr = cn.prepareStatement("select name from \"Provider\"");
             ResultSet rs = pr.executeQuery();
             while (rs.next())deliveryBox.addItem(rs.getString(1));
-
-            pr = cn.prepareStatement("insert into \"Order\" (\"idDelivery\") values  (default )");
-            pr.executeUpdate();
+            pr = cn.prepareStatement("select max(\"idDelivery\") from \"Order\"");
+            rs = pr.executeQuery();
+            rs.next();
+            idOrder = rs.getInt(1)+1;
+            numbertextField.setText(String.valueOf(idOrder));
         } catch (SQLException e) {
             e.printStackTrace();
             this.dispose();
@@ -49,21 +52,21 @@ class CreateDelivery extends JFrame {
         p.put("text.today", "Сегодня");
         p.put("text.month", "Месяц");
         p.put("text.year", "Год");
-        JDatePickerImpl datePicker = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel(), p), new DateComponentFormatter());
-        JDatePickerImpl datePicker2 = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel(), p), new DateComponentFormatter());
-
-        firstpanel.add(datePicker, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
+        dateOfCreatePicker = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel(), p), new DateComponentFormatter());
+        dateOfWishingPicker = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel(), p), new DateComponentFormatter());
+        dateOfCreatePicker.getModel().setSelected(true);
+        firstpanel.add(dateOfCreatePicker, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));
-        panel4.add(datePicker2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+        panel4.add(dateOfWishingPicker, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
-        }
+    }
 
     private void addrowBtnActionPerformed() {((DefaultTableModel)prodtable.getModel()).setRowCount(0);
         try {
             PreparedStatement pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.\" currency\", pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
-            pr.setInt(1,idDelivery);
+            pr.setInt(1,idProvider);
             ResultSet rs = pr.executeQuery();
             int i=0;
             while (rs.next()){
@@ -95,20 +98,7 @@ class CreateDelivery extends JFrame {
 
 
     private void tableMouseClicked() {
-        double summ=0;
-        double summNDS=0;
-        for (int i =0; i< table.getRowCount();i++){
-            if (table.getModel().getValueAt(i, 0)!=null && table.getModel().getValueAt(i, 2)!=null) {
-                double count = (double) table.getModel().getValueAt(i, 2);
-                double price = (double) table.getModel().getValueAt(i, 4);
-                double nds = (double) table.getModel().getValueAt(i, 6);
-                summ += count * price;
-                summNDS+=price*nds*count/100;
-                table.getModel().setValueAt(count *price,i,7);
-            }
-        }
-        summlbl.setText(summ + "");
-        ndslbl.setText(summNDS +"");
+
     }
 
     private void deliveryBoxActionPerformed() {
@@ -117,11 +107,11 @@ class CreateDelivery extends JFrame {
             pr.setString(1,Objects.requireNonNull(deliveryBox.getSelectedItem()).toString());
             ResultSet rs = pr.executeQuery();
             rs.next();
-            idDelivery = rs.getInt(1);
+            idProvider = rs.getInt(1);
             contacttextField.setText(rs.getString(2));
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -233,6 +223,52 @@ class CreateDelivery extends JFrame {
 
     private void addProdDialogKeyPressed(KeyEvent e) {
         System.out.println(e.getKeyCode());
+    }
+
+    private void okbtnActionPerformed() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            PreparedStatement pr = cn.prepareStatement("insert into \"Order\" (\"idDelivery\", date_of_wishing_delivery, status, \"Place\", \"Date_of_create\", \"Description\", \"Price\", amout_of_delivery) values (default ,?,?,?,?,?,?,?)");
+            pr.setString(2,"StatusOk");
+            pr.setString(3,deliveryPlacetextField.getText());
+            pr.setTimestamp(4,Timestamp.valueOf(df.format(dateOfCreatePicker.getModel().getValue())));
+            pr.setString(5,komentTextArea.getText());
+            pr.setBigDecimal(6,BigDecimal.valueOf(Double.parseDouble(summlbl.getText())));
+            if (checkBox.isSelected()){
+                pr.setTimestamp(1,Timestamp.valueOf(df.format(dateOfWishingPicker.getModel().getValue())));
+                pr.setString(7,"Mnogo");
+            }
+            else{
+                pr.setTimestamp(1,null);
+                pr.setString(7,"1");
+            }
+            pr.executeUpdate();
+            this.dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    private void checkBoxActionPerformed() {
+        dateOfWishingPicker.getModel().setSelected(true);
+    }
+
+    private void tablePropertyChange() {
+        double summ=0;
+        double summNDS=0;
+        for (int i =0; i< table.getRowCount();i++){
+            if (table.getModel().getValueAt(i, 0)!=null && table.getModel().getValueAt(i, 2)!=null) {
+                double count = (double) table.getModel().getValueAt(i, 2);
+                double price = (double) table.getModel().getValueAt(i, 4);
+                double nds = (double) table.getModel().getValueAt(i, 6);
+                summ += count * price;
+                summNDS+=price*nds*count/100;
+                table.getModel().setValueAt(count *price,i,7);
+            }
+        }
+        summlbl.setText(summ + "");
+        ndslbl.setText(summNDS +"");
     }
 
 
@@ -530,12 +566,7 @@ class CreateDelivery extends JFrame {
                 table.setAutoCreateRowSorter(true);
                 table.setRowSelectionAllowed(false);
                 table.setCellSelectionEnabled(true);
-                table.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        tableMouseClicked();
-                    }
-                });
+                table.addPropertyChangeListener(e -> tablePropertyChange());
                 scrollPane1.setViewportView(table);
             }
             tablepanel.add(scrollPane1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
@@ -557,6 +588,7 @@ class CreateDelivery extends JFrame {
             //---- checkBox ----
             checkBox.setText("\u041f\u043e\u0441\u0442\u0443\u043f\u043b\u0435\u043d\u0438\u044f \u043e\u0434\u043d\u043e\u0439 \u0434\u0430\u0442\u043e\u0439");
             checkBox.setFont(new Font("Segoe UI", Font.BOLD, 16));
+            checkBox.addActionListener(e -> checkBoxActionPerformed());
             panel4.add(checkBox, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 5), 0, 0));
@@ -666,6 +698,7 @@ class CreateDelivery extends JFrame {
                 //---- okbtn ----
                 okbtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u0437\u0430\u043a\u0430\u0437");
                 okbtn.setFont(new Font("Segoe UI", Font.BOLD, 20));
+                okbtn.addActionListener(e -> okbtnActionPerformed());
                 panel7.add(okbtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
