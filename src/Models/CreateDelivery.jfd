@@ -661,6 +661,11 @@ new FormModel {
 		} ) {
 			name: "paydialog"
 			"$sizePolicy": 1
+			"$locationPolicy": 1
+			"alwaysOnTop": true
+			"defaultCloseOperation": 2
+			"title": "Оплата"
+			"resizable": false
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "0"
 				"$rowSpecs": "0"
@@ -671,8 +676,8 @@ new FormModel {
 			} ) {
 				name: "panel3"
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button1"
-					"text": "text"
+					name: "exitPayBtn"
+					"text": "Назад"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
@@ -689,7 +694,9 @@ new FormModel {
 					"text": "Аванс"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "textField1"
+					name: "avansTF"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "avansTFActionPerformed", false ) )
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyTyped", "avansTFKeyTyped", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )
@@ -700,7 +707,8 @@ new FormModel {
 					"gridy": 1
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "textField2"
+					name: "onDeliveryTF"
+					"editable": false
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 					"gridy": 1
@@ -712,7 +720,9 @@ new FormModel {
 					"gridy": 2
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "textField3"
+					name: "creditTF"
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyTyped", "creditTFKeyTyped", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "creditTFActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 					"gridy": 2
@@ -720,9 +730,28 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridy": 1
 			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "152, 0"
+				"$rowSpecs": "0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel8"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "okPayBtn"
+					"text": "Подтвердить"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okPayBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 2
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 180, 780 )
-			"size": new java.awt.Dimension( 425, 315 )
+			"size": new java.awt.Dimension( 335, 215 )
 		} )
 	}
 }

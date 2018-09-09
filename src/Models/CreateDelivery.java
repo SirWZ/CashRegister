@@ -14,8 +14,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -91,14 +95,10 @@ class CreateDelivery extends JFrame {
             }
     }
 
-    private void payBtnActionPerformed() {
+    private void payBtnActionPerformed()
+    {
+        onDeliveryTF.setText(summlbl.getText());
         paydialog.setVisible(true);
-    }
-
-
-
-    private void tableMouseClicked() {
-
     }
 
     private void deliveryBoxActionPerformed() {
@@ -208,9 +208,7 @@ class CreateDelivery extends JFrame {
     }
 
     private void okKomentBtnActionPerformed() {
-        String koment = komentTextArea.getText();
         komentdialog.dispose();
-        komentTextArea.setText("");
     }
 
     private void addComentBtnActionPerformed() {
@@ -228,6 +226,7 @@ class CreateDelivery extends JFrame {
     private void okbtnActionPerformed() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
+            // tablica order
             PreparedStatement pr = cn.prepareStatement("insert into \"Order\" (\"idDelivery\", date_of_wishing_delivery, status, \"Place\", \"Date_of_create\", \"Description\", \"Price\", amout_of_delivery) values (default ,?,?,?,?,?,?,?)");
             pr.setString(2,"StatusOk");
             pr.setString(3,deliveryPlacetextField.getText());
@@ -243,6 +242,17 @@ class CreateDelivery extends JFrame {
                 pr.setString(7,"1");
             }
             pr.executeUpdate();
+            //tablica order bucket
+            for (int i = 0; i < table.getRowCount()-1; i++) {
+                String idprod = table.getModel().getValueAt(i, 0).toString();
+                pr = cn.prepareStatement("insert into order_bucket (\"ID_Delivery_Bucket\", amount, \"Delivery\", \"Product\", \"Price\") VALUES (default ,?,?,?,?)");
+                pr.setDouble(1,Double.parseDouble(table.getModel().getValueAt(i,2).toString()));
+                pr.setInt(2,idOrder);
+                pr.setInt(3,Integer.parseInt(idprod));
+                pr.setBigDecimal(4,BigDecimal.valueOf(Double.parseDouble(table.getModel().getValueAt(i,7).toString())));
+                pr.executeUpdate();
+            }
+
             this.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
@@ -262,14 +272,77 @@ class CreateDelivery extends JFrame {
                 double count = (double) table.getModel().getValueAt(i, 2);
                 double price = (double) table.getModel().getValueAt(i, 4);
                 double nds = (double) table.getModel().getValueAt(i, 6);
-                summ += count * price;
-                summNDS+=price*nds*count/100;
-                table.getModel().setValueAt(count *price,i,7);
+                summ += new BigDecimal(count * price).setScale(2, RoundingMode.UP).doubleValue();
+                summNDS+=new BigDecimal(price*nds*count/100).setScale(2, RoundingMode.UP).doubleValue();
+                table.getModel().setValueAt(new BigDecimal(count * price).setScale(2, RoundingMode.UP).doubleValue() ,i,7);
             }
         }
         summlbl.setText(summ + "");
         ndslbl.setText(summNDS +"");
     }
+
+    private void avansTFActionPerformed() {
+        double sum ,avans =0 , credit =0;
+        if (!avansTF.getText().equals(""))avans = Double.parseDouble(avansTF.getText());
+        if (!creditTF.getText().equals(""))credit = Double.parseDouble(creditTF.getText());
+        sum = Double.parseDouble(summlbl.getText())- avans - credit;
+        if (sum<0){
+            onDeliveryTF.setText("");
+            if (!creditTF.getText().equals("")){
+                double val = Double.parseDouble(creditTF.getText()) + sum;
+                if (val>0){
+                    creditTF.setText(String.valueOf(val));
+                }
+                else {
+                    creditTF.setText("");
+                    avansTF.setText(summlbl.getText());
+                }
+            }
+            else avansTF.setText(summlbl.getText());
+        }else onDeliveryTF.setText(String.valueOf(sum));
+
+    }
+
+    private void avansTFKeyTyped(KeyEvent e) {
+    char c = e.getKeyChar();
+        if (!(((c >= '0') && (c <= '9')) ||
+                (c == '.') ||
+                (c == KeyEvent.VK_BACK_SPACE) ||
+                (c == KeyEvent.VK_DELETE))) {
+            e.setKeyChar((char) 0);
+        }
+        if (c == ',')e.setKeyChar('.');
+    }
+
+    private void creditTFKeyTyped(KeyEvent e) {
+        avansTFKeyTyped(e);
+    }
+
+    private void creditTFActionPerformed() {
+        avansTFActionPerformed();
+    }
+
+        private void okPayBtnActionPerformed() {
+           /* int count = 0;
+            boolean avans =false,ondep = false, credit = false;
+            if (!avansTF.getText().equals("")){
+                count++;
+                avans=true;
+            }
+            if (!onDeliveryTF.getText().equals(""))count++;
+            if (!creditTF.getText().equals(""))count++;
+            try {
+                for (int i=0; i<count;i++) {
+                    PreparedStatement pr = cn.prepareStatement("insert into \"Order_payments\" (id_order_payments, \"order\", type, sum, \"percent \", currency) values (default ,?,?,?,?,?)");
+                    pr.setInt(1, idOrder);
+                    if ()
+                    pr.setString(2);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+*/
+        }
 
 
     private void initComponents() {
@@ -338,14 +411,16 @@ class CreateDelivery extends JFrame {
         okKomentBtn = new JButton();
         paydialog = new JDialog();
         panel3 = new JPanel();
-        button1 = new JButton();
+        exitPayBtn = new JButton();
         panel6 = new JPanel();
         label1 = new JLabel();
-        textField1 = new JTextField();
+        avansTF = new JTextField();
         label2 = new JLabel();
-        textField2 = new JTextField();
+        onDeliveryTF = new JTextField();
         label3 = new JLabel();
-        textField3 = new JTextField();
+        creditTF = new JTextField();
+        panel8 = new JPanel();
+        okPayBtn = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -918,6 +993,10 @@ class CreateDelivery extends JFrame {
 
         //======== paydialog ========
         {
+            paydialog.setAlwaysOnTop(true);
+            paydialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            paydialog.setTitle("\u041e\u043f\u043b\u0430\u0442\u0430");
+            paydialog.setResizable(false);
             var paydialogContentPane = paydialog.getContentPane();
             paydialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)paydialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
@@ -941,9 +1020,9 @@ class CreateDelivery extends JFrame {
                 ((GridBagLayout)panel3.getLayout()).columnWeights = new double[] {0.0, 1.0E-4};
                 ((GridBagLayout)panel3.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-                //---- button1 ----
-                button1.setText("text");
-                panel3.add(button1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                //---- exitPayBtn ----
+                exitPayBtn.setText("\u041d\u0430\u0437\u0430\u0434");
+                panel3.add(exitPayBtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
@@ -964,7 +1043,16 @@ class CreateDelivery extends JFrame {
                 panel6.add(label1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
-                panel6.add(textField1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+
+                //---- avansTF ----
+                avansTF.addActionListener(e -> avansTFActionPerformed());
+                avansTF.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        avansTFKeyTyped(e);
+                    }
+                });
+                panel6.add(avansTF, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 0), 0, 0));
 
@@ -973,7 +1061,10 @@ class CreateDelivery extends JFrame {
                 panel6.add(label2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
-                panel6.add(textField2, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+
+                //---- onDeliveryTF ----
+                onDeliveryTF.setEditable(false);
+                panel6.add(onDeliveryTF, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 0), 0, 0));
 
@@ -982,15 +1073,43 @@ class CreateDelivery extends JFrame {
                 panel6.add(label3, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
-                panel6.add(textField3, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+
+                //---- creditTF ----
+                creditTF.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        creditTFKeyTyped(e);
+                    }
+                });
+                creditTF.addActionListener(e -> creditTFActionPerformed());
+                panel6.add(creditTF, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
             }
             paydialogContentPane.add(panel6, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
-            paydialog.setSize(425, 315);
-            paydialog.setLocationRelativeTo(paydialog.getOwner());
+
+            //======== panel8 ========
+            {
+                panel8.setLayout(new GridBagLayout());
+                ((GridBagLayout)panel8.getLayout()).columnWidths = new int[] {157, 0, 0};
+                ((GridBagLayout)panel8.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)panel8.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)panel8.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //---- okPayBtn ----
+                okPayBtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c");
+                okPayBtn.addActionListener(e -> okPayBtnActionPerformed());
+                panel8.add(okPayBtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            paydialogContentPane.add(panel8, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+            paydialog.setSize(335, 215);
+            paydialog.setLocationRelativeTo(null);
         }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
@@ -1042,13 +1161,15 @@ class CreateDelivery extends JFrame {
     private JButton okKomentBtn;
     private JDialog paydialog;
     private JPanel panel3;
-    private JButton button1;
+    private JButton exitPayBtn;
     private JPanel panel6;
     private JLabel label1;
-    private JTextField textField1;
+    private JTextField avansTF;
     private JLabel label2;
-    private JTextField textField2;
+    private JTextField onDeliveryTF;
     private JLabel label3;
-    private JTextField textField3;
+    private JTextField creditTF;
+    private JPanel panel8;
+    private JButton okPayBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
