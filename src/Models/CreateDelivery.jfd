@@ -678,6 +678,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "exitPayBtn"
 					"text": "Назад"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitPayBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {

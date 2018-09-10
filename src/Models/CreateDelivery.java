@@ -34,6 +34,7 @@ class CreateDelivery extends JFrame {
     private int idOrder, idProvider;
     private  JComboBox box;
     private JDatePickerImpl dateOfCreatePicker, dateOfWishingPicker;
+    private String currency;
     CreateDelivery(Connection cn) {
         initComponents();
         this.cn = cn;
@@ -69,7 +70,7 @@ class CreateDelivery extends JFrame {
 
     private void addrowBtnActionPerformed() {((DefaultTableModel)prodtable.getModel()).setRowCount(0);
         try {
-            PreparedStatement pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.\" currency\", pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
+            PreparedStatement pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.currency, pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
             pr.setInt(1,idProvider);
             ResultSet rs = pr.executeQuery();
             int i=0;
@@ -110,6 +111,11 @@ class CreateDelivery extends JFrame {
             idProvider = rs.getInt(1);
             contacttextField.setText(rs.getString(2));
 
+            pr = cn.prepareStatement("select currency from \"Provider_Price\" where \"idProviderProduct\" in (select \"idProviderProduct\" from \"Provider_Connect_Product\" where \"idProvider\" = ?)");
+            pr.setInt(1,idProvider);
+            rs = pr.executeQuery();
+            rs.next();
+            currency = rs.getString(1);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
@@ -252,7 +258,16 @@ class CreateDelivery extends JFrame {
                 pr.setBigDecimal(4,BigDecimal.valueOf(Double.parseDouble(table.getModel().getValueAt(i,7).toString())));
                 pr.executeUpdate();
             }
-
+            //orderPayments
+            if (!avansTF.getText().equals("")){
+                makeOrderPayments("Аванс",Double.parseDouble(avansTF.getText()));
+            }
+            if (!onDeliveryTF.getText().equals("")){
+                makeOrderPayments("Во время доставки",Double.parseDouble(onDeliveryTF.getText()));
+            }
+            if (!creditTF.getText().equals("")){
+                makeOrderPayments("Кредит",Double.parseDouble(creditTF.getText()));
+            }
             this.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
@@ -323,28 +338,28 @@ class CreateDelivery extends JFrame {
     }
 
         private void okPayBtnActionPerformed() {
-           /* int count = 0;
-            boolean avans =false,ondep = false, credit = false;
-            if (!avansTF.getText().equals("")){
-                count++;
-                avans=true;
-            }
-            if (!onDeliveryTF.getText().equals(""))count++;
-            if (!creditTF.getText().equals(""))count++;
-            try {
-                for (int i=0; i<count;i++) {
-                    PreparedStatement pr = cn.prepareStatement("insert into \"Order_payments\" (id_order_payments, \"order\", type, sum, \"percent \", currency) values (default ,?,?,?,?,?)");
-                    pr.setInt(1, idOrder);
-                    if ()
-                    pr.setString(2);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-*/
+            paydialog.dispose();
         }
 
+    private void makeOrderPayments(String type, double summ){
+        try {
+            PreparedStatement pr = cn.prepareStatement("insert into \"Order_payments\" (id_order_payments, \"order\", type, sum, \"percent \", currency) values (default ,?,?,?,?,?)");
+            pr.setInt(1, idOrder);
+                    pr.setString(2,type);
+                    pr.setDouble(3,summ);
+                    double percent = new BigDecimal(summ/Double.parseDouble(summlbl.getText())*100).setScale(2, RoundingMode.UP).doubleValue();
+                    pr.setDouble(4,percent);
+                    pr.setString(5,currency);
+                    pr.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
+        }
 
+    }
+
+    private void exitPayBtnActionPerformed() {
+        paydialog.dispose();
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Yurii
@@ -1022,6 +1037,7 @@ class CreateDelivery extends JFrame {
 
                 //---- exitPayBtn ----
                 exitPayBtn.setText("\u041d\u0430\u0437\u0430\u0434");
+                exitPayBtn.addActionListener(e -> exitPayBtnActionPerformed());
                 panel3.add(exitPayBtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
