@@ -362,7 +362,7 @@ class CreateDelivery extends JFrame {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - Yurii
+        // Generated using JFormDesigner Evaluation license - hhh
         var vSpacer1 = new JPanel(null);
         firstpanel = new JPanel();
         exitBtn = new JButton();
@@ -1131,7 +1131,7 @@ class CreateDelivery extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Yurii
+    // Generated using JFormDesigner Evaluation license - hhh
     private JPanel firstpanel;
     private JButton exitBtn;
     private JTextField numbertextField;

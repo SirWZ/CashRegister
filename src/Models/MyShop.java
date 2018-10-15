@@ -41,16 +41,20 @@ class MyShop extends JFrame {
         new ProductManagment(cn).setVisible(true);
     }
 
+    private void deliverisBttnActionPerformed() {
+        new CreateDelivery(cn).setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - Yurii
+        // Generated using JFormDesigner Evaluation license - hhh
         var panel1 = new JPanel();
         var backbtn = new JButton();
         var textField1 = new JTextField();
         var panel2 = new JPanel();
         var productManagmentBtn = new JButton();
         var selsBtn = new JButton();
-        var button4 = new JButton();
+        var deliverisBttn = new JButton();
         var staffBtn = new JButton();
         var shiftsBtn = new JButton();
         var promoBtn = new JButton();
@@ -121,9 +125,10 @@ class MyShop extends JFrame {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));
 
-            //---- button4 ----
-            button4.setText("\u0414\u043e\u0441\u0442\u0430\u0432\u043a\u0438");
-            panel2.add(button4, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0,
+            //---- deliverisBttn ----
+            deliverisBttn.setText("\u0414\u043e\u0441\u0442\u0430\u0432\u043a\u0438");
+            deliverisBttn.addActionListener(e -> deliverisBttnActionPerformed());
+            panel2.add(deliverisBttn, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));
 
@@ -196,7 +201,7 @@ class MyShop extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Yurii
+    // Generated using JFormDesigner Evaluation license - hhh
     private JLabel namelbl;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

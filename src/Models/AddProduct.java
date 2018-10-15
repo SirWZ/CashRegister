@@ -4,6 +4,8 @@
 
 package Models;
 
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
@@ -17,6 +19,8 @@ public class AddProduct extends JFrame {
     public AddProduct(Connection cn) {
         initComponents();//kkk
         this.cn = cn;
+
+
     }
 
     private void exitBtnActionPerformed() {
@@ -24,44 +28,98 @@ public class AddProduct extends JFrame {
         new ProductManagment(cn).setVisible(true);
     }
 
+    private void addMeasuringBtnActionPerformed() {
+       addmeasuringdialog.setVisible(true);
+    }
+
+    private void exitMeasuringDialogBtnActionPerformed() {
+        addmeasuringdialog.dispose();
+    }
+
+    private void addNewMeasuringBtnActionPerformed() {
+        String name = nametextField.getText();
+        try {
+            int count = Integer.parseInt(countMeasuring.getText());
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(addmeasuringdialog,"Неверный формат","Ошибка",JOptionPane.ERROR_MESSAGE);
+            countMeasuring.setText("");
+        }
+
+    }
+
+    private void exitProviderDialogActionPerformed() {
+        addProviderDialog.dispose();
+    }
+
+    private void addNewProviderBtnActionPerformed() {
+        // TODO add your code here
+    }
+
+    private void addProducentBtnActionPerformed() {
+        addProviderDialog.setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - hhh
         panel1 = new JPanel();
         exitBtn = new JButton();
-        JLabel lblProdCode = new JLabel();
+        var lblProdCode = new JLabel();
         prodCodetextField = new JTextField();
-        JLabel lblName = new JLabel();
+        var lblName = new JLabel();
         nametextField = new JTextField();
         printBtn = new JButton();
-        JLabel lblCategory = new JLabel();
+        var lblCategory = new JLabel();
         categorycomboBox = new JComboBox();
-        JLabel lblmanufact = new JLabel();
+        var lblmanufact = new JLabel();
         manufacttextField = new JTextField();
         panel2 = new JPanel();
         fotopanel = new JPanel();
         fotolbl = new JLabel();
         addFotoBtn = new JButton();
         panel4 = new JPanel();
-        JLabel lblMeasuring = new JLabel();
+        var lblMeasuring = new JLabel();
         measuringtextField = new JTextField();
         addMeasuringBtn = new JButton();
-        JLabel lblProducent = new JLabel();
+        var lblProducent = new JLabel();
         producenttextField = new JTextField();
         addProducentBtn = new JButton();
-        JLabel lblBarcode = new JLabel();
+        var lblBarcode = new JLabel();
         barCodetextField = new JTextField();
-        JLabel lblVAT = new JLabel();
+        var lblVAT = new JLabel();
         vattextField = new JTextField();
         panel5 = new JPanel();
-        JLabel lbldescript = new JLabel();
+        var lbldescript = new JLabel();
         scrollPane1 = new JScrollPane();
         descripttextArea = new JTextArea();
         addProduct = new JButton();
+        addmeasuringdialog = new JDialog();
+        panel3 = new JPanel();
+        exitMeasuringDialogBtn = new JButton();
+        label1measuringDialog = new JLabel();
+        panel6 = new JPanel();
+        label2MeasuringDialog = new JLabel();
+        nameMeasuring = new JTextField();
+        label3MeasuringDialog = new JLabel();
+        countMeasuring = new JTextField();
+        panel7 = new JPanel();
+        addNewMeasuringBtn = new JButton();
+        addProviderDialog = new JDialog();
+        panel8 = new JPanel();
+        exitProviderDialog = new JButton();
+        lable1ProviderDialog = new JLabel();
+        panel9 = new JPanel();
+        label2ProviderDialog = new JLabel();
+        codeProviderDialog = new JTextField();
+        label3ProviderDialog = new JLabel();
+        nameProviderDialog = new JTextField();
+        panel10 = new JPanel();
+        addNewProviderBtn = new JButton();
 
         //======== this ========
         setTitle("\u0414\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u0430");
-        Container contentPane = getContentPane();
+        var contentPane = getContentPane();
         contentPane.setLayout(new GridBagLayout());
         ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {31, 0, 25, 0};
         ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {29, 0, 0, 83, 24, 0};
@@ -198,6 +256,7 @@ public class AddProduct extends JFrame {
                 //---- addMeasuringBtn ----
                 addMeasuringBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0435\u0434. \u0438\u0437.");
                 addMeasuringBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                addMeasuringBtn.addActionListener(e -> addMeasuringBtnActionPerformed());
                 panel4.add(addMeasuringBtn, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 0), 0, 0));
@@ -215,6 +274,7 @@ public class AddProduct extends JFrame {
                 //---- addProducentBtn ----
                 addProducentBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0435\u0449\u0435");
                 addProducentBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                addProducentBtn.addActionListener(e -> addProducentBtnActionPerformed());
                 panel4.add(addProducentBtn, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 0), 0, 0));
@@ -282,6 +342,208 @@ public class AddProduct extends JFrame {
             new Insets(0, 0, 5, 5), 0, 0));
         setSize(1175, 585);
         setLocationRelativeTo(null);
+
+        //======== addmeasuringdialog ========
+        {
+            addmeasuringdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            addmeasuringdialog.setAlwaysOnTop(true);
+            var addmeasuringdialogContentPane = addmeasuringdialog.getContentPane();
+            addmeasuringdialogContentPane.setLayout(new MigLayout(
+                "hidemode 3",
+                // columns
+                "[grow,fill]",
+                // rows
+                "[]" +
+                "[]" +
+                "[]" +
+                "[]"));
+
+            //======== panel3 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel3.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel3.getBorder())); panel3.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel3.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[fill]" +
+                    "[218,fill]",
+                    // rows
+                    "[]" +
+                    "[]"));
+
+                //---- exitMeasuringDialogBtn ----
+                exitMeasuringDialogBtn.setText("\u0412\u044b\u0445\u043e\u0434");
+                exitMeasuringDialogBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                exitMeasuringDialogBtn.addActionListener(e -> exitMeasuringDialogBtnActionPerformed());
+                panel3.add(exitMeasuringDialogBtn, "cell 0 0");
+
+                //---- label1measuringDialog ----
+                label1measuringDialog.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0435\u0434\u0435\u043d\u0438\u0446\u0443 \u0438\u0437\u043c\u0438\u0440\u0435\u043d\u0438\u044f");
+                label1measuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                panel3.add(label1measuringDialog, "cell 1 1");
+            }
+            addmeasuringdialogContentPane.add(panel3, "cell 0 0");
+
+            //======== panel6 ========
+            {
+                panel6.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[fill]" +
+                    "[255,fill]",
+                    // rows
+                    "[]" +
+                    "[]"));
+
+                //---- label2MeasuringDialog ----
+                label2MeasuringDialog.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0435\u0434. \u0438\u0437.");
+                label2MeasuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel6.add(label2MeasuringDialog, "cell 0 0");
+
+                //---- nameMeasuring ----
+                nameMeasuring.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel6.add(nameMeasuring, "cell 1 0");
+
+                //---- label3MeasuringDialog ----
+                label3MeasuringDialog.setText("\u041a\u043e\u043b\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0448\u0442.");
+                label3MeasuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel6.add(label3MeasuringDialog, "cell 0 1");
+
+                //---- countMeasuring ----
+                countMeasuring.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel6.add(countMeasuring, "cell 1 1");
+            }
+            addmeasuringdialogContentPane.add(panel6, "cell 0 1");
+
+            //======== panel7 ========
+            {
+                panel7.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[239,fill]rel" +
+                    "[fill]",
+                    // rows
+                    "[]0" +
+                    "[]0" +
+                    "[]0" +
+                    "[]"));
+
+                //---- addNewMeasuringBtn ----
+                addNewMeasuringBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
+                addNewMeasuringBtn.addActionListener(e -> addNewMeasuringBtnActionPerformed());
+                panel7.add(addNewMeasuringBtn, "cell 1 1");
+            }
+            addmeasuringdialogContentPane.add(panel7, "cell 0 2");
+            addmeasuringdialog.setSize(425, 255);
+            addmeasuringdialog.setLocationRelativeTo(null);
+        }
+
+        //======== addProviderDialog ========
+        {
+            addProviderDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            addProviderDialog.setAlwaysOnTop(true);
+            var addProviderDialogContentPane = addProviderDialog.getContentPane();
+            addProviderDialogContentPane.setLayout(new MigLayout(
+                "hidemode 3",
+                // columns
+                "[grow,fill]",
+                // rows
+                "[]" +
+                "[]" +
+                "[]" +
+                "[]"));
+
+            //======== panel8 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel8.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel8.getBorder())); panel8.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel8.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[fill]" +
+                    "[218,fill]",
+                    // rows
+                    "[]" +
+                    "[]"));
+
+                //---- exitProviderDialog ----
+                exitProviderDialog.setText("\u0412\u044b\u0445\u043e\u0434");
+                exitProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                exitProviderDialog.addActionListener(e -> exitProviderDialogActionPerformed());
+                panel8.add(exitProviderDialog, "cell 0 0");
+
+                //---- lable1ProviderDialog ----
+                lable1ProviderDialog.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430");
+                lable1ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                panel8.add(lable1ProviderDialog, "cell 1 1");
+            }
+            addProviderDialogContentPane.add(panel8, "cell 0 0");
+
+            //======== panel9 ========
+            {
+                panel9.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[fill]" +
+                    "[255,fill]",
+                    // rows
+                    "[]" +
+                    "[]"));
+
+                //---- label2ProviderDialog ----
+                label2ProviderDialog.setText("\u041a\u043e\u0434 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430");
+                label2ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel9.add(label2ProviderDialog, "cell 0 0");
+
+                //---- codeProviderDialog ----
+                codeProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel9.add(codeProviderDialog, "cell 1 0");
+
+                //---- label3ProviderDialog ----
+                label3ProviderDialog.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435");
+                label3ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel9.add(label3ProviderDialog, "cell 0 1");
+
+                //---- nameProviderDialog ----
+                nameProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel9.add(nameProviderDialog, "cell 1 1");
+            }
+            addProviderDialogContentPane.add(panel9, "cell 0 1");
+
+            //======== panel10 ========
+            {
+                panel10.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[239,fill]rel" +
+                    "[fill]",
+                    // rows
+                    "[]0" +
+                    "[]0" +
+                    "[]0" +
+                    "[]"));
+
+                //---- addNewProviderBtn ----
+                addNewProviderBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
+                addNewProviderBtn.addActionListener(e -> addNewProviderBtnActionPerformed());
+                panel10.add(addNewProviderBtn, "cell 1 1");
+            }
+            addProviderDialogContentPane.add(panel10, "cell 0 2");
+            addProviderDialog.setSize(425, 255);
+            addProviderDialog.setLocationRelativeTo(null);
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -309,5 +571,27 @@ public class AddProduct extends JFrame {
     private JScrollPane scrollPane1;
     private JTextArea descripttextArea;
     private JButton addProduct;
+    private JDialog addmeasuringdialog;
+    private JPanel panel3;
+    private JButton exitMeasuringDialogBtn;
+    private JLabel label1measuringDialog;
+    private JPanel panel6;
+    private JLabel label2MeasuringDialog;
+    private JTextField nameMeasuring;
+    private JLabel label3MeasuringDialog;
+    private JTextField countMeasuring;
+    private JPanel panel7;
+    private JButton addNewMeasuringBtn;
+    private JDialog addProviderDialog;
+    private JPanel panel8;
+    private JButton exitProviderDialog;
+    private JLabel lable1ProviderDialog;
+    private JPanel panel9;
+    private JLabel label2ProviderDialog;
+    private JTextField codeProviderDialog;
+    private JLabel label3ProviderDialog;
+    private JTextField nameProviderDialog;
+    private JPanel panel10;
+    private JButton addNewProviderBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

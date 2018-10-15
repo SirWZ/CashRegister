@@ -27,7 +27,7 @@ public class UserInterface extends JFrame {
             Class.forName("org.postgresql.Driver");
             cn= DriverManager.getConnection("jdbc:postgresql://25.90.246.178:5432/postgres","postgres","shift");
             initComponents();
-            new  CreateDelivery(cn).setVisible(true);
+            new AddProduct(cn).setVisible(true);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
