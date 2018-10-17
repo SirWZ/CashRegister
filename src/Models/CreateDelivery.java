@@ -957,10 +957,7 @@ class CreateDelivery extends JFrame {
 
                 //---- exitbtn2 ----
                 exitbtn2.setText("\u0412\u044b\u0445\u043e\u0434");
-                exitbtn2.addActionListener(e -> {
-			exitbtn2ActionPerformed();
-			exitbtn2ActionPerformed();
-		});
+                exitbtn2.addActionListener(e -> exitbtn2ActionPerformed());
                 panel9.add(exitbtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
