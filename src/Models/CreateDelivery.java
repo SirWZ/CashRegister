@@ -282,7 +282,11 @@ class CreateDelivery extends JFrame {
     private void tablePropertyChange() {
         double summ=0;
         double summNDS=0;
+        if (table.getSelectedColumn()==3){
+
+        }
         for (int i =0; i< table.getRowCount();i++){
+            //if (table.getModel().getValueAt(i,3).toString().equals(5))
             if (table.getModel().getValueAt(i, 0)!=null && table.getModel().getValueAt(i, 2)!=null) {
                 double count = (double) table.getModel().getValueAt(i, 2);
                 double price = (double) table.getModel().getValueAt(i, 4);
@@ -360,6 +364,7 @@ class CreateDelivery extends JFrame {
     private void exitPayBtnActionPerformed() {
         paydialog.dispose();
     }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - hhh
