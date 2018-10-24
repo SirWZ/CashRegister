@@ -69,6 +69,12 @@ public class RegisterDelivery extends JFrame {
     private void okDialobtnActionPerformed() {
         try{
             if (parseInt(numberTF.getText())>0){
+                try{
+                    idProvider=parseInt(numberTF.getText());
+                    PreparedStatement pr = cn.prepareStatement("");
+                }catch (Exception e){
+
+                }
                 typeDeliveryDialog.dispose();
                 numdeliverytextField.setText(numberTF.getText());
                 this.setVisible(true);
@@ -86,7 +92,7 @@ public class RegisterDelivery extends JFrame {
             ResultSet rs;
             rs = pr.executeQuery();
             int i=0;
-            while (rs.next()){
+            while (rs.next()){JOptionPane.showMessageDialog(this,"while","Ошибка",JOptionPane.ERROR_MESSAGE);
                 ((DefaultTableModel)table2.getModel()).addRow(new Object[]{});
                 table2.getModel().setValueAt(rs.getDouble(3),i,2);
                 table2.getModel().setValueAt(rs.getString(4),i,3);
