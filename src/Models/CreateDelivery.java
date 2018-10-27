@@ -12,17 +12,17 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -35,6 +35,7 @@ class CreateDelivery extends JFrame {
     private  JComboBox box;
     private JDatePickerImpl dateOfCreatePicker, dateOfWishingPicker;
     private String currency;
+    private ArrayList<String> listOfMeasurings;
     CreateDelivery(Connection cn) {
         initComponents();
         this.cn = cn;
@@ -51,7 +52,7 @@ class CreateDelivery extends JFrame {
             e.printStackTrace();
             this.dispose();
         }
-
+        createMeasuringComboBox();
         AutoCompleteDecorator.decorate(deliveryBox);
         Properties p = new Properties();
         p.put("text.today", "Сегодня");
@@ -66,6 +67,20 @@ class CreateDelivery extends JFrame {
         panel4.add(dateOfWishingPicker, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
+    }
+
+    private void createMeasuringComboBox(){
+        box = new JComboBox();
+        TableColumn measuringColumn = table.getColumnModel().getColumn(3);
+        try{
+            PreparedStatement pr = cn.prepareStatement("select name from \"Provider_product_measuring_rate\"");
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) box.addItem(rs.getString(1));
+            AutoCompleteDecorator.decorate(box);
+            measuringColumn.setCellEditor(new DefaultCellEditor(box));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void addrowBtnActionPerformed() {((DefaultTableModel)prodtable.getModel()).setRowCount(0);
@@ -93,6 +108,7 @@ class CreateDelivery extends JFrame {
             if (table.getSelectedRow()!=-1){
                 ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());
                 if (table.getRowCount()==0)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
+                createListOfMeasuringRattes();
             }
     }
 
@@ -139,30 +155,6 @@ class CreateDelivery extends JFrame {
             String currency = prodtable.getValueAt(prodtable.getSelectedRows()[i],3).toString();
             double vat = Double.parseDouble(prodtable.getValueAt(prodtable.getSelectedRows()[i],4).toString());
 
-            box = new JComboBox();
-
-            box.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    int id =0;
-                     System.out.println(table.getEditingRow() + "//");
-                     box.removeAllItems();
-                    try {
-                        PreparedStatement pr = cn.prepareStatement("select name\n" +
-                                "from \"Provider_product_measuring_rate\" pp,\"Measuring_rate_connect_provider_product\" mr\n" +
-                                "where pp.\"Id_Provider_product_measuring_rate\" = mr.\"id_measuring_rate_connect_provider_product\"\n" +
-                                "      and \"provider_product\" = ?");
-                        pr.setInt(1, table.getEditingRow());
-                        ResultSet rs = pr.executeQuery();
-                        while (rs.next()) {
-                            box.addItem(rs.getString(1));
-                            //System.out.println(rs.getString(1));
-                        }
-                    }catch (Exception ex){
-
-                    }
-                }
-            });
             String mesuringRate;
             try {
                 PreparedStatement pr;
@@ -183,8 +175,8 @@ class CreateDelivery extends JFrame {
                 e.printStackTrace();
             }
             ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
-
         }
+        createListOfMeasuringRattes();
     }
 
     private void upBtnActionPerformed() {
@@ -251,11 +243,13 @@ class CreateDelivery extends JFrame {
             //tablica order bucket
             for (int i = 0; i < table.getRowCount()-1; i++) {
                 String idprod = table.getModel().getValueAt(i, 0).toString();
-                pr = cn.prepareStatement("insert into order_bucket (\"ID_Delivery_Bucket\", amount, \"Delivery\", \"Product\", \"Price\") VALUES (default ,?,?,?,?)");
+                pr = cn.prepareStatement("insert into order_bucket(\"ID_Delivery_Bucket\",amount,\"Delivery\",\"Product\",\"Price_per_unit\",measuring_rate,currency) values (default ,?,?,?,?,?,?)");
                 pr.setDouble(1,Double.parseDouble(table.getModel().getValueAt(i,2).toString()));
                 pr.setInt(2,idOrder);
                 pr.setInt(3,Integer.parseInt(idprod));
-                pr.setBigDecimal(4,BigDecimal.valueOf(Double.parseDouble(table.getModel().getValueAt(i,7).toString())));
+                pr.setBigDecimal(4,BigDecimal.valueOf(Double.parseDouble(table.getModel().getValueAt(i,4).toString())));
+                pr.setString(5,table.getModel().getValueAt(i,3).toString());
+                pr.setString(6,table.getModel().getValueAt(i,5).toString());
                 pr.executeUpdate();
             }
             //orderPayments
@@ -280,7 +274,29 @@ class CreateDelivery extends JFrame {
     }
 
     private void tablePropertyChange() {
-        double summ=0;
+        if (table.getSelectedColumn()==3){//measuring rates and coeff.
+            for (int i=0; i<table.getRowCount()-1;i++){
+                String oldMeas = listOfMeasurings.get(i);
+                String newMeas = table.getValueAt(i,3).toString();
+                if (!oldMeas.equals(newMeas)){
+                    listOfMeasurings.set(i,newMeas);
+                    try {
+                        PreparedStatement pr = cn.prepareStatement("select c.coefficient, p.price from \"Measuring_rate_connect_provider_product\" c, \"Provider_Price\" p where provider_product = ? and p.\"idProviderProduct\"=c.provider_product and measuring_rate = (select \"Id_Provider_product_measuring_rate\" from \"Provider_product_measuring_rate\" where name like ?)");
+                        pr.setInt(1,Integer.parseInt(table.getValueAt(i,0).toString()));
+                        pr.setString(2,newMeas);
+                        ResultSet rs = pr.executeQuery();
+                        rs.next();
+                        double oldprice = rs.getDouble(2);
+                        double newprice = rs.getDouble(1)*oldprice;
+                        table.getModel().setValueAt(newprice,i,4);
+                    }catch (Exception e){
+                        JOptionPane.showMessageDialog(this,"Measuring rate error","Error",JOptionPane.ERROR_MESSAGE);
+                        table.getModel().setValueAt(oldMeas,i,3);
+                    }
+                }
+            }
+        }
+        double summ=0;//calk summ
         double summNDS=0;
         if (table.getSelectedColumn()==3){
 
@@ -298,6 +314,16 @@ class CreateDelivery extends JFrame {
         }
         summlbl.setText(summ + "");
         ndslbl.setText(summNDS +"");
+
+    }
+
+
+    private void createListOfMeasuringRattes(){
+        listOfMeasurings = new ArrayList<>();
+        for (int i=0; i<table.getRowCount()-1;i++){
+            listOfMeasurings.add(table.getValueAt(i,3).toString());
+        }
+        //for(String s: lista)System.out.println(s);
     }
 
     private void avansTFActionPerformed() {
@@ -808,7 +834,7 @@ class CreateDelivery extends JFrame {
         contentPane.add(vSpacer2, new GridBagConstraints(0, 5, 1, 2, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
             new Insets(0, 0, 0, 0), 0, 0));
-        setSize(945, 600);
+        setSize(925, 585);
         setLocationRelativeTo(getOwner());
 
         //======== addProdDialog ========
@@ -957,10 +983,7 @@ class CreateDelivery extends JFrame {
 
                 //---- exitbtn2 ----
                 exitbtn2.setText("\u0412\u044b\u0445\u043e\u0434");
-                exitbtn2.addActionListener(e -> {
-			exitbtn2ActionPerformed();
-			exitbtn2ActionPerformed();
-		});
+                exitbtn2.addActionListener(e -> exitbtn2ActionPerformed());
                 panel9.add(exitbtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));

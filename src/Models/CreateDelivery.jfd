@@ -479,8 +479,8 @@ new FormModel {
 				"gridheight": 2
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 5 )
-			"size": new java.awt.Dimension( 945, 600 )
+			"location": new java.awt.Point( 20, 20 )
+			"size": new java.awt.Dimension( 925, 585 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
 			"$columnSpecs": "0:1.0"
@@ -606,7 +606,6 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "exitbtn2"
 					"text": "Выход"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtn2ActionPerformed", false ) )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitbtn2ActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
