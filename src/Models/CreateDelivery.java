@@ -22,6 +22,7 @@ import java.math.RoundingMode;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -34,6 +35,7 @@ class CreateDelivery extends JFrame {
     private  JComboBox box;
     private JDatePickerImpl dateOfCreatePicker, dateOfWishingPicker;
     private String currency;
+    private ArrayList<String> listOfMeasurings;
     CreateDelivery(Connection cn) {
         initComponents();
         this.cn = cn;
@@ -70,12 +72,8 @@ class CreateDelivery extends JFrame {
     private void createMeasuringComboBox(){
         box = new JComboBox();
         TableColumn measuringColumn = table.getColumnModel().getColumn(3);
-        box.addItemListener(e -> {
-           if (table.getSelectedRow()!=-1)System.out.println("getItem "+e.getItem() + " row "+table.getSelectedRow());
-            //if (e.getStateChange()==2)table
-        });
         try{
-            PreparedStatement pr = cn.prepareStatement("select name from \"Measuring_Rate\"");
+            PreparedStatement pr = cn.prepareStatement("select name from \"Provider_product_measuring_rate\"");
             ResultSet rs = pr.executeQuery();
             while (rs.next()) box.addItem(rs.getString(1));
             AutoCompleteDecorator.decorate(box);
@@ -110,6 +108,7 @@ class CreateDelivery extends JFrame {
             if (table.getSelectedRow()!=-1){
                 ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());
                 if (table.getRowCount()==0)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
+                createListOfMeasuringRattes();
             }
     }
 
@@ -176,8 +175,8 @@ class CreateDelivery extends JFrame {
                 e.printStackTrace();
             }
             ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
-
         }
+        createListOfMeasuringRattes();
     }
 
     private void upBtnActionPerformed() {
@@ -275,7 +274,29 @@ class CreateDelivery extends JFrame {
     }
 
     private void tablePropertyChange() {
-        double summ=0;
+        if (table.getSelectedColumn()==3){//measuring rates and coeff.
+            for (int i=0; i<table.getRowCount()-1;i++){
+                String oldMeas = listOfMeasurings.get(i);
+                String newMeas = table.getValueAt(i,3).toString();
+                if (!oldMeas.equals(newMeas)){
+                    listOfMeasurings.set(i,newMeas);
+                    try {
+                        PreparedStatement pr = cn.prepareStatement("select c.coefficient, p.price from \"Measuring_rate_connect_provider_product\" c, \"Provider_Price\" p where provider_product = ? and p.\"idProviderProduct\"=c.provider_product and measuring_rate = (select \"Id_Provider_product_measuring_rate\" from \"Provider_product_measuring_rate\" where name like ?)");
+                        pr.setInt(1,Integer.parseInt(table.getValueAt(i,0).toString()));
+                        pr.setString(2,newMeas);
+                        ResultSet rs = pr.executeQuery();
+                        rs.next();
+                        double oldprice = rs.getDouble(2);
+                        double newprice = rs.getDouble(1)*oldprice;
+                        table.getModel().setValueAt(newprice,i,4);
+                    }catch (Exception e){
+                        JOptionPane.showMessageDialog(this,"Measuring rate error","Error",JOptionPane.ERROR_MESSAGE);
+                        table.getModel().setValueAt(oldMeas,i,3);
+                    }
+                }
+            }
+        }
+        double summ=0;//calk summ
         double summNDS=0;
         if (table.getSelectedColumn()==3){
 
@@ -293,6 +314,16 @@ class CreateDelivery extends JFrame {
         }
         summlbl.setText(summ + "");
         ndslbl.setText(summNDS +"");
+
+    }
+
+
+    private void createListOfMeasuringRattes(){
+        listOfMeasurings = new ArrayList<>();
+        for (int i=0; i<table.getRowCount()-1;i++){
+            listOfMeasurings.add(table.getValueAt(i,3).toString());
+        }
+        //for(String s: lista)System.out.println(s);
     }
 
     private void avansTFActionPerformed() {
