@@ -30,13 +30,11 @@ public class UserInterface extends JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     private void loggBtnActionPerformed()  {
         try {
             idwor = Integer.parseInt(logintextField.getText());
-           // SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             pr = cn.prepareStatement("select password from worker_password where idwor="+idwor);
             ResultSet rs =  pr.executeQuery();
             if (rs.next() ){
