@@ -314,16 +314,14 @@ class CreateDelivery extends JFrame {
         }
         summlbl.setText(summ + "");
         ndslbl.setText(summNDS +"");
-
     }
 
 
     private void createListOfMeasuringRattes(){
         listOfMeasurings = new ArrayList<>();
-        for (int i=0; i<table.getRowCount()-1;i++){
-            listOfMeasurings.add(table.getValueAt(i,3).toString());
+        for (int i=0; i<table.getRowCount()-1;i++) {
+            listOfMeasurings.add(table.getValueAt(i, 3).toString());
         }
-        //for(String s: lista)System.out.println(s);
     }
 
     private void avansTFActionPerformed() {
