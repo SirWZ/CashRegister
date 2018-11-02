@@ -43,6 +43,7 @@ class CreateDelivery extends JFrame {
             PreparedStatement pr = cn.prepareStatement("select name from \"Provider\"");
             ResultSet rs = pr.executeQuery();
             while (rs.next())deliveryBox.addItem(rs.getString(1));
+            AutoCompleteDecorator.decorate(deliveryBox);
             pr = cn.prepareStatement("select max(\"idDelivery\") from \"Order\"");
             rs = pr.executeQuery();
             rs.next();
@@ -53,7 +54,7 @@ class CreateDelivery extends JFrame {
             this.dispose();
         }
         createMeasuringComboBox();
-        AutoCompleteDecorator.decorate(deliveryBox);
+
         Properties p = new Properties();
         p.put("text.today", "Сегодня");
         p.put("text.month", "Месяц");
@@ -107,8 +108,8 @@ class CreateDelivery extends JFrame {
     private void deleteBtnActionPerformed() {
             if (table.getSelectedRow()!=-1){
                 ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());
-                if (table.getRowCount()==0)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
                 createListOfMeasuringRattes();
+                if (table.getRowCount()==0)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
             }
     }
 
@@ -302,7 +303,6 @@ class CreateDelivery extends JFrame {
 
         }
         for (int i =0; i< table.getRowCount();i++){
-            //if (table.getModel().getValueAt(i,3).toString().equals(5))
             if (table.getModel().getValueAt(i, 0)!=null && table.getModel().getValueAt(i, 2)!=null) {
                 double count = (double) table.getModel().getValueAt(i, 2);
                 double price = (double) table.getModel().getValueAt(i, 4);

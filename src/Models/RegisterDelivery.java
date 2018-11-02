@@ -5,19 +5,22 @@
 package Models;
 
 import net.miginfocom.swing.MigLayout;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
 
@@ -26,12 +29,28 @@ import static java.lang.Integer.parseInt;
  */
 public class RegisterDelivery extends JFrame {
     Connection cn;
-    int idProvider;
+    int idProvider, idDelivery;
+    String currency;
+    private  JComboBox measuringBox;
+    private ArrayList<String> listOfMeasurings;
     public RegisterDelivery(Connection cn) {
         this.cn=cn;
         initComponents();
         typeDeliveryDialog.setVisible(true);
-
+        createMeasuringComboBox();
+        try {
+            PreparedStatement pr = cn.prepareStatement("select name from \"Provider\"");
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) producentBox.addItem(rs.getString(1));
+            AutoCompleteDecorator.decorate(producentBox);
+            pr = cn.prepareStatement("select max(iddelivry) from \"Delivery\"");
+            rs = pr.executeQuery();
+            rs.next();
+            idDelivery = rs.getInt(1) + 1;
+            numdeliverytextField.setText(String.valueOf(idDelivery));
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,e.getMessage(),"",JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
 
@@ -41,24 +60,43 @@ public class RegisterDelivery extends JFrame {
 
     private void registerandpaybtnMouseClicked() {
         this.dispose();
-        firstdialog.setVisible(true);
-    }
+        try{
+            PreparedStatement pr = cn.prepareStatement("select \"idProvider\" from \"Provider\" where name like ?");//table delivery
+            pr.setString(1,producentBox.getSelectedItem().toString());
+            ResultSet rs = pr.executeQuery();
+            rs.next();
+            int idVendor = rs.getInt(1);
+            pr.clearBatch();
+            pr = cn.prepareStatement("insert into \"Delivery\"(iddelivry, date, vendor) values (default , ?, ?)");
+            pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
+            pr.setInt(2,idVendor);
+            pr.executeUpdate();
+            pr.clearBatch();
 
-    private void firstokbtnActionPerformed() {
+            for (int i = 0; i < table.getRowCount()-1; i++) {//table deliveryBascket
+                pr = cn.prepareStatement("insert into \"Delivery_basket\" (id_del_basket, price, measuring_rate, \"Delivery\", \"Product\", amount) values (default,?,?,?,?,?)");
+                pr.setDouble(1,Double.parseDouble(table.getModel().getValueAt(i,7).toString()));
+                pr.setString(2,table.getModel().getValueAt(i,3).toString());
+                pr.setInt(3,Integer.parseInt(numdeliverytextField.getText()));
+                pr.setInt(4,Integer.parseInt(table.getModel().getValueAt(i,0).toString()));
+                pr.setDouble(5,Double.parseDouble(table.getModel().getValueAt(i,2).toString()));
+                pr.executeUpdate();
+                pr.clearBatch();
+            }
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,e.getMessage(),"",JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         JOptionPane.showMessageDialog(this,"Доставка подтверждена.","",JOptionPane.INFORMATION_MESSAGE);
-        firstdialog.dispose();
-        seconddialog.setVisible(true);
-    }
-
-    private void firstnobtnActionPerformed() {
-        JOptionPane.showMessageDialog(this,"Доставка не подтверждена.","",JOptionPane.INFORMATION_MESSAGE);
-        firstdialog.dispose();
         seconddialog.setVisible(true);
     }
 
     private void secondokbtnActionPerformed() {
         seconddialog.dispose();
-        new CashInOut("Выплата", cn).setVisible(true);
+        CashInOut cio = new CashInOut("Выплата", cn);
+        cio.komenttextField.setEditable(false);
+        cio.komenttextField.setText("Oплата доставки № "+ idDelivery);
+        cio.setVisible(true);
     }
 
     private void secondnobtnActionPerformed() {
@@ -68,17 +106,29 @@ public class RegisterDelivery extends JFrame {
 
     private void okDialobtnActionPerformed() {
         try{
-            if (parseInt(numberTF.getText())>0){
-                try{
-                    idProvider=parseInt(numberTF.getText());
-                    PreparedStatement pr = cn.prepareStatement("");
-                }catch (Exception e){
-
-                }
+            int idOrder =parseInt(numberTF.getText());
+            PreparedStatement pr = cn.prepareStatement("select o.\"Product\",p.name, o.amount, o.measuring_rate, o.\"Price_per_unit\", o.currency, p.\"VAT\" from order_bucket o, \"Provider_Product\" p  where o.\"Delivery\"=? and p.\"idProviderProduct\"=o.\"Product\"");
+            pr.setInt(1,idOrder);
+            ResultSet rs = pr.executeQuery();
+            if (rs.next()){
                 typeDeliveryDialog.dispose();
                 numdeliverytextField.setText(numberTF.getText());
+                this.setTitle("Принятие доставки по номеру заказа");
                 this.setVisible(true);
-            }else JOptionPane.showMessageDialog(this,"Неверный формат2","Ошибка",JOptionPane.ERROR_MESSAGE);
+                int i=0;
+                while (rs.next()){
+                    ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
+                    table.getModel().setValueAt(rs.getInt(1),i,0);
+                    table.getModel().setValueAt(rs.getString(2),i,1);
+                    table.getModel().setValueAt(rs.getDouble(3),i,2);
+                    table.getModel().setValueAt(rs.getString(4),i,3);
+                    table.getModel().setValueAt(rs.getDouble(5),i,4);
+                    table.getModel().setValueAt(rs.getString(6),i,5);
+                    table.getModel().setValueAt(rs.getDouble(7),i,6);
+                    table.getModel().setValueAt(rs.getDouble(3)*rs.getDouble(5),i,7);
+                    i++;
+                }
+            }else JOptionPane.showMessageDialog(this,"Заказ не найден","Ошибка",JOptionPane.ERROR_MESSAGE);
         }catch (Exception ex){
             JOptionPane.showMessageDialog(this,"Неверный формат","Ошибка",JOptionPane.ERROR_MESSAGE);
         }
@@ -87,12 +137,17 @@ public class RegisterDelivery extends JFrame {
     private void addrowBtnActionPerformed() {
         ((DefaultTableModel)table2.getModel()).setRowCount(0);
         try {
-            PreparedStatement pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.currency, pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
-            pr.setInt(1,idProvider);
+            PreparedStatement pr;
+            if (!numdeliverytextField.getText().isEmpty()) {
+                 pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.currency, pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
+                pr.setInt(1, idProvider);
+            }else {
+                 pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.currency, pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
+            }
             ResultSet rs;
             rs = pr.executeQuery();
             int i=0;
-            while (rs.next()){JOptionPane.showMessageDialog(this,"while","Ошибка",JOptionPane.ERROR_MESSAGE);
+            while (rs.next()){
                 ((DefaultTableModel)table2.getModel()).addRow(new Object[]{});
                 table2.getModel().setValueAt(rs.getDouble(3),i,2);
                 table2.getModel().setValueAt(rs.getString(4),i,3);
@@ -111,6 +166,7 @@ public class RegisterDelivery extends JFrame {
         if (table.getSelectedRow()!=-1){
             ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());
             if (table.getRowCount()==0)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
+            createListOfMeasuringRattes();
         }
     }
 
@@ -126,8 +182,68 @@ public class RegisterDelivery extends JFrame {
         komentdialog.setVisible(true);
     }
 
+    private void createListOfMeasuringRattes(){
+        listOfMeasurings = new ArrayList<>();
+        for (int i=0; i<table.getRowCount()-1;i++) {
+            listOfMeasurings.add(table.getValueAt(i, 3).toString());
+        }
+    }
+
     private void tablePropertyChange() {
-        // TODO add your code here
+        if (table.getSelectedColumn()==3){//measuring rates and coeff.
+            for (int i=0; i<table.getRowCount()-1;i++){
+                String oldMeas = listOfMeasurings.get(i);
+                String newMeas = table.getValueAt(i,3).toString();
+                if (!oldMeas.equals(newMeas)){
+                    listOfMeasurings.set(i,newMeas);
+                    try {
+                        PreparedStatement pr;
+                        ResultSet rs;
+                        pr = cn.prepareStatement("select c.coefficient, p.price from \"Measuring_rate_connect_provider_product\" c, \"Provider_Price\" p where provider_product = ? and p.\"idProviderProduct\"=c.provider_product and measuring_rate = (select \"Id_Provider_product_measuring_rate\" from \"Provider_product_measuring_rate\" where name like ?)");
+                        pr.setInt(1,Integer.parseInt(table.getValueAt(i,0).toString()));
+                        pr.setString(2,newMeas);
+                        rs = pr.executeQuery();
+                        rs.next();
+                        double oldprice = rs.getDouble(2);
+                        double newprice = rs.getDouble(1)*oldprice;
+                        table.getModel().setValueAt(newprice,i,4);
+                    }catch (Exception e){
+                        JOptionPane.showMessageDialog(this,"Measuring rate error","Error",JOptionPane.ERROR_MESSAGE);
+                        table.getModel().setValueAt(oldMeas,i,3);
+                    }
+                }
+            }
+        }
+        double summ=0;//calk summ
+        double summNDS=0;
+        for (int i =0; i< table.getRowCount();i++){
+            if (table.getModel().getValueAt(i, 0)!=null && table.getModel().getValueAt(i, 2)!=null) {
+                double count = (double) table.getModel().getValueAt(i, 2);
+                double nds = (double) table.getModel().getValueAt(i, 6);
+                double price = (double) table.getModel().getValueAt(i, 4);
+                summ += new BigDecimal(count * price).setScale(2, RoundingMode.UP).doubleValue();
+                summNDS+=new BigDecimal(price*nds*count/100).setScale(2, RoundingMode.UP).doubleValue();
+                table.getModel().setValueAt(new BigDecimal(count * price).setScale(2, RoundingMode.UP).doubleValue() ,i,7);
+            }
+        }
+        summlbl.setText(summ + "");
+        ndslbl.setText(summNDS +"");
+    }
+
+    private void createMeasuringComboBox(){
+        measuringBox = new JComboBox();
+        TableColumn measuringColumn = table.getColumnModel().getColumn(3);
+        try{
+            PreparedStatement pr;
+            ResultSet rs;
+            pr = cn.prepareStatement("select name from \"Provider_product_measuring_rate\"");
+            rs = pr.executeQuery();
+            while (rs.next()) measuringBox.addItem(rs.getString(1));
+            AutoCompleteDecorator.decorate(measuringBox);
+            measuringColumn.setCellEditor(new DefaultCellEditor(measuringBox));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void addProdDialogKeyPressed(KeyEvent e) {
@@ -171,8 +287,6 @@ public class RegisterDelivery extends JFrame {
             box.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    int id =0;
-                    System.out.println(table.getEditingRow() + "//");
                     box.removeAllItems();
                     try {
                         PreparedStatement pr;
@@ -183,10 +297,7 @@ public class RegisterDelivery extends JFrame {
                                 "      and \"provider_product\" = ?");
                         pr.setInt(1, table.getEditingRow());
                         rs  = pr.executeQuery();
-                        while (rs.next()) {
-                            box.addItem(rs.getString(1));
-                            //System.out.println(rs.getString(1));
-                        }
+                        while (rs.next()) box.addItem(rs.getString(1));
                     }catch (Exception ex){
 
                     }
@@ -211,7 +322,7 @@ public class RegisterDelivery extends JFrame {
             }
             ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
 
-        }
+        }createListOfMeasuringRattes();
     }
     private void exitbtn2ActionPerformed() {
         komentdialog.dispose();
@@ -222,15 +333,37 @@ public class RegisterDelivery extends JFrame {
         komentdialog.dispose();
     }
 
+    private void samovvozBtnActionPerformed() {
+        samovvoz.setVisible(true);
+    }
+
+    private void newDelBtnActionPerformed() {
+        typeDeliveryDialog.dispose();
+        this.setTitle("Принятие доставки без номера");
+        this.setVisible(true);
+    }
+
+    private void deliveryBoxActionPerformed() {
+        try {
+            PreparedStatement pr = cn.prepareStatement("select \"idProvider\" from \"Provider\" where name like ?");
+            pr.setString(1, Objects.requireNonNull(producentBox.getSelectedItem()).toString());
+            ResultSet rs = pr.executeQuery();
+            rs.next();
+            idProvider = rs.getInt(1);
+            pr = cn.prepareStatement("select currency from \"Provider_Price\" where \"idProviderProduct\" in (select \"idProviderProduct\" from \"Provider_Connect_Product\" where \"idProvider\" = ?)");
+            pr.setInt(1,idProvider);
+            rs = pr.executeQuery();
+            rs.next();
+            currency = rs.getString(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - hhh
-        firstdialog = new JDialog();
-        label2 = new JLabel();
-        panel4 = new JPanel();
-        firstokbtn = new JButton();
-        firstnobtn = new JButton();
         seconddialog = new JDialog();
         label3 = new JLabel();
         panel5 = new JPanel();
@@ -249,8 +382,9 @@ public class RegisterDelivery extends JFrame {
         nobtn = new JButton();
         var numlabel = new JLabel();
         numdeliverytextField = new JTextField();
+        button1 = new JButton();
         var deliverylbl = new JLabel();
-        producentField = new JTextField();
+        producentBox = new JComboBox();
         var secondpanel = new JPanel();
         addrowBtn = new JButton();
         deleteBtn = new JButton();
@@ -289,61 +423,29 @@ public class RegisterDelivery extends JFrame {
         komentTextArea = new JTextArea();
         panel13 = new JPanel();
         okKomentBtn = new JButton();
-
-        //======== firstdialog ========
-        {
-            firstdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-            firstdialog.setResizable(false);
-            var firstdialogContentPane = firstdialog.getContentPane();
-            firstdialogContentPane.setLayout(new GridBagLayout());
-            ((GridBagLayout)firstdialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
-            ((GridBagLayout)firstdialogContentPane.getLayout()).rowHeights = new int[] {0, 42, 44, 0};
-            ((GridBagLayout)firstdialogContentPane.getLayout()).columnWeights = new double[] {0.0, 1.0E-4};
-            ((GridBagLayout)firstdialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
-
-            //---- label2 ----
-            label2.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438.");
-            label2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-            firstdialogContentPane.add(label2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-
-            //======== panel4 ========
-            {
-
-                // JFormDesigner evaluation mark
-                panel4.setBorder(new javax.swing.border.CompoundBorder(
-                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
-                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), panel4.getBorder())); panel4.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
-
-                panel4.setLayout(new GridBagLayout());
-                ((GridBagLayout)panel4.getLayout()).columnWidths = new int[] {0, 110, 0};
-                ((GridBagLayout)panel4.getLayout()).rowHeights = new int[] {0, 0};
-                ((GridBagLayout)panel4.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
-                ((GridBagLayout)panel4.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
-
-                //---- firstokbtn ----
-                firstokbtn.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c");
-                firstokbtn.addActionListener(e -> firstokbtnActionPerformed());
-                panel4.add(firstokbtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- firstnobtn ----
-                firstnobtn.setText("\u041e\u0442\u043b\u043e\u0436\u0438\u0442\u044c");
-                firstnobtn.addActionListener(e -> firstnobtnActionPerformed());
-                panel4.add(firstnobtn, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            firstdialogContentPane.add(panel4, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-            firstdialog.setSize(260, 130);
-            firstdialog.setLocationRelativeTo(firstdialog.getOwner());
-        }
+        samovvoz = new JFrame();
+        firstpanel2 = new JPanel();
+        nobtn2 = new JButton();
+        var secondpanel2 = new JPanel();
+        addrowBtn2 = new JButton();
+        deleteBtn2 = new JButton();
+        upBtn2 = new JButton();
+        downbtn2 = new JButton();
+        addComentBtn2 = new JButton();
+        anotherBtn2 = new JButton();
+        var tablepanel2 = new JPanel();
+        scrollPane5 = new JScrollPane();
+        tableSam = new JTable();
+        var lastpanel2 = new JPanel();
+        var panel15 = new JPanel();
+        var itogolbl2 = new JLabel();
+        var suminfolbl2 = new JLabel();
+        summlbl2 = new JLabel();
+        var ndsinfolbl2 = new JLabel();
+        ndslbl2 = new JLabel();
+        var panel16 = new JPanel();
+        registerandpaybtn2 = new JButton();
+        var vSpacer4 = new JPanel(null);
 
         //======== seconddialog ========
         {
@@ -459,11 +561,13 @@ public class RegisterDelivery extends JFrame {
                 //---- samovvozBtn ----
                 samovvozBtn.setText("\u0421\u0430\u043c\u043e\u0432\u0432\u043e\u0437");
                 samovvozBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                samovvozBtn.addActionListener(e -> samovvozBtnActionPerformed());
                 panel7.add(samovvozBtn, "cell 1 0,grow");
 
                 //---- newDelBtn ----
                 newDelBtn.setText("\u0411\u0435\u0437 \u043d\u043e\u043c\u0435\u0440\u0430");
                 newDelBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                newDelBtn.addActionListener(e -> newDelBtnActionPerformed());
                 panel7.add(newDelBtn, "cell 2 0,grow");
             }
             typeDeliveryDialogContentPane.add(panel7, "cell 0 1,growy");
@@ -494,9 +598,9 @@ public class RegisterDelivery extends JFrame {
                     java.awt.Color.red), firstpanel.getBorder())); firstpanel.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
             firstpanel.setLayout(new GridBagLayout());
-            ((GridBagLayout)firstpanel.getLayout()).columnWidths = new int[] {134, 66, 188, 0};
+            ((GridBagLayout)firstpanel.getLayout()).columnWidths = new int[] {134, 66, 201, 409, 0, 0};
             ((GridBagLayout)firstpanel.getLayout()).rowHeights = new int[] {0, 0, 0};
-            ((GridBagLayout)firstpanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)firstpanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
             ((GridBagLayout)firstpanel.getLayout()).rowWeights = new double[] {1.0, 1.0, 1.0E-4};
 
             //---- nobtn ----
@@ -522,6 +626,12 @@ public class RegisterDelivery extends JFrame {
             numdeliverytextField.setEditable(false);
             firstpanel.add(numdeliverytextField, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 5), 0, 0));
+
+            //---- button1 ----
+            button1.setText("\u041e\u0442\u043b\u043e\u0436\u0438\u0442\u044c");
+            firstpanel.add(button1, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
             //---- deliverylbl ----
@@ -531,11 +641,12 @@ public class RegisterDelivery extends JFrame {
                 GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 0, 5), 0, 0));
 
-            //---- producentField ----
-            producentField.setEditable(false);
-            firstpanel.add(producentField, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
+            //---- producentBox ----
+            producentBox.setMaximumRowCount(40);
+            producentBox.addActionListener(e -> deliveryBoxActionPerformed());
+            firstpanel.add(producentBox, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 0, 5), 0, 0));
         }
         contentPane.add(firstpanel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -953,16 +1064,258 @@ public class RegisterDelivery extends JFrame {
             komentdialog.setSize(410, 230);
             komentdialog.setLocationRelativeTo(komentdialog.getOwner());
         }
+
+        //======== samovvoz ========
+        {
+            samovvoz.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            var samovvozContentPane = samovvoz.getContentPane();
+            samovvozContentPane.setLayout(new GridBagLayout());
+            ((GridBagLayout)samovvozContentPane.getLayout()).columnWidths = new int[] {0, 0};
+            ((GridBagLayout)samovvozContentPane.getLayout()).rowHeights = new int[] {0, 0, 113, 0, 0, 0, 0};
+            ((GridBagLayout)samovvozContentPane.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+            ((GridBagLayout)samovvozContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0E-4};
+
+            //======== firstpanel2 ========
+            {
+
+                // JFormDesigner evaluation mark
+                firstpanel2.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), firstpanel2.getBorder())); firstpanel2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                firstpanel2.setLayout(new GridBagLayout());
+                ((GridBagLayout)firstpanel2.getLayout()).columnWidths = new int[] {129, 0};
+                ((GridBagLayout)firstpanel2.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)firstpanel2.getLayout()).columnWeights = new double[] {0.0, 1.0E-4};
+                ((GridBagLayout)firstpanel2.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
+
+                //---- nobtn2 ----
+                nobtn2.setText("\u041e\u0442\u043c\u0435\u043d\u0430");
+                nobtn2.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        nobtnMouseClicked();
+                    }
+                });
+                firstpanel2.add(nobtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            samovvozContentPane.add(firstpanel2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //======== secondpanel2 ========
+            {
+                secondpanel2.setLayout(new GridBagLayout());
+                ((GridBagLayout)secondpanel2.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
+                ((GridBagLayout)secondpanel2.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)secondpanel2.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0E-4};
+                ((GridBagLayout)secondpanel2.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
+
+                //---- addrowBtn2 ----
+                addrowBtn2.setText("\u041f\u043b\u044e\u0441");
+                addrowBtn2.addActionListener(e -> addrowBtnActionPerformed());
+                secondpanel2.add(addrowBtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- deleteBtn2 ----
+                deleteBtn2.setText("\u041a\u0440\u0435\u0441\u0442\u0438\u043a");
+                deleteBtn2.addActionListener(e -> deleteBtnActionPerformed());
+                secondpanel2.add(deleteBtn2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- upBtn2 ----
+                upBtn2.setText("\u0412\u0432\u0435\u0440\u0445");
+                upBtn2.addActionListener(e -> upBtnActionPerformed());
+                secondpanel2.add(upBtn2, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- downbtn2 ----
+                downbtn2.setText("\u0412\u043d\u0438\u0437");
+                downbtn2.addActionListener(e -> downbtnActionPerformed());
+                secondpanel2.add(downbtn2, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- addComentBtn2 ----
+                addComentBtn2.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043a\u043e\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439");
+                addComentBtn2.addActionListener(e -> addComentBtnActionPerformed());
+                secondpanel2.add(addComentBtn2, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- anotherBtn2 ----
+                anotherBtn2.setText("\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u043e");
+                secondpanel2.add(anotherBtn2, new GridBagConstraints(7, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            samovvozContentPane.add(secondpanel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //======== tablepanel2 ========
+            {
+                tablepanel2.setLayout(new GridBagLayout());
+                ((GridBagLayout)tablepanel2.getLayout()).columnWidths = new int[] {0, 0};
+                ((GridBagLayout)tablepanel2.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)tablepanel2.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+                ((GridBagLayout)tablepanel2.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
+
+                //======== scrollPane5 ========
+                {
+
+                    //---- tableSam ----
+                    tableSam.setModel(new DefaultTableModel(
+                        new Object[][] {
+                            {null, null, null, null, null, null, null, null},
+                        },
+                        new String[] {
+                            "\u041d\u043e\u043c\u0435\u0440", "\u0422\u043e\u0432\u0430\u0440", "\u041a\u043e\u043b-\u0432\u043e", "\u0415\u0434.\u0438\u0437.", "\u0426\u0435\u043d\u0430\\\u0448\u0442.", "\u0412\u0430\u043b\u044e\u0442\u0430", "\u0412 \u043d\u0435\u043c \u041d\u0414\u0421", "\u0421\u0443\u043c\u043c\u0430"
+                        }
+                    ) {
+                        Class<?>[] columnTypes = new Class<?>[] {
+                            Integer.class, Object.class, Double.class, String.class, Double.class, String.class, Double.class, Double.class
+                        };
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, true, true, false, true, false, false
+                        };
+                        @Override
+                        public Class<?> getColumnClass(int columnIndex) {
+                            return columnTypes[columnIndex];
+                        }
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    {
+                        TableColumnModel cm = tableSam.getColumnModel();
+                        cm.getColumn(0).setResizable(false);
+                        cm.getColumn(1).setResizable(false);
+                        cm.getColumn(1).setPreferredWidth(265);
+                        cm.getColumn(2).setResizable(false);
+                        cm.getColumn(2).setPreferredWidth(55);
+                        cm.getColumn(3).setResizable(false);
+                        cm.getColumn(3).setPreferredWidth(45);
+                        cm.getColumn(4).setResizable(false);
+                        cm.getColumn(6).setResizable(false);
+                        cm.getColumn(6).setPreferredWidth(70);
+                        cm.getColumn(7).setResizable(false);
+                        cm.getColumn(7).setPreferredWidth(50);
+                    }
+                    tableSam.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+                    tableSam.setAutoCreateRowSorter(true);
+                    tableSam.setRowSelectionAllowed(false);
+                    tableSam.setCellSelectionEnabled(true);
+                    tableSam.addPropertyChangeListener(e -> tablePropertyChange());
+                    scrollPane5.setViewportView(tableSam);
+                }
+                tablepanel2.add(scrollPane5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            samovvozContentPane.add(tablepanel2, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+
+            //======== lastpanel2 ========
+            {
+                lastpanel2.setLayout(new GridBagLayout());
+                ((GridBagLayout)lastpanel2.getLayout()).columnWidths = new int[] {0, 0, 0};
+                ((GridBagLayout)lastpanel2.getLayout()).rowHeights = new int[] {0, 0};
+                ((GridBagLayout)lastpanel2.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
+                ((GridBagLayout)lastpanel2.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+                //======== panel15 ========
+                {
+                    panel15.setLayout(new GridBagLayout());
+                    ((GridBagLayout)panel15.getLayout()).columnWidths = new int[] {0, 0, 69, 0};
+                    ((GridBagLayout)panel15.getLayout()).rowHeights = new int[] {42, 0, 0, 0};
+                    ((GridBagLayout)panel15.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+                    ((GridBagLayout)panel15.getLayout()).rowWeights = new double[] {1.0, 1.0, 1.0, 1.0E-4};
+
+                    //---- itogolbl2 ----
+                    itogolbl2.setText("\u0418\u0442\u043e\u0433\u043e");
+                    itogolbl2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+                    panel15.add(itogolbl2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                        GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                        new Insets(0, 0, 5, 5), 0, 0));
+
+                    //---- suminfolbl2 ----
+                    suminfolbl2.setText("\u0421\u0443\u043c\u043c\u0430 :");
+                    suminfolbl2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                    panel15.add(suminfolbl2, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                        new Insets(0, 0, 5, 5), 0, 0));
+
+                    //---- summlbl2 ----
+                    summlbl2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                    panel15.add(summlbl2, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
+                        GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+                        new Insets(0, 0, 5, 0), 0, 0));
+
+                    //---- ndsinfolbl2 ----
+                    ndsinfolbl2.setText("\u0412 \u043d\u0435\u043c \u041d\u0414\u0421 :");
+                    ndsinfolbl2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                    panel15.add(ndsinfolbl2, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                        new Insets(0, 0, 0, 5), 0, 0));
+
+                    //---- ndslbl2 ----
+                    ndslbl2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                    panel15.add(ndslbl2, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
+                        GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+                        new Insets(0, 0, 0, 0), 0, 0));
+                }
+                lastpanel2.add(panel15, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //======== panel16 ========
+                {
+                    panel16.setLayout(new GridBagLayout());
+                    ((GridBagLayout)panel16.getLayout()).columnWidths = new int[] {216, 0};
+                    ((GridBagLayout)panel16.getLayout()).rowHeights = new int[] {85, 0};
+                    ((GridBagLayout)panel16.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+                    ((GridBagLayout)panel16.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
+
+                    //---- registerandpaybtn2 ----
+                    registerandpaybtn2.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435 \u0438 \u043e\u043f\u043b\u0430\u0442\u0430");
+                    registerandpaybtn2.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            registerandpaybtnMouseClicked();
+                        }
+                    });
+                    panel16.add(registerandpaybtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                        new Insets(0, 0, 0, 0), 0, 0));
+                }
+                lastpanel2.add(panel16, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                    new Insets(0, 0, 0, 0), 0, 0));
+            }
+            samovvozContentPane.add(lastpanel2, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 0), 0, 0));
+            samovvozContentPane.add(vSpacer4, new GridBagConstraints(0, 4, 1, 2, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 0, 0), 0, 0));
+            samovvoz.setSize(945, 600);
+            samovvoz.setLocationRelativeTo(samovvoz.getOwner());
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - hhh
-    private JDialog firstdialog;
-    private JLabel label2;
-    private JPanel panel4;
-    private JButton firstokbtn;
-    private JButton firstnobtn;
     private JDialog seconddialog;
     private JLabel label3;
     private JPanel panel5;
@@ -979,7 +1332,8 @@ public class RegisterDelivery extends JFrame {
     private JPanel firstpanel;
     private JButton nobtn;
     private JTextField numdeliverytextField;
-    private JTextField producentField;
+    private JButton button1;
+    private JComboBox producentBox;
     private JButton addrowBtn;
     private JButton deleteBtn;
     private JButton upBtn;
@@ -1009,5 +1363,19 @@ public class RegisterDelivery extends JFrame {
     private JTextArea komentTextArea;
     private JPanel panel13;
     private JButton okKomentBtn;
+    private JFrame samovvoz;
+    private JPanel firstpanel2;
+    private JButton nobtn2;
+    private JButton addrowBtn2;
+    private JButton deleteBtn2;
+    private JButton upBtn2;
+    private JButton downbtn2;
+    private JButton addComentBtn2;
+    private JButton anotherBtn2;
+    private JScrollPane scrollPane5;
+    private JTable tableSam;
+    private JLabel summlbl2;
+    private JLabel ndslbl2;
+    private JButton registerandpaybtn2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
