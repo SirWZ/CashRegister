@@ -176,12 +176,9 @@ new FormModel {
 					"gridx": 4
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "deliverylbl"
+					name: "producentlbl"
 					"text": "Поставщик"
 					"font": new java.awt.Font( "Segoe UI", 1, 16 )
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": true
-					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 					"gridy": 1
@@ -279,7 +276,7 @@ new FormModel {
 					name: "scrollPane2"
 					add( new FormComponent( "javax.swing.JTable" ) {
 						name: "table"
-						"model": &SwingTableModel0 new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+						"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 							add( new java.util.Vector {
 								add( null )
 								add( null )
@@ -310,12 +307,12 @@ new FormModel {
 							add( class java.lang.Double )
 						}, new java.util.Vector {
 							add( false )
-							add( false )
+							add( true )
 							add( null )
 							add( null )
+							add( true )
 							add( false )
-							add( null )
-							add( false )
+							add( true )
 							add( false )
 						}, new java.util.Vector {
 							add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
@@ -323,11 +320,11 @@ new FormModel {
 							add( new com.jformdesigner.model.SwingTableColumn( null, 55, 0, 0, false ) )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 45, 0, 0, false ) )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
-							add( null )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 70, 0, 0, false ) )
 							add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, false ) )
 						} )
-						"font": &Font1 new java.awt.Font( "Segoe UI", 0, 14 )
+						"font": new java.awt.Font( "Segoe UI", 0, 14 )
 						"autoCreateRowSorter": true
 						"rowSelectionAllowed": false
 						"cellSelectionEnabled": true
@@ -378,7 +375,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "itogolbl"
 						"text": "Итого"
-						"font": &Font2 new java.awt.Font( "Segoe UI", 1, 20 )
+						"font": new java.awt.Font( "Segoe UI", 1, 20 )
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
@@ -389,7 +386,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "suminfolbl"
 						"text": "Сумма :"
-						"font": &Font3 new java.awt.Font( "Segoe UI", 1, 16 )
+						"font": &Font1 new java.awt.Font( "Segoe UI", 1, 16 )
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
@@ -399,7 +396,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "summlbl"
-						"font": #Font3
+						"font": #Font1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridy": 1
 						"hAlign": 2
@@ -408,7 +405,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "ndsinfolbl"
 						"text": "В нем НДС :"
-						"font": #Font3
+						"font": #Font1
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
@@ -418,7 +415,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "ndslbl"
-						"font": #Font3
+						"font": #Font1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridy": 2
 						"hAlign": 2
@@ -460,7 +457,7 @@ new FormModel {
 				"gridheight": 2
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"size": &Dimension0 new java.awt.Dimension( 945, 600 )
+			"size": new java.awt.Dimension( 945, 600 )
 			"location": new java.awt.Point( 5, 785 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
@@ -630,232 +627,6 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"size": new java.awt.Dimension( 410, 230 )
 			"location": new java.awt.Point( 525, 1440 )
-		} )
-		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.GridBagLayout ) {
-			"$columnSpecs": "0:1.0"
-			"$rowSpecs": "0, 0, 108:1.0, 0, 0, 0"
-			"$hGap": 5
-			"$vGap": 5
-			"$alignLeft": true
-			"$alignTop": true
-		} ) {
-			name: "samovvoz"
-			"$sizePolicy": 1
-			"defaultCloseOperation": 3
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "129"
-				"$rowSpecs": "0:1.0"
-				"$hGap": 5
-				"$vGap": 5
-				"$alignLeft": true
-				"$alignTop": true
-			} ) {
-				name: "firstpanel2"
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "nobtn2"
-					"text": "Отмена"
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "nobtnMouseClicked", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "0:1.0, 0:1.0, 0:1.0, 0:1.0, 0:1.0, 0:1.0, 0:1.0, 0:1.0"
-				"$rowSpecs": "0:1.0"
-				"$hGap": 5
-				"$vGap": 5
-				"$alignLeft": true
-				"$alignTop": true
-			} ) {
-				name: "secondpanel2"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": true
-				}
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "addrowBtn2"
-					"text": "Плюс"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addrowBtnActionPerformed", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"hAlign": 0
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "deleteBtn2"
-					"text": "Крестик"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "deleteBtnActionPerformed", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 1
-					"hAlign": 0
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "upBtn2"
-					"text": "Вверх"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "upBtnActionPerformed", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 2
-					"hAlign": 0
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "downbtn2"
-					"text": "Вниз"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "downbtnActionPerformed", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 3
-					"hAlign": 0
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "addComentBtn2"
-					"text": "Добавить коментарий"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addComentBtnActionPerformed", false ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 5
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "anotherBtn2"
-					"text": "Дополнительно"
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 7
-				} )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 1
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "0:1.0"
-				"$rowSpecs": "0:1.0"
-				"$hGap": 5
-				"$vGap": 5
-				"$alignLeft": true
-				"$alignTop": true
-			} ) {
-				name: "tablepanel2"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": true
-				}
-				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-					name: "scrollPane5"
-					add( new FormComponent( "javax.swing.JTable" ) {
-						name: "tableSam"
-						"model": #SwingTableModel0
-						"font": #Font1
-						"autoCreateRowSorter": true
-						"rowSelectionAllowed": false
-						"cellSelectionEnabled": true
-						addEvent( new FormEvent( "java.beans.PropertyChangeListener", "propertyChange", "tablePropertyChange", false ) )
-					} )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"vAlign": 5
-				} )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 2
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "0:1.0, 0:1.0"
-				"$rowSpecs": "0"
-				"$hGap": 5
-				"$vGap": 5
-				"$alignLeft": true
-				"$alignTop": true
-			} ) {
-				name: "lastpanel2"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": true
-				}
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-					"$columnSpecs": "0, 0, 69"
-					"$rowSpecs": "37:1.0, 0:1.0, 0:1.0"
-					"$hGap": 5
-					"$vGap": 5
-					"$alignLeft": true
-					"$alignTop": true
-				} ) {
-					name: "panel15"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": true
-					}
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "itogolbl2"
-						"text": "Итого"
-						"font": #Font2
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"hAlign": 0
-						"gridx": 1
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "suminfolbl2"
-						"text": "Сумма :"
-						"font": #Font3
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridy": 1
-						"gridx": 1
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "summlbl2"
-						"font": #Font3
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridy": 1
-						"hAlign": 2
-						"gridx": 2
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "ndsinfolbl2"
-						"text": "В нем НДС :"
-						"font": #Font3
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": true
-						}
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridy": 2
-						"gridx": 1
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "ndslbl2"
-						"font": #Font3
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridy": 2
-						"hAlign": 2
-						"gridx": 2
-					} )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-					"$columnSpecs": "216:1.0"
-					"$rowSpecs": "85:1.0"
-					"$hGap": 5
-					"$vGap": 5
-					"$alignLeft": true
-					"$alignTop": true
-				} ) {
-					name: "panel16"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": true
-					}
-					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "registerandpaybtn2"
-						"text": "Подтверждение и оплата"
-						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "registerandpaybtnMouseClicked", false ) )
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridx": 1
-					"hAlign": 0
-					"vAlign": 0
-				} )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 4
-			} )
-			add( new FormComponent( "com.jformdesigner.designer.wrapper.VSpacer" ) {
-				name: "vSpacer4"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": true
-				}
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 4
-				"gridheight": 2
-			} )
-		}, new FormLayoutConstraints( null ) {
-			"size": #Dimension0
-			"location": new java.awt.Point( 0, 1783 )
 		} )
 	}
 }

@@ -190,7 +190,7 @@ public class RegisterDelivery extends JFrame {
     }
 
     private void tablePropertyChange() {
-        if (table.getSelectedColumn()==3){//measuring rates and coeff.
+        if (table.getSelectedColumn()==3 && addrowBtn.isEnabled()){//measuring rates and coeff.
             for (int i=0; i<table.getRowCount()-1;i++){
                 String oldMeas = listOfMeasurings.get(i);
                 String newMeas = table.getValueAt(i,3).toString();
@@ -214,10 +214,14 @@ public class RegisterDelivery extends JFrame {
                 }
             }
         }
+        if ( table.getValueAt(table.getRowCount()-1, 1)!=null)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
         double summ=0;//calk summ
         double summNDS=0;
-        for (int i =0; i< table.getRowCount();i++){
-            if (table.getModel().getValueAt(i, 0)!=null && table.getModel().getValueAt(i, 2)!=null) {
+        for (int i =0; i< table.getRowCount()-1;i++){
+            if (table.getModel().getValueAt(i,5)== null) table.getModel().setValueAt("грн",i,5);
+            if (table.getValueAt(i,3)== null)addrowBtn.setEnabled(false);
+            else addrowBtn.setEnabled(true);
+            if (table.getModel().getValueAt(i, 4)!=null && table.getModel().getValueAt(i, 2)!=null && table.getModel().getValueAt(i, 6)!=null) {
                 double count = (double) table.getModel().getValueAt(i, 2);
                 double nds = (double) table.getModel().getValueAt(i, 6);
                 double price = (double) table.getModel().getValueAt(i, 4);
@@ -228,7 +232,8 @@ public class RegisterDelivery extends JFrame {
         }
         summlbl.setText(summ + "");
         ndslbl.setText(summNDS +"");
-    }
+
+}
 
     private void createMeasuringComboBox(){
         measuringBox = new JComboBox();
@@ -334,7 +339,10 @@ public class RegisterDelivery extends JFrame {
     }
 
     private void samovvozBtnActionPerformed() {
-        samovvoz.setVisible(true);
+        producentBox.setVisible(false);
+        producentlbl.setVisible(false);
+        this.setVisible(true);
+        typeDeliveryDialog.dispose();
     }
 
     private void newDelBtnActionPerformed() {
@@ -383,7 +391,7 @@ public class RegisterDelivery extends JFrame {
         var numlabel = new JLabel();
         numdeliverytextField = new JTextField();
         button1 = new JButton();
-        var deliverylbl = new JLabel();
+        producentlbl = new JLabel();
         producentBox = new JComboBox();
         var secondpanel = new JPanel();
         addrowBtn = new JButton();
@@ -423,29 +431,6 @@ public class RegisterDelivery extends JFrame {
         komentTextArea = new JTextArea();
         panel13 = new JPanel();
         okKomentBtn = new JButton();
-        samovvoz = new JFrame();
-        firstpanel2 = new JPanel();
-        nobtn2 = new JButton();
-        var secondpanel2 = new JPanel();
-        addrowBtn2 = new JButton();
-        deleteBtn2 = new JButton();
-        upBtn2 = new JButton();
-        downbtn2 = new JButton();
-        addComentBtn2 = new JButton();
-        anotherBtn2 = new JButton();
-        var tablepanel2 = new JPanel();
-        scrollPane5 = new JScrollPane();
-        tableSam = new JTable();
-        var lastpanel2 = new JPanel();
-        var panel15 = new JPanel();
-        var itogolbl2 = new JLabel();
-        var suminfolbl2 = new JLabel();
-        summlbl2 = new JLabel();
-        var ndsinfolbl2 = new JLabel();
-        ndslbl2 = new JLabel();
-        var panel16 = new JPanel();
-        registerandpaybtn2 = new JButton();
-        var vSpacer4 = new JPanel(null);
 
         //======== seconddialog ========
         {
@@ -634,10 +619,10 @@ public class RegisterDelivery extends JFrame {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
-            //---- deliverylbl ----
-            deliverylbl.setText("\u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a");
-            deliverylbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            firstpanel.add(deliverylbl, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+            //---- producentlbl ----
+            producentlbl.setText("\u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a");
+            producentlbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
+            firstpanel.add(producentlbl, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 0, 5), 0, 0));
 
@@ -729,7 +714,7 @@ public class RegisterDelivery extends JFrame {
                         Integer.class, Object.class, Double.class, String.class, Double.class, String.class, Double.class, Double.class
                     };
                     boolean[] columnEditable = new boolean[] {
-                        false, false, true, true, false, true, false, false
+                        false, true, true, true, true, false, true, false
                     };
                     @Override
                     public Class<?> getColumnClass(int columnIndex) {
@@ -750,6 +735,7 @@ public class RegisterDelivery extends JFrame {
                     cm.getColumn(3).setResizable(false);
                     cm.getColumn(3).setPreferredWidth(45);
                     cm.getColumn(4).setResizable(false);
+                    cm.getColumn(5).setResizable(false);
                     cm.getColumn(6).setResizable(false);
                     cm.getColumn(6).setPreferredWidth(70);
                     cm.getColumn(7).setResizable(false);
@@ -1064,253 +1050,6 @@ public class RegisterDelivery extends JFrame {
             komentdialog.setSize(410, 230);
             komentdialog.setLocationRelativeTo(komentdialog.getOwner());
         }
-
-        //======== samovvoz ========
-        {
-            samovvoz.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            var samovvozContentPane = samovvoz.getContentPane();
-            samovvozContentPane.setLayout(new GridBagLayout());
-            ((GridBagLayout)samovvozContentPane.getLayout()).columnWidths = new int[] {0, 0};
-            ((GridBagLayout)samovvozContentPane.getLayout()).rowHeights = new int[] {0, 0, 113, 0, 0, 0, 0};
-            ((GridBagLayout)samovvozContentPane.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-            ((GridBagLayout)samovvozContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0E-4};
-
-            //======== firstpanel2 ========
-            {
-
-                // JFormDesigner evaluation mark
-                firstpanel2.setBorder(new javax.swing.border.CompoundBorder(
-                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
-                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
-                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-                        java.awt.Color.red), firstpanel2.getBorder())); firstpanel2.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
-
-                firstpanel2.setLayout(new GridBagLayout());
-                ((GridBagLayout)firstpanel2.getLayout()).columnWidths = new int[] {129, 0};
-                ((GridBagLayout)firstpanel2.getLayout()).rowHeights = new int[] {0, 0};
-                ((GridBagLayout)firstpanel2.getLayout()).columnWeights = new double[] {0.0, 1.0E-4};
-                ((GridBagLayout)firstpanel2.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
-
-                //---- nobtn2 ----
-                nobtn2.setText("\u041e\u0442\u043c\u0435\u043d\u0430");
-                nobtn2.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        nobtnMouseClicked();
-                    }
-                });
-                firstpanel2.add(nobtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            samovvozContentPane.add(firstpanel2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-
-            //======== secondpanel2 ========
-            {
-                secondpanel2.setLayout(new GridBagLayout());
-                ((GridBagLayout)secondpanel2.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
-                ((GridBagLayout)secondpanel2.getLayout()).rowHeights = new int[] {0, 0};
-                ((GridBagLayout)secondpanel2.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0E-4};
-                ((GridBagLayout)secondpanel2.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
-
-                //---- addrowBtn2 ----
-                addrowBtn2.setText("\u041f\u043b\u044e\u0441");
-                addrowBtn2.addActionListener(e -> addrowBtnActionPerformed());
-                secondpanel2.add(addrowBtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- deleteBtn2 ----
-                deleteBtn2.setText("\u041a\u0440\u0435\u0441\u0442\u0438\u043a");
-                deleteBtn2.addActionListener(e -> deleteBtnActionPerformed());
-                secondpanel2.add(deleteBtn2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- upBtn2 ----
-                upBtn2.setText("\u0412\u0432\u0435\u0440\u0445");
-                upBtn2.addActionListener(e -> upBtnActionPerformed());
-                secondpanel2.add(upBtn2, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- downbtn2 ----
-                downbtn2.setText("\u0412\u043d\u0438\u0437");
-                downbtn2.addActionListener(e -> downbtnActionPerformed());
-                secondpanel2.add(downbtn2, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- addComentBtn2 ----
-                addComentBtn2.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043a\u043e\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439");
-                addComentBtn2.addActionListener(e -> addComentBtnActionPerformed());
-                secondpanel2.add(addComentBtn2, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- anotherBtn2 ----
-                anotherBtn2.setText("\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u043e");
-                secondpanel2.add(anotherBtn2, new GridBagConstraints(7, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            samovvozContentPane.add(secondpanel2, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-
-            //======== tablepanel2 ========
-            {
-                tablepanel2.setLayout(new GridBagLayout());
-                ((GridBagLayout)tablepanel2.getLayout()).columnWidths = new int[] {0, 0};
-                ((GridBagLayout)tablepanel2.getLayout()).rowHeights = new int[] {0, 0};
-                ((GridBagLayout)tablepanel2.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-                ((GridBagLayout)tablepanel2.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
-
-                //======== scrollPane5 ========
-                {
-
-                    //---- tableSam ----
-                    tableSam.setModel(new DefaultTableModel(
-                        new Object[][] {
-                            {null, null, null, null, null, null, null, null},
-                        },
-                        new String[] {
-                            "\u041d\u043e\u043c\u0435\u0440", "\u0422\u043e\u0432\u0430\u0440", "\u041a\u043e\u043b-\u0432\u043e", "\u0415\u0434.\u0438\u0437.", "\u0426\u0435\u043d\u0430\\\u0448\u0442.", "\u0412\u0430\u043b\u044e\u0442\u0430", "\u0412 \u043d\u0435\u043c \u041d\u0414\u0421", "\u0421\u0443\u043c\u043c\u0430"
-                        }
-                    ) {
-                        Class<?>[] columnTypes = new Class<?>[] {
-                            Integer.class, Object.class, Double.class, String.class, Double.class, String.class, Double.class, Double.class
-                        };
-                        boolean[] columnEditable = new boolean[] {
-                            false, false, true, true, false, true, false, false
-                        };
-                        @Override
-                        public Class<?> getColumnClass(int columnIndex) {
-                            return columnTypes[columnIndex];
-                        }
-                        @Override
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                            return columnEditable[columnIndex];
-                        }
-                    });
-                    {
-                        TableColumnModel cm = tableSam.getColumnModel();
-                        cm.getColumn(0).setResizable(false);
-                        cm.getColumn(1).setResizable(false);
-                        cm.getColumn(1).setPreferredWidth(265);
-                        cm.getColumn(2).setResizable(false);
-                        cm.getColumn(2).setPreferredWidth(55);
-                        cm.getColumn(3).setResizable(false);
-                        cm.getColumn(3).setPreferredWidth(45);
-                        cm.getColumn(4).setResizable(false);
-                        cm.getColumn(6).setResizable(false);
-                        cm.getColumn(6).setPreferredWidth(70);
-                        cm.getColumn(7).setResizable(false);
-                        cm.getColumn(7).setPreferredWidth(50);
-                    }
-                    tableSam.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-                    tableSam.setAutoCreateRowSorter(true);
-                    tableSam.setRowSelectionAllowed(false);
-                    tableSam.setCellSelectionEnabled(true);
-                    tableSam.addPropertyChangeListener(e -> tablePropertyChange());
-                    scrollPane5.setViewportView(tableSam);
-                }
-                tablepanel2.add(scrollPane5, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            samovvozContentPane.add(tablepanel2, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-
-            //======== lastpanel2 ========
-            {
-                lastpanel2.setLayout(new GridBagLayout());
-                ((GridBagLayout)lastpanel2.getLayout()).columnWidths = new int[] {0, 0, 0};
-                ((GridBagLayout)lastpanel2.getLayout()).rowHeights = new int[] {0, 0};
-                ((GridBagLayout)lastpanel2.getLayout()).columnWeights = new double[] {1.0, 1.0, 1.0E-4};
-                ((GridBagLayout)lastpanel2.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
-
-                //======== panel15 ========
-                {
-                    panel15.setLayout(new GridBagLayout());
-                    ((GridBagLayout)panel15.getLayout()).columnWidths = new int[] {0, 0, 69, 0};
-                    ((GridBagLayout)panel15.getLayout()).rowHeights = new int[] {42, 0, 0, 0};
-                    ((GridBagLayout)panel15.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
-                    ((GridBagLayout)panel15.getLayout()).rowWeights = new double[] {1.0, 1.0, 1.0, 1.0E-4};
-
-                    //---- itogolbl2 ----
-                    itogolbl2.setText("\u0418\u0442\u043e\u0433\u043e");
-                    itogolbl2.setFont(new Font("Segoe UI", Font.BOLD, 20));
-                    panel15.add(itogolbl2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                        GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
-                        new Insets(0, 0, 5, 5), 0, 0));
-
-                    //---- suminfolbl2 ----
-                    suminfolbl2.setText("\u0421\u0443\u043c\u043c\u0430 :");
-                    suminfolbl2.setFont(new Font("Segoe UI", Font.BOLD, 16));
-                    panel15.add(suminfolbl2, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                        new Insets(0, 0, 5, 5), 0, 0));
-
-                    //---- summlbl2 ----
-                    summlbl2.setFont(new Font("Segoe UI", Font.BOLD, 16));
-                    panel15.add(summlbl2, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
-                        GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
-                        new Insets(0, 0, 5, 0), 0, 0));
-
-                    //---- ndsinfolbl2 ----
-                    ndsinfolbl2.setText("\u0412 \u043d\u0435\u043c \u041d\u0414\u0421 :");
-                    ndsinfolbl2.setFont(new Font("Segoe UI", Font.BOLD, 16));
-                    panel15.add(ndsinfolbl2, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
-                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                        new Insets(0, 0, 0, 5), 0, 0));
-
-                    //---- ndslbl2 ----
-                    ndslbl2.setFont(new Font("Segoe UI", Font.BOLD, 16));
-                    panel15.add(ndslbl2, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
-                        GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
-                        new Insets(0, 0, 0, 0), 0, 0));
-                }
-                lastpanel2.add(panel15, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
-
-                //======== panel16 ========
-                {
-                    panel16.setLayout(new GridBagLayout());
-                    ((GridBagLayout)panel16.getLayout()).columnWidths = new int[] {216, 0};
-                    ((GridBagLayout)panel16.getLayout()).rowHeights = new int[] {85, 0};
-                    ((GridBagLayout)panel16.getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
-                    ((GridBagLayout)panel16.getLayout()).rowWeights = new double[] {1.0, 1.0E-4};
-
-                    //---- registerandpaybtn2 ----
-                    registerandpaybtn2.setText("\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435 \u0438 \u043e\u043f\u043b\u0430\u0442\u0430");
-                    registerandpaybtn2.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            registerandpaybtnMouseClicked();
-                        }
-                    });
-                    panel16.add(registerandpaybtn2, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                        new Insets(0, 0, 0, 0), 0, 0));
-                }
-                lastpanel2.add(panel16, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                    new Insets(0, 0, 0, 0), 0, 0));
-            }
-            samovvozContentPane.add(lastpanel2, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-            samovvozContentPane.add(vSpacer4, new GridBagConstraints(0, 4, 1, 2, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-            samovvoz.setSize(945, 600);
-            samovvoz.setLocationRelativeTo(samovvoz.getOwner());
-        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -1333,6 +1072,7 @@ public class RegisterDelivery extends JFrame {
     private JButton nobtn;
     private JTextField numdeliverytextField;
     private JButton button1;
+    private JLabel producentlbl;
     private JComboBox producentBox;
     private JButton addrowBtn;
     private JButton deleteBtn;
@@ -1363,19 +1103,5 @@ public class RegisterDelivery extends JFrame {
     private JTextArea komentTextArea;
     private JPanel panel13;
     private JButton okKomentBtn;
-    private JFrame samovvoz;
-    private JPanel firstpanel2;
-    private JButton nobtn2;
-    private JButton addrowBtn2;
-    private JButton deleteBtn2;
-    private JButton upBtn2;
-    private JButton downbtn2;
-    private JButton addComentBtn2;
-    private JButton anotherBtn2;
-    private JScrollPane scrollPane5;
-    private JTable tableSam;
-    private JLabel summlbl2;
-    private JLabel ndslbl2;
-    private JButton registerandpaybtn2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
