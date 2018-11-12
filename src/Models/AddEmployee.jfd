@@ -159,10 +159,12 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button_no"
 					"text": "Отмена"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_noActionPerformed", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button_yes"
 					"text": "Добавить"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_yesActionPerformed", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )

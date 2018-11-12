@@ -6,7 +6,9 @@ package Models;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Properties;
 import javax.swing.*;
@@ -44,9 +46,14 @@ public class AddEmployee {
     }
 
     private void button_addActionPerformed(ActionEvent e) {
-        if(textField_id.getText().isEmpty()||textField_name.getText().isEmpty()||textField_surname.getText().isEmpty()||xDatePicker1.getDate().toString().isEmpty()){
+        if(textField_id.getText().isEmpty()
+                ||textField_name.getText().isEmpty()
+                ||textField_surname.getText().isEmpty()
+                ||xDatePicker1.getDate().toString().isEmpty()) {
             fillAllFieldsDialog.setVisible(true);
-        }else if(passwordField1.getPassword().length==0 || passwordField2.getPassword().length==0 || !Arrays.equals(passwordField1.getPassword(),passwordField2.getPassword())){
+        }else if(passwordField1.getPassword().length==0
+                || passwordField2.getPassword().length==0
+                || !Arrays.equals(passwordField1.getPassword(),passwordField2.getPassword())){
             passwordIncorrectDialog.setVisible(true);
         }else {
             confirmDialog.setVisible(true);
@@ -55,6 +62,31 @@ public class AddEmployee {
 
     private void button_back2ActionPerformed(ActionEvent e) {
         fillAllFieldsDialog.dispose();
+    }
+
+    private void button_noActionPerformed(ActionEvent e) {
+        confirmDialog.dispose();
+    }
+
+    private void button_yesActionPerformed(ActionEvent e) {
+        try {
+            PreparedStatement preparedStatement1 = cn.prepareStatement("insert into Worker (idwor, Name, surname, hiredate, date_of_birthday) values (?,?,?,?,?) ");
+            preparedStatement1.setInt(1, Integer.parseInt(textField_id.getText()));
+            preparedStatement1.setString(2, textField_name.getText());
+            preparedStatement1.setString(3, textField_surname.getText());
+            preparedStatement1.setTimestamp(4, Timestamp.valueOf((LocalDateTime.now())));
+            preparedStatement1.setTimestamp(5, Timestamp.valueOf(xDatePicker1.getDate().toString()));
+
+            PreparedStatement preparedStatement2 = cn.prepareStatement("insert into worker_password (idwor, idpass, password) values (?, default , ?)");
+            preparedStatement2.setInt(1, Integer.parseInt(textField_id.getText()));
+            preparedStatement2.setString(2,new String(passwordField1.getPassword()));
+
+            preparedStatement1.execute();
+            preparedStatement2.execute();
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     private void initComponents() {
@@ -230,12 +262,14 @@ public class AddEmployee {
 
                 //---- button_no ----
                 button_no.setText("\u041e\u0442\u043c\u0435\u043d\u0430");
+                button_no.addActionListener(e -> button_noActionPerformed(e));
                 panel3.add(button_no, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
 
                 //---- button_yes ----
                 button_yes.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
+                button_yes.addActionListener(e -> button_yesActionPerformed(e));
                 panel3.add(button_yes, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));

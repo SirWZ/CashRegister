@@ -22,7 +22,7 @@ new FormModel {
 			} ) {
 				name: "panel2"
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button5"
+					name: "backButton"
 					"text": "Назад"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
@@ -39,23 +39,24 @@ new FormModel {
 			} ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button1"
+					name: "addEmpButton"
 					"text": "Добавить сотрудника"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addEmpButtonActionPerformed", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button3"
+					name: "contractButton"
 					"text": "Контракты"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button2"
+					name: "empButton"
 					"text": "Мои сотрудники"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridy": 1
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button4"
+					name: "empPosButton"
 					"text": "Должности"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
