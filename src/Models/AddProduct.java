@@ -62,35 +62,35 @@ public class AddProduct extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - hhh
+        // Generated using JFormDesigner Evaluation license - Yaroslav
         panel1 = new JPanel();
         exitBtn = new JButton();
-        var lblProdCode = new JLabel();
+        JLabel lblProdCode = new JLabel();
         prodCodetextField = new JTextField();
-        var lblName = new JLabel();
+        JLabel lblName = new JLabel();
         nametextField = new JTextField();
         printBtn = new JButton();
-        var lblCategory = new JLabel();
+        JLabel lblCategory = new JLabel();
         categorycomboBox = new JComboBox();
-        var lblmanufact = new JLabel();
+        JLabel lblmanufact = new JLabel();
         manufacttextField = new JTextField();
         panel2 = new JPanel();
         fotopanel = new JPanel();
         fotolbl = new JLabel();
         addFotoBtn = new JButton();
         panel4 = new JPanel();
-        var lblMeasuring = new JLabel();
+        JLabel lblMeasuring = new JLabel();
         measuringtextField = new JTextField();
         addMeasuringBtn = new JButton();
-        var lblProducent = new JLabel();
+        JLabel lblProducent = new JLabel();
         producenttextField = new JTextField();
         addProducentBtn = new JButton();
-        var lblBarcode = new JLabel();
+        JLabel lblBarcode = new JLabel();
         barCodetextField = new JTextField();
-        var lblVAT = new JLabel();
+        JLabel lblVAT = new JLabel();
         vattextField = new JTextField();
         panel5 = new JPanel();
-        var lbldescript = new JLabel();
+        JLabel lbldescript = new JLabel();
         scrollPane1 = new JScrollPane();
         descripttextArea = new JTextArea();
         addProduct = new JButton();
@@ -119,7 +119,7 @@ public class AddProduct extends JFrame {
 
         //======== this ========
         setTitle("\u0414\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u0430");
-        var contentPane = getContentPane();
+        Container contentPane = getContentPane();
         contentPane.setLayout(new GridBagLayout());
         ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {31, 0, 25, 0};
         ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {29, 0, 0, 83, 24, 0};
@@ -347,7 +347,7 @@ public class AddProduct extends JFrame {
         {
             addmeasuringdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             addmeasuringdialog.setAlwaysOnTop(true);
-            var addmeasuringdialogContentPane = addmeasuringdialog.getContentPane();
+            Container addmeasuringdialogContentPane = addmeasuringdialog.getContentPane();
             addmeasuringdialogContentPane.setLayout(new MigLayout(
                 "hidemode 3",
                 // columns
@@ -448,7 +448,7 @@ public class AddProduct extends JFrame {
         {
             addProviderDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             addProviderDialog.setAlwaysOnTop(true);
-            var addProviderDialogContentPane = addProviderDialog.getContentPane();
+            Container addProviderDialogContentPane = addProviderDialog.getContentPane();
             addProviderDialogContentPane.setLayout(new MigLayout(
                 "hidemode 3",
                 // columns
@@ -548,7 +548,7 @@ public class AddProduct extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - hhh
+    // Generated using JFormDesigner Evaluation license - Yaroslav
     private JPanel panel1;
     private JButton exitBtn;
     private JTextField prodCodetextField;

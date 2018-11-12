@@ -21,7 +21,7 @@ import org.jdesktop.swingx.*;
 import org.jdesktop.swingx.table.*;
 
 /**
- * @author Yaroslav
+ * @author Yaroslav z
  */
 public class AddEmployee {
     private JDatePickerImpl dateOfCreatePicker;

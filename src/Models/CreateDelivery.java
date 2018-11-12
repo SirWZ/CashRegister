@@ -362,22 +362,22 @@ class CreateDelivery extends JFrame {
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - hhh
-        var vSpacer1 = new JPanel(null);
+        // Generated using JFormDesigner Evaluation license - Yaroslav
+        JPanel vSpacer1 = new JPanel(null);
         firstpanel = new JPanel();
         exitBtn = new JButton();
-        var numlabel = new JLabel();
+        JLabel numlabel = new JLabel();
         numbertextField = new JTextField();
         datelbl = new JLabel();
         noBtn = new JButton();
         printBtn = new JButton();
-        var deliverylbl = new JLabel();
+        JLabel deliverylbl = new JLabel();
         deliveryBox = new JComboBox();
-        var numdelLbl = new JLabel();
+        JLabel numdelLbl = new JLabel();
         deliveryPlacetextField = new JTextField();
-        var contactlbl = new JLabel();
+        JLabel contactlbl = new JLabel();
         contacttextField = new JTextField();
-        var secondpanel = new JPanel();
+        JPanel secondpanel = new JPanel();
         addrowBtn = new JButton();
         deleteBtn = new JButton();
         upBtn = new JButton();
@@ -385,28 +385,28 @@ class CreateDelivery extends JFrame {
         addComentBtn = new JButton();
         payBtn = new JButton();
         anotherBtn = new JButton();
-        var tablepanel = new JPanel();
+        JPanel tablepanel = new JPanel();
         scrollPane1 = new JScrollPane();
         table = new JTable();
         panel4 = new JPanel();
         checkBox = new JCheckBox();
-        var lastpanel = new JPanel();
-        var panel5 = new JPanel();
-        var itogolbl = new JLabel();
-        var etapslbl = new JLabel();
-        var suminfolbl = new JLabel();
+        JPanel lastpanel = new JPanel();
+        JPanel panel5 = new JPanel();
+        JLabel itogolbl = new JLabel();
+        JLabel etapslbl = new JLabel();
+        JLabel suminfolbl = new JLabel();
         summlbl = new JLabel();
-        var avansinfolbl = new JLabel();
+        JLabel avansinfolbl = new JLabel();
         avanslbl = new JLabel();
-        var ndsinfolbl = new JLabel();
+        JLabel ndsinfolbl = new JLabel();
         ndslbl = new JLabel();
-        var nextinfolbl = new JLabel();
+        JLabel nextinfolbl = new JLabel();
         ondeliverlbl = new JLabel();
-        var creditinfo = new JLabel();
+        JLabel creditinfo = new JLabel();
         creditlbl = new JLabel();
-        var panel7 = new JPanel();
+        JPanel panel7 = new JPanel();
         okbtn = new JButton();
-        var vSpacer2 = new JPanel(null);
+        JPanel vSpacer2 = new JPanel(null);
         addProdDialog = new JDialog();
         panel2 = new JPanel();
         exitbtn = new JButton();
@@ -439,7 +439,7 @@ class CreateDelivery extends JFrame {
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        var contentPane = getContentPane();
+        Container contentPane = getContentPane();
         contentPane.setLayout(new GridBagLayout());
         ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {29, 0, 0, 113, 0, 0, 0, 0};
@@ -814,7 +814,7 @@ class CreateDelivery extends JFrame {
                     addProdDialogKeyPressed(e);
                 }
             });
-            var addProdDialogContentPane = addProdDialog.getContentPane();
+            Container addProdDialogContentPane = addProdDialog.getContentPane();
             addProdDialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)addProdDialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
             ((GridBagLayout)addProdDialogContentPane.getLayout()).rowHeights = new int[] {0, 218, 0, 0};
@@ -927,7 +927,7 @@ class CreateDelivery extends JFrame {
         //======== komentdialog ========
         {
             komentdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-            var komentdialogContentPane = komentdialog.getContentPane();
+            Container komentdialogContentPane = komentdialog.getContentPane();
             komentdialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)komentdialogContentPane.getLayout()).columnWidths = new int[] {0, 0, 0};
             ((GridBagLayout)komentdialogContentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
@@ -1012,7 +1012,7 @@ class CreateDelivery extends JFrame {
             paydialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             paydialog.setTitle("\u041e\u043f\u043b\u0430\u0442\u0430");
             paydialog.setResizable(false);
-            var paydialogContentPane = paydialog.getContentPane();
+            Container paydialogContentPane = paydialog.getContentPane();
             paydialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)paydialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
             ((GridBagLayout)paydialogContentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
@@ -1131,7 +1131,7 @@ class CreateDelivery extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - hhh
+    // Generated using JFormDesigner Evaluation license - Yaroslav
     private JPanel firstpanel;
     private JButton exitBtn;
     private JTextField numbertextField;
