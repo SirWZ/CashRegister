@@ -27,17 +27,14 @@ public class UserInterface extends JFrame {
             Class.forName("org.postgresql.Driver");
             cn= DriverManager.getConnection("jdbc:postgresql://25.90.246.178:5432/postgres","postgres","shift");
             initComponents();
-            new AddProduct(cn).setVisible(true);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     private void loggBtnActionPerformed()  {
         try {
             idwor = Integer.parseInt(logintextField.getText());
-           // SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             pr = cn.prepareStatement("select password from worker_password where idwor="+idwor);
             ResultSet rs =  pr.executeQuery();
             if (rs.next() ){

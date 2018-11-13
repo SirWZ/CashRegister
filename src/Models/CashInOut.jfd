@@ -27,6 +27,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "komenttextField"
+				auxiliary() {
+					"JavaCodeGenerator.variableModifiers": 4
+				}
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "okbtn"
