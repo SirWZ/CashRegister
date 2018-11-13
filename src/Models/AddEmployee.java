@@ -31,6 +31,7 @@ public class AddEmployee {
         this.cn = cn;
         addEmpDialog.setVisible(true);
         /*
+        adsasdas
         Properties p = new Properties();
         p.put("text.today", "Сегодня");
         p.put("text.month", "Месяц");
