@@ -16,8 +16,8 @@ new FormModel {
 			"defaultCloseOperation": 2
 			"resizable": false
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label3"
-				"text": "Оплатить?"
+				name: "payLable"
+				"text": "Оплатить? "
 				"font": new java.awt.Font( "Segoe UI", 0, 20 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridx": 1
@@ -170,8 +170,9 @@ new FormModel {
 					"gridx": 2
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button1"
+					name: "asidebtn"
 					"text": "Отложить"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "asidebtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 4
 				} )
@@ -361,7 +362,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": true
 				}
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-					"$columnSpecs": "0, 0, 69"
+					"$columnSpecs": "0, 0, 69, 164, 74, 53, 57"
 					"$rowSpecs": "37:1.0, 0:1.0, 0:1.0"
 					"$hGap": 5
 					"$vGap": 5
@@ -384,9 +385,24 @@ new FormModel {
 						"gridx": 1
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label1"
+						"text": "Заплачено авансом :"
+						"font": &Font1 new java.awt.Font( "Segoe UI", 1, 16 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+						"vAlign": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "avansPaymentLbl"
+						"font": &Font2 new java.awt.Font( "Segoe UI", 1, 16 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+						"vAlign": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "suminfolbl"
 						"text": "Сумма :"
-						"font": &Font1 new java.awt.Font( "Segoe UI", 1, 16 )
+						"font": &Font3 new java.awt.Font( "Segoe UI", 1, 16 )
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
@@ -396,16 +412,46 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "summlbl"
-						"font": #Font1
+						"font": #Font3
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridy": 1
 						"hAlign": 2
 						"gridx": 2
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label4"
+						"text": "Во время доставки :"
+						"font": new java.awt.Font( "Segoe UI", 1, 16 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+						"gridy": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "onDeliveryPaymenttsLbl"
+						"font": #Font2
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+						"gridy": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label5"
+						"text": "К оплате :"
+						"font": new java.awt.Font( "Segoe UI", 1, 16 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 5
+						"gridy": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "nowPaymentLbl"
+						"font": new java.awt.Font( "Segoe UI", 1, 16 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 6
+						"gridy": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "ndsinfolbl"
 						"text": "В нем НДС :"
-						"font": #Font1
+						"font": #Font3
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
@@ -415,11 +461,26 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "ndslbl"
-						"font": #Font1
+						"font": #Font3
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridy": 2
 						"hAlign": 2
 						"gridx": 2
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label2"
+						"text": "В кредит :"
+						"font": #Font1
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+						"gridy": 2
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "creditPaymentLbl"
+						"font": #Font2
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+						"gridy": 2
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {

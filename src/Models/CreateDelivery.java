@@ -256,13 +256,13 @@ class CreateDelivery extends JFrame {
             //orderPayments
             if (!avansTF.getText().equals("")){
                 makeOrderPayments("Аванс",Double.parseDouble(avansTF.getText()));
-            }
+            }else makeOrderPayments("Аванс",0);
             if (!onDeliveryTF.getText().equals("")){
                 makeOrderPayments("Во время доставки",Double.parseDouble(onDeliveryTF.getText()));
-            }
+            }else makeOrderPayments("Во время доставки",0);
             if (!creditTF.getText().equals("")){
                 makeOrderPayments("Кредит",Double.parseDouble(creditTF.getText()));
-            }
+            }else makeOrderPayments("Кредит",0);
             this.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
@@ -391,7 +391,7 @@ class CreateDelivery extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - hhh
+        // Generated using JFormDesigner Evaluation license - ff
         var vSpacer1 = new JPanel(null);
         firstpanel = new JPanel();
         exitBtn = new JButton();
@@ -1157,7 +1157,7 @@ class CreateDelivery extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - hhh
+    // Generated using JFormDesigner Evaluation license - ff
     private JPanel firstpanel;
     private JButton exitBtn;
     private JTextField numbertextField;
