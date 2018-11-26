@@ -113,6 +113,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button_back"
 					"text": "Назад"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_backActionPerformed", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button_add"
@@ -126,7 +127,7 @@ new FormModel {
 				"gridy": 2
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 35, 55 )
+			"location": new java.awt.Point( 25, 45 )
 			"size": new java.awt.Dimension( 365, 310 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
@@ -160,10 +161,12 @@ new FormModel {
 					name: "button_no"
 					"text": "Отмена"
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_noActionPerformed", true ) )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_noActionPerformed", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button_yes"
 					"text": "Добавить"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_yesActionPerformed", true ) )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_yesActionPerformed", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
@@ -200,12 +203,12 @@ new FormModel {
 				"gridy": 2
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 420, 55 )
+			"location": new java.awt.Point( 420, 50 )
 			"size": new java.awt.Dimension( 195, 150 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
-			"$columnSpecs": "19, 0, 20"
-			"$rowSpecs": "25, 0, 40, 25"
+			"$columnSpecs": "19, 150, 20"
+			"$rowSpecs": "25, 0, 41, 25"
 			"$hGap": 5
 			"$vGap": 5
 		} ) {
@@ -221,6 +224,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button_back3"
 				"text": "Назад"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_back3ActionPerformed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridx": 1
 				"gridy": 2
@@ -228,6 +232,35 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 420, 225 )
 			"size": new java.awt.Dimension( 195, 140 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.GridBagLayout ) {
+			"$columnSpecs": "0, 150, 0"
+			"$rowSpecs": "0, 0, 40, 0"
+			"$hGap": 5
+			"$vGap": 5
+			"$alignLeft": true
+			"$alignTop": true
+		} ) {
+			name: "empAddedDialog"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "Сотрудник добавлен"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 1
+				"hAlign": 0
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button_back4"
+				"text": "Назад"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button_back4ActionPerformed", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 2
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 420, 375 )
+			"size": new java.awt.Dimension( 200, 145 )
 		} )
 	}
 }

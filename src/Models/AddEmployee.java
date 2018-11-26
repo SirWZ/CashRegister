@@ -7,6 +7,9 @@ package Models;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
@@ -18,10 +21,11 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.table.*;
 
 /**
- * @author Yaroslav z
+ * @author Yaroslav
  */
 public class AddEmployee {
     private JDatePickerImpl dateOfCreatePicker;
@@ -30,18 +34,26 @@ public class AddEmployee {
         initComponents();
         this.cn = cn;
         addEmpDialog.setVisible(true);
-        /*
-        adsasdas
+        try {
+            PreparedStatement pr = cn.prepareStatement("select max(\"idwor\") from \"Worker\"");
+            ResultSet rs = pr.executeQuery();
+            rs.next();
+            int idwor = rs.getInt(1) + 1;
+            textField_id.setText(String.valueOf(idwor));
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
         Properties p = new Properties();
         p.put("text.today", "Сегодня");
         p.put("text.month", "Месяц");
         p.put("text.year", "Год");
         dateOfCreatePicker = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel(), p), new DateComponentFormatter());
-
-        firstpanel.add(dateOfCreatePicker, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
+        dateOfCreatePicker.getModel().setSelected(true);
+        panel1.add(dateOfCreatePicker, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 5), 0, 0));
-        */
+                new Insets(0, 0, 5, 0), 0, 0));
 
 
     }
@@ -70,17 +82,28 @@ public class AddEmployee {
     }
 
     private void button_yesActionPerformed(ActionEvent e) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         try {
-            PreparedStatement preparedStatement1 = cn.prepareStatement("insert into Worker (idwor, Name, surname, hiredate, date_of_birthday) values (?,?,?,?,?) ");
+            PreparedStatement preparedStatement1 = cn.prepareStatement("insert into \"Worker\" (idwor, \"Name\", surname, hiredate, \"date_of_birthday\") values (?,?,?,?,?) ");
             preparedStatement1.setInt(1, Integer.parseInt(textField_id.getText()));
             preparedStatement1.setString(2, textField_name.getText());
             preparedStatement1.setString(3, textField_surname.getText());
-            preparedStatement1.setTimestamp(4, Timestamp.valueOf((LocalDateTime.now())));
-            preparedStatement1.setTimestamp(5, Timestamp.valueOf(xDatePicker1.getDate().toString()));
+            //preparedStatement1.setDate(4, Date.valueOf(LocalDate.now()));
+            //preparedStatement1.setDate(5, Date.valueOf(LocalDate.now()));
+            preparedStatement1.setTimestamp(4,Timestamp.valueOf(df.format(System.currentTimeMillis()));
+            preparedStatement1.setTimestamp(5,Timestamp.valueOf(df.format(dateOfCreatePicker.getModel().getValue())));
+           ////preparedStatement1.setDate(5, Date.valueOf(xDatePicker1.getDate().toString()));
 
-            PreparedStatement preparedStatement2 = cn.prepareStatement("insert into worker_password (idwor, idpass, password) values (?, default , ?)");
+            PreparedStatement pr = cn.prepareStatement("select max(\"idpass\") from \"worker_password\"");
+            ResultSet rs = pr.executeQuery();
+            rs.next();
+            int idpass = rs.getInt(1) + 1;
+
+            PreparedStatement preparedStatement2 = cn.prepareStatement("insert into \"worker_password\" (idwor, idpass, password) values (?, ? , ?)");
             preparedStatement2.setInt(1, Integer.parseInt(textField_id.getText()));
-            preparedStatement2.setString(2,new String(passwordField1.getPassword()));
+            preparedStatement2.setInt(2,idpass);
+            preparedStatement2.setString(3,new String(passwordField1.getPassword()));
 
             preparedStatement1.execute();
             preparedStatement2.execute();
@@ -88,6 +111,24 @@ public class AddEmployee {
         catch (SQLException ex){
             ex.printStackTrace();
         }
+
+        empAddedDialog.setVisible(true);
+
+    }
+
+    private void button_backActionPerformed(ActionEvent e) {
+        new ManageEmployee(cn);
+        addEmpDialog.dispose();
+    }
+
+    private void button_back3ActionPerformed(ActionEvent e) {
+        passwordIncorrectDialog.dispose();
+    }
+
+    private void button_back4ActionPerformed(ActionEvent e) {
+        new ManageEmployee(cn);
+        empAddedDialog.dispose();
+        addEmpDialog.dispose();
     }
 
     private void initComponents() {
@@ -121,6 +162,9 @@ public class AddEmployee {
         passwordIncorrectDialog = new JDialog();
         label3 = new JLabel();
         button_back3 = new JButton();
+        empAddedDialog = new JDialog();
+        label4 = new JLabel();
+        button_back4 = new JButton();
 
         //======== addEmpDialog ========
         {
@@ -176,9 +220,9 @@ public class AddEmployee {
                 panel1.add(label_birthday, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
                     GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 5), 0, 0));
-                panel1.add(xDatePicker1, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 5, 0), 0, 0));
+ //               panel1.add(xDatePicker1, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+ //                   GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+ //                   new Insets(0, 0, 5, 0), 0, 0));
 
                 //---- label_pass ----
                 label_pass.setText("\u041f\u0430\u0440\u043e\u043b\u044c");
@@ -212,6 +256,7 @@ public class AddEmployee {
 
                 //---- button_back ----
                 button_back.setText("\u041d\u0430\u0437\u0430\u0434");
+                button_back.addActionListener(e -> button_backActionPerformed(e));
                 panel2.add(button_back, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
@@ -263,14 +308,20 @@ public class AddEmployee {
 
                 //---- button_no ----
                 button_no.setText("\u041e\u0442\u043c\u0435\u043d\u0430");
-                button_no.addActionListener(e -> button_noActionPerformed(e));
+                button_no.addActionListener(e -> {
+			button_noActionPerformed(e);
+			button_noActionPerformed(e);
+		});
                 panel3.add(button_no, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
 
                 //---- button_yes ----
                 button_yes.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
-                button_yes.addActionListener(e -> button_yesActionPerformed(e));
+                button_yes.addActionListener(e -> {
+			button_yesActionPerformed(e);
+			button_yesActionPerformed(e);
+		});
                 panel3.add(button_yes, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -309,8 +360,8 @@ public class AddEmployee {
         {
             Container passwordIncorrectDialogContentPane = passwordIncorrectDialog.getContentPane();
             passwordIncorrectDialogContentPane.setLayout(new GridBagLayout());
-            ((GridBagLayout)passwordIncorrectDialogContentPane.getLayout()).columnWidths = new int[] {24, 0, 20};
-            ((GridBagLayout)passwordIncorrectDialogContentPane.getLayout()).rowHeights = new int[] {30, 0, 45, 25};
+            ((GridBagLayout)passwordIncorrectDialogContentPane.getLayout()).columnWidths = new int[] {24, 155, 20};
+            ((GridBagLayout)passwordIncorrectDialogContentPane.getLayout()).rowHeights = new int[] {30, 0, 46, 25};
 
             //---- label3 ----
             label3.setText("\u041f\u0430\u0440\u043e\u043b\u0438 \u043d\u0435 \u0441\u043e\u0432\u043f\u0430\u0434\u0430\u044e\u0442!");
@@ -320,11 +371,37 @@ public class AddEmployee {
 
             //---- button_back3 ----
             button_back3.setText("\u041d\u0430\u0437\u0430\u0434");
+            button_back3.addActionListener(e -> button_back3ActionPerformed(e));
             passwordIncorrectDialogContentPane.add(button_back3, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));
             passwordIncorrectDialog.pack();
             passwordIncorrectDialog.setLocationRelativeTo(null);
+        }
+
+        //======== empAddedDialog ========
+        {
+            Container empAddedDialogContentPane = empAddedDialog.getContentPane();
+            empAddedDialogContentPane.setLayout(new GridBagLayout());
+            ((GridBagLayout)empAddedDialogContentPane.getLayout()).columnWidths = new int[] {0, 155, 0, 0};
+            ((GridBagLayout)empAddedDialogContentPane.getLayout()).rowHeights = new int[] {0, 0, 45, 0, 0};
+            ((GridBagLayout)empAddedDialogContentPane.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+            ((GridBagLayout)empAddedDialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
+
+            //---- label4 ----
+            label4.setText("\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d");
+            empAddedDialogContentPane.add(label4, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                new Insets(0, 0, 5, 5), 0, 0));
+
+            //---- button_back4 ----
+            button_back4.setText("\u041d\u0430\u0437\u0430\u0434");
+            button_back4.addActionListener(e -> button_back4ActionPerformed(e));
+            empAddedDialogContentPane.add(button_back4, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(0, 0, 5, 5), 0, 0));
+            empAddedDialog.pack();
+            empAddedDialog.setLocationRelativeTo(empAddedDialog.getOwner());
         }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
@@ -359,5 +436,8 @@ public class AddEmployee {
     private JDialog passwordIncorrectDialog;
     private JLabel label3;
     private JButton button_back3;
+    private JDialog empAddedDialog;
+    private JLabel label4;
+    private JButton button_back4;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

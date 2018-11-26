@@ -16,14 +16,20 @@ public class ManageEmployee extends JFrame {
     private Connection cn;
 
     public ManageEmployee(Connection cn) {
-        initComponents();
         this.cn = cn;
+        initComponents();
         this.setVisible(true);
     }
 
     private void addEmpButtonActionPerformed(ActionEvent e) {
         new AddEmployee(cn);
         this.dispose();
+    }
+
+    private void backButtonActionPerformed(ActionEvent e) {
+        new MyShop(cn);
+        this.dispose();
+
     }
 
     private void initComponents() {
@@ -60,6 +66,10 @@ public class ManageEmployee extends JFrame {
 
             //---- backButton ----
             backButton.setText("\u041d\u0430\u0437\u0430\u0434");
+            backButton.addActionListener(e -> {
+			backButtonActionPerformed(e);
+			backButtonActionPerformed(e);
+		});
             panel2.add(backButton, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));

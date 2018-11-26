@@ -94,8 +94,8 @@ public class RegisterDelivery extends JFrame {
     private void secondokbtnActionPerformed() {
         seconddialog.dispose();
         CashInOut cio = new CashInOut("Выплата", cn);
-        cio.komenttextField.setEditable(false);
-        cio.komenttextField.setText("Oплата доставки № "+ idDelivery);
+      //  cio.komenttextField.setEditable(false);
+        //cio.komenttextField.setText("Oплата доставки № "+ idDelivery);
         cio.setVisible(true);
     }
 

@@ -47,8 +47,9 @@ class MyShop extends JFrame {
     }
 
     private void staffBtnActionPerformed(ActionEvent e) {
-        new ManageEmployee(cn);
         this.dispose();
+        new ManageEmployee(cn);
+
     }
 
     private void initComponents() {
