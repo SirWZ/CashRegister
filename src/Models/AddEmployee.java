@@ -91,7 +91,7 @@ public class AddEmployee {
             preparedStatement1.setString(3, textField_surname.getText());
             //preparedStatement1.setDate(4, Date.valueOf(LocalDate.now()));
             //preparedStatement1.setDate(5, Date.valueOf(LocalDate.now()));
-            preparedStatement1.setTimestamp(4,Timestamp.valueOf(df.format(System.currentTimeMillis()));
+            preparedStatement1.setTimestamp(4,Timestamp.valueOf(df.format(System.currentTimeMillis())));
             preparedStatement1.setTimestamp(5,Timestamp.valueOf(df.format(dateOfCreatePicker.getModel().getValue())));
            ////preparedStatement1.setDate(5, Date.valueOf(xDatePicker1.getDate().toString()));
 
