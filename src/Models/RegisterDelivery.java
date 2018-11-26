@@ -29,12 +29,13 @@ import static java.lang.Integer.parseInt;
  */
 public class RegisterDelivery extends JFrame {
     Connection cn;
-    int idProvider, idDelivery;
-    String currency;
-    private  JComboBox measuringBox;
+    int idProvider, idOrder, idDelivery;
+    String currency, status="";
+    private JComboBox measuringBox;
     private ArrayList<String> listOfMeasurings;
+
     public RegisterDelivery(Connection cn) {
-        this.cn=cn;
+        this.cn = cn;
         initComponents();
         typeDeliveryDialog.setVisible(true);
         createMeasuringComboBox();
@@ -46,10 +47,10 @@ public class RegisterDelivery extends JFrame {
             pr = cn.prepareStatement("select max(iddelivry) from \"Delivery\"");
             rs = pr.executeQuery();
             rs.next();
-            idDelivery = rs.getInt(1) + 1;
-            numdeliverytextField.setText(String.valueOf(idDelivery));
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(this,e.getMessage(),"",JOptionPane.INFORMATION_MESSAGE);
+            idOrder = rs.getInt(1) + 1;
+            numdeliverytextField.setText(String.valueOf(idOrder));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -60,42 +61,66 @@ public class RegisterDelivery extends JFrame {
 
     private void registerandpaybtnMouseClicked() {
         this.dispose();
-        try{
+        try {
+            if (status.equals("")) status = "Подтверждено";
             PreparedStatement pr = cn.prepareStatement("select \"idProvider\" from \"Provider\" where name like ?");//table delivery
-            pr.setString(1,producentBox.getSelectedItem().toString());
+            pr.setString(1, producentBox.getSelectedItem().toString());
             ResultSet rs = pr.executeQuery();
             rs.next();
             int idVendor = rs.getInt(1);
             pr.clearBatch();
-            pr = cn.prepareStatement("insert into \"Delivery\"(iddelivry, date, vendor) values (default , ?, ?)");
-            pr.setTimestamp(1,new Timestamp(System.currentTimeMillis()));
-            pr.setInt(2,idVendor);
+            pr = cn.prepareStatement("insert into \"Delivery\"(iddelivry, date, vendor,comment,status) values (default , ?, ?,?,?)");
+            pr.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            pr.setInt(2, idVendor);
+            pr.setString(3, komentTextArea.getText());
+            pr.setString(4, status);
             pr.executeUpdate();
             pr.clearBatch();
 
-            for (int i = 0; i < table.getRowCount()-1; i++) {//table deliveryBascket
+            pr = cn.prepareStatement("select max(iddelivry) from \"Delivery\"");
+            rs = pr.executeQuery();
+            rs.next();
+            idDelivery = rs.getInt(1);
+            for (int i = 0; i < table.getRowCount() - 1; i++) {//table deliveryBascket
                 pr = cn.prepareStatement("insert into \"Delivery_basket\" (id_del_basket, price, measuring_rate, \"Delivery\", \"Product\", amount) values (default,?,?,?,?,?)");
-                pr.setDouble(1,Double.parseDouble(table.getModel().getValueAt(i,7).toString()));
-                pr.setString(2,table.getModel().getValueAt(i,3).toString());
-                pr.setInt(3,Integer.parseInt(numdeliverytextField.getText()));
-                pr.setInt(4,Integer.parseInt(table.getModel().getValueAt(i,0).toString()));
-                pr.setDouble(5,Double.parseDouble(table.getModel().getValueAt(i,2).toString()));
+                pr.setDouble(1, Double.parseDouble(table.getModel().getValueAt(i, 7).toString()));
+                pr.setString(2, table.getModel().getValueAt(i, 3).toString());
+                pr.setInt(3, idDelivery);
+                pr.setInt(4, Integer.parseInt(table.getModel().getValueAt(i, 0).toString()));
+                pr.setDouble(5, Double.parseDouble(table.getModel().getValueAt(i, 2).toString()));
                 pr.executeUpdate();
                 pr.clearBatch();
             }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(this,e.getMessage(),"",JOptionPane.INFORMATION_MESSAGE);
+
+            pr = cn.prepareStatement("update \"Order\" set status = 'Получено' where \"idDelivery\" = ?");
+            pr.setInt(1,Integer.parseInt(numdeliverytextField.getText()));
+            pr.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Статус : " + status, "", JOptionPane.INFORMATION_MESSAGE);
+
+            pr = cn.prepareStatement("select sum from \"Order_payments\" where type = 'Во время доставки' and \"order\" = ?");
+            pr.setInt(1,Integer.parseInt(numdeliverytextField.getText()));
+            rs = pr.executeQuery();
+            rs.next();
+            int sum = rs.getInt(1);
+            double countedSumm = Double.parseDouble(nowPaymentLbl.getText());
+            if (sum > 0 || countedSumm > 0){
+                seconddialog.setVisible(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        JOptionPane.showMessageDialog(this,"Доставка подтверждена.","",JOptionPane.INFORMATION_MESSAGE);
-        seconddialog.setVisible(true);
+
+
     }
 
     private void secondokbtnActionPerformed() {
         seconddialog.dispose();
         CashInOut cio = new CashInOut("Выплата", cn);
-      //  cio.komenttextField.setEditable(false);
-        //cio.komenttextField.setText("Oплата доставки № "+ idDelivery);
+        cio.komenttextField.setEditable(false);
+        cio.komenttextField.setText("Oплата доставки № " + idDelivery);
         cio.setVisible(true);
     }
 
@@ -105,57 +130,82 @@ public class RegisterDelivery extends JFrame {
 
 
     private void okDialobtnActionPerformed() {
-        try{
-            int idOrder =parseInt(numberTF.getText());
-            PreparedStatement pr = cn.prepareStatement("select o.\"Product\",p.name, o.amount, o.measuring_rate, o.\"Price_per_unit\", o.currency, p.\"VAT\" from order_bucket o, \"Provider_Product\" p  where o.\"Delivery\"=? and p.\"idProviderProduct\"=o.\"Product\"");
-            pr.setInt(1,idOrder);
-            ResultSet rs = pr.executeQuery();
-            if (rs.next()){
-                typeDeliveryDialog.dispose();
-                numdeliverytextField.setText(numberTF.getText());
-                this.setTitle("Принятие доставки по номеру заказа");
-                this.setVisible(true);
-                int i=0;
-                while (rs.next()){
-                    ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
-                    table.getModel().setValueAt(rs.getInt(1),i,0);
-                    table.getModel().setValueAt(rs.getString(2),i,1);
-                    table.getModel().setValueAt(rs.getDouble(3),i,2);
-                    table.getModel().setValueAt(rs.getString(4),i,3);
-                    table.getModel().setValueAt(rs.getDouble(5),i,4);
-                    table.getModel().setValueAt(rs.getString(6),i,5);
-                    table.getModel().setValueAt(rs.getDouble(7),i,6);
-                    table.getModel().setValueAt(rs.getDouble(3)*rs.getDouble(5),i,7);
-                    i++;
+        try {
+            int idOrder = parseInt(numberTF.getText());
+            try {
+                PreparedStatement pr = cn.prepareStatement("select status from \"Order\" where \"idDelivery\" = ?");
+                pr.setInt(1,idOrder);
+                ResultSet rs = pr.executeQuery();
+                rs.next();
+                if (rs.getString(1).equals("Получено")) {
+                    JOptionPane.showMessageDialog(this, "Заказ уже получен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-            }else JOptionPane.showMessageDialog(this,"Заказ не найден","Ошибка",JOptionPane.ERROR_MESSAGE);
-        }catch (Exception ex){
-            JOptionPane.showMessageDialog(this,"Неверный формат","Ошибка",JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Заказ не найден", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            PreparedStatement pr = cn.prepareStatement("select o.\"Product\",p.name, o.amount, o.measuring_rate, o.\"Price_per_unit\", o.currency, p.\"VAT\" from order_bucket o, \"Provider_Product\" p  where o.\"Delivery\"=? and p.\"idProviderProduct\"=o.\"Product\"");
+            pr.setInt(1, idOrder);
+            ResultSet rs = pr.executeQuery();
+            typeDeliveryDialog.dispose();
+            numdeliverytextField.setText(numberTF.getText());
+            this.setTitle("Принятие доставки по номеру заказа");
+            this.setVisible(true);
+            int i = 0;
+            while (rs.next()) {
+                ((DefaultTableModel) table.getModel()).addRow(new Object[]{});
+                table.getModel().setValueAt(rs.getInt(1), i, 0);
+                table.getModel().setValueAt(rs.getString(2), i, 1);
+                table.getModel().setValueAt(rs.getDouble(3), i, 2);
+                table.getModel().setValueAt(rs.getString(4), i, 3);
+                table.getModel().setValueAt(rs.getDouble(5), i, 4);
+                table.getModel().setValueAt(rs.getString(6), i, 5);
+                table.getModel().setValueAt(rs.getDouble(7), i, 6);
+                table.getModel().setValueAt(rs.getDouble(3) * rs.getDouble(5), i, 7);
+                i++;
+            }
+
+            pr = cn.prepareStatement("select sum from \"Order_payments\" where \"order\" = ?");
+            pr.setInt(1,idOrder);
+            rs = pr.executeQuery();
+            rs.next();
+            avansPaymentLbl.setText(String.valueOf(rs.getDouble(1)));
+            rs.next();
+            onDeliveryPaymenttsLbl.setText(String.valueOf(rs.getDouble(1)));
+            rs.next();
+            creditPaymentLbl.setText(String.valueOf(rs.getDouble(1)));
+            calculateSumm();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Неверный формат", "Ошибка", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void addrowBtnActionPerformed() {
-        ((DefaultTableModel)table2.getModel()).setRowCount(0);
+        ((DefaultTableModel) table2.getModel()).setRowCount(0);
         try {
             PreparedStatement pr;
             if (!numdeliverytextField.getText().isEmpty()) {
-                 pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.currency, pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
+                pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.currency, pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and pcp.\"idProvider\" =? and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
                 pr.setInt(1, idProvider);
-            }else {
-                 pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.currency, pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
+            } else {
+                pr = cn.prepareStatement("select pp.\"idProviderProduct\", pp.name,p.price, p.currency, pp.\"VAT\" from \"Provider_Product\" pp, \"Provider_Connect_Product\" pcp, \"Provider_Price\" p where pp.\"idProviderProduct\" = pcp.\"idProviderProduct\" and p.\"idProviderProduct\" = pp.\"idProviderProduct\"\n");
             }
             ResultSet rs;
             rs = pr.executeQuery();
-            int i=0;
-            while (rs.next()){
-                ((DefaultTableModel)table2.getModel()).addRow(new Object[]{});
-                table2.getModel().setValueAt(rs.getDouble(3),i,2);
-                table2.getModel().setValueAt(rs.getString(4),i,3);
-                table2.getModel().setValueAt(rs.getDouble(5),i,4);
-                table2.getModel().setValueAt(rs.getInt(1),i,0);
-                table2.getModel().setValueAt(rs.getString(2),i,1);
+            int i = 0;
+            while (rs.next()) {
+                ((DefaultTableModel) table2.getModel()).addRow(new Object[]{});
+                table2.getModel().setValueAt(rs.getDouble(3), i, 2);
+                table2.getModel().setValueAt(rs.getString(4), i, 3);
+                table2.getModel().setValueAt(rs.getDouble(5), i, 4);
+                table2.getModel().setValueAt(rs.getInt(1), i, 0);
+                table2.getModel().setValueAt(rs.getString(2), i, 1);
                 i++;
-            }addProdDialog.setVisible(true);
+            }
+            addProdDialog.setVisible(true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -163,82 +213,89 @@ public class RegisterDelivery extends JFrame {
     }
 
     private void deleteBtnActionPerformed() {
-        if (table.getSelectedRow()!=-1){
-            ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());
-            if (table.getRowCount()==0)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
+        if (table.getSelectedRow() != -1) {
+            ((DefaultTableModel) table.getModel()).removeRow(table.getSelectedRow());
+            if (table.getRowCount() == 0) ((DefaultTableModel) table.getModel()).addRow(new Object[]{});
             createListOfMeasuringRattes();
         }
     }
 
     private void upBtnActionPerformed() {
-        if (table.getSelectedRow()>0)table.setRowSelectionInterval(table.getSelectedRow()-1,table.getSelectedRow()-1);
+        if (table.getSelectedRow() > 0)
+            table.setRowSelectionInterval(table.getSelectedRow() - 1, table.getSelectedRow() - 1);
     }
 
     private void downbtnActionPerformed() {
-        if (table.getSelectedRow()<table.getRowCount()-1 )table.setRowSelectionInterval(table.getSelectedRow()+1,table.getSelectedRow()+1);
+        if (table.getSelectedRow() < table.getRowCount() - 1)
+            table.setRowSelectionInterval(table.getSelectedRow() + 1, table.getSelectedRow() + 1);
     }
 
     private void addComentBtnActionPerformed() {
         komentdialog.setVisible(true);
     }
 
-    private void createListOfMeasuringRattes(){
+    private void createListOfMeasuringRattes() {
         listOfMeasurings = new ArrayList<>();
-        for (int i=0; i<table.getRowCount()-1;i++) {
+        for (int i = 0; i < table.getRowCount() - 1; i++) {
             listOfMeasurings.add(table.getValueAt(i, 3).toString());
         }
     }
 
     private void tablePropertyChange() {
-        if (table.getSelectedColumn()==3 && addrowBtn.isEnabled()){//measuring rates and coeff.
-            for (int i=0; i<table.getRowCount()-1;i++){
+        if (table.getSelectedColumn() == 3 && addrowBtn.isEnabled()) {//measuring rates and coeff.
+            for (int i = 0; i < table.getRowCount() - 1; i++) {
                 String oldMeas = listOfMeasurings.get(i);
-                String newMeas = table.getValueAt(i,3).toString();
-                if (!oldMeas.equals(newMeas)){
-                    listOfMeasurings.set(i,newMeas);
+                String newMeas = table.getValueAt(i, 3).toString();
+                if (!oldMeas.equals(newMeas)) {
+                    listOfMeasurings.set(i, newMeas);
                     try {
                         PreparedStatement pr;
                         ResultSet rs;
                         pr = cn.prepareStatement("select c.coefficient, p.price from \"Measuring_rate_connect_provider_product\" c, \"Provider_Price\" p where provider_product = ? and p.\"idProviderProduct\"=c.provider_product and measuring_rate = (select \"Id_Provider_product_measuring_rate\" from \"Provider_product_measuring_rate\" where name like ?)");
-                        pr.setInt(1,Integer.parseInt(table.getValueAt(i,0).toString()));
-                        pr.setString(2,newMeas);
+                        pr.setInt(1, Integer.parseInt(table.getValueAt(i, 0).toString()));
+                        pr.setString(2, newMeas);
                         rs = pr.executeQuery();
                         rs.next();
                         double oldprice = rs.getDouble(2);
-                        double newprice = rs.getDouble(1)*oldprice;
-                        table.getModel().setValueAt(newprice,i,4);
-                    }catch (Exception e){
-                        JOptionPane.showMessageDialog(this,"Measuring rate error","Error",JOptionPane.ERROR_MESSAGE);
-                        table.getModel().setValueAt(oldMeas,i,3);
+                        double newprice = rs.getDouble(1) * oldprice;
+                        table.getModel().setValueAt(newprice, i, 4);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Measuring rate error", "Error", JOptionPane.ERROR_MESSAGE);
+                        table.getModel().setValueAt(oldMeas, i, 3);
                     }
                 }
             }
         }
-        if ( table.getValueAt(table.getRowCount()-1, 1)!=null)((DefaultTableModel)table.getModel()).addRow(new Object[]{});
-        double summ=0;//calk summ
-        double summNDS=0;
-        for (int i =0; i< table.getRowCount()-1;i++){
-            if (table.getModel().getValueAt(i,5)== null) table.getModel().setValueAt("грн",i,5);
-            if (table.getValueAt(i,3)== null)addrowBtn.setEnabled(false);
+        if (table.getValueAt(table.getRowCount() - 1, 1) != null)((DefaultTableModel) table.getModel()).addRow(new Object[]{});
+        //calk summ
+        calculateSumm();
+
+    }
+    private void calculateSumm(){
+        double summ = 0;//calk summ
+        double summNDS = 0;
+        for (int i = 0; i < table.getRowCount() - 1; i++) {
+            if (table.getModel().getValueAt(i, 5) == null) table.getModel().setValueAt("грн", i, 5);
+            if (table.getValueAt(i, 3) == null) addrowBtn.setEnabled(false);
             else addrowBtn.setEnabled(true);
-            if (table.getModel().getValueAt(i, 4)!=null && table.getModel().getValueAt(i, 2)!=null && table.getModel().getValueAt(i, 6)!=null) {
+            if (table.getModel().getValueAt(i, 4) != null && table.getModel().getValueAt(i, 2) != null && table.getModel().getValueAt(i, 6) != null) {
                 double count = (double) table.getModel().getValueAt(i, 2);
                 double nds = (double) table.getModel().getValueAt(i, 6);
                 double price = (double) table.getModel().getValueAt(i, 4);
                 summ += new BigDecimal(count * price).setScale(2, RoundingMode.UP).doubleValue();
-                summNDS+=new BigDecimal(price*nds*count/100).setScale(2, RoundingMode.UP).doubleValue();
-                table.getModel().setValueAt(new BigDecimal(count * price).setScale(2, RoundingMode.UP).doubleValue() ,i,7);
+                summNDS += new BigDecimal(price * nds * count / 100).setScale(2, RoundingMode.UP).doubleValue();
+                table.getModel().setValueAt(new BigDecimal(count * price).setScale(2, RoundingMode.UP).doubleValue(), i, 7);
             }
         }
         summlbl.setText(summ + "");
-        ndslbl.setText(summNDS +"");
+        ndslbl.setText(summNDS + "");
+        if (summ!=0)nowPaymentLbl.setText(String.valueOf(summ - Double.parseDouble(avansPaymentLbl.getText()) - Double.parseDouble(creditPaymentLbl.getText())));
 
-}
-
-    private void createMeasuringComboBox(){
+    }
+    private void createMeasuringComboBox() {
         measuringBox = new JComboBox();
         TableColumn measuringColumn = table.getColumnModel().getColumn(3);
-        try{
+        try {
             PreparedStatement pr;
             ResultSet rs;
             pr = cn.prepareStatement("select name from \"Provider_product_measuring_rate\"");
@@ -246,7 +303,7 @@ public class RegisterDelivery extends JFrame {
             while (rs.next()) measuringBox.addItem(rs.getString(1));
             AutoCompleteDecorator.decorate(measuringBox);
             measuringColumn.setCellEditor(new DefaultCellEditor(measuringBox));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -257,7 +314,7 @@ public class RegisterDelivery extends JFrame {
 
     private void button1ActionPerformed() {
         addProdDialog.dispose();
-        ((DefaultTableModel)table2.getModel()).setRowCount(0);
+        ((DefaultTableModel) table2.getModel()).setRowCount(0);
     }
 
     private void findProdTFKeyPressed(KeyEvent e) {
@@ -269,7 +326,7 @@ public class RegisterDelivery extends JFrame {
         if (!name.equals("")) {
             ListSelectionModel model;
             findProdTF.setText("");
-            model= table2.getSelectionModel();
+            model = table2.getSelectionModel();
             model.clearSelection();
             for (int i = 0; i < table2.getRowCount(); i++) {
                 String prod = table2.getModel().getValueAt(i, 1).toString();
@@ -279,15 +336,15 @@ public class RegisterDelivery extends JFrame {
     }
 
     private void addProdActionPerformed() {
-        for (int i=0; i<table2.getSelectedRows().length;i++){
+        for (int i = 0; i < table2.getSelectedRows().length; i++) {
             int id;
-            id = Integer.parseInt(table2.getValueAt(table2.getSelectedRows()[i],0).toString());
-            String name = table2.getValueAt(table2.getSelectedRows()[i],1).toString();
-            double price = Double.parseDouble(table2.getValueAt(table2.getSelectedRows()[i],2).toString());
-            String currency = table2.getValueAt(table2.getSelectedRows()[i],3).toString();
-            double vat = Double.parseDouble(table2.getValueAt(table2.getSelectedRows()[i],4).toString());
+            id = Integer.parseInt(table2.getValueAt(table2.getSelectedRows()[i], 0).toString());
+            String name = table2.getValueAt(table2.getSelectedRows()[i], 1).toString();
+            double price = Double.parseDouble(table2.getValueAt(table2.getSelectedRows()[i], 2).toString());
+            String currency = table2.getValueAt(table2.getSelectedRows()[i], 3).toString();
+            double vat = Double.parseDouble(table2.getValueAt(table2.getSelectedRows()[i], 4).toString());
 
-           JComboBox box = new JComboBox();
+            JComboBox box = new JComboBox();
 
             box.addMouseListener(new MouseAdapter() {
                 @Override
@@ -301,9 +358,9 @@ public class RegisterDelivery extends JFrame {
                                 "where pp.\"Id_Provider_product_measuring_rate\" = mr.\"id_measuring_rate_connect_provider_product\"\n" +
                                 "      and \"provider_product\" = ?");
                         pr.setInt(1, table.getEditingRow());
-                        rs  = pr.executeQuery();
+                        rs = pr.executeQuery();
                         while (rs.next()) box.addItem(rs.getString(1));
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                 }
@@ -311,24 +368,26 @@ public class RegisterDelivery extends JFrame {
             String mesuringRate;
             try {
                 PreparedStatement pr = cn.prepareStatement("select p.name from \"Provider_product_measuring_rate\" p, \"Provider_Product\" where \"Id_Provider_product_measuring_rate\" = \"BaseMeasuringRate\" and \"idProviderProduct\" = ?");
-                pr.setInt(1,id);
+                pr.setInt(1, id);
                 ResultSet rs = pr.executeQuery();
                 rs.next();
                 mesuringRate = rs.getString(1);
-                table.getModel().setValueAt(id,table.getRowCount()-1,0);
-                table.getModel().setValueAt(name,table.getRowCount()-1,1);
+                table.getModel().setValueAt(id, table.getRowCount() - 1, 0);
+                table.getModel().setValueAt(name, table.getRowCount() - 1, 1);
 
-                table.getModel().setValueAt(mesuringRate,table.getRowCount()-1,3);
-                table.getModel().setValueAt(price,table.getRowCount()-1,4);
-                table.getModel().setValueAt(currency,table.getRowCount()-1,5);
-                table.getModel().setValueAt(vat,table.getRowCount()-1,6);
+                table.getModel().setValueAt(mesuringRate, table.getRowCount() - 1, 3);
+                table.getModel().setValueAt(price, table.getRowCount() - 1, 4);
+                table.getModel().setValueAt(currency, table.getRowCount() - 1, 5);
+                table.getModel().setValueAt(vat, table.getRowCount() - 1, 6);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            ((DefaultTableModel)table.getModel()).addRow(new Object[]{});
+            ((DefaultTableModel) table.getModel()).addRow(new Object[]{});
 
-        }createListOfMeasuringRattes();
+        }
+        createListOfMeasuringRattes();
     }
+
     private void exitbtn2ActionPerformed() {
         komentdialog.dispose();
         komentTextArea.setText("");
@@ -359,21 +418,26 @@ public class RegisterDelivery extends JFrame {
             rs.next();
             idProvider = rs.getInt(1);
             pr = cn.prepareStatement("select currency from \"Provider_Price\" where \"idProviderProduct\" in (select \"idProviderProduct\" from \"Provider_Connect_Product\" where \"idProvider\" = ?)");
-            pr.setInt(1,idProvider);
+            pr.setInt(1, idProvider);
             rs = pr.executeQuery();
             rs.next();
             currency = rs.getString(1);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,e.getLocalizedMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void asidebtnActionPerformed() {
+        status = "Отложено";
+        registerandpaybtnMouseClicked();
     }
 
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - hhh
+        // Generated using JFormDesigner Evaluation license - ff
         seconddialog = new JDialog();
-        label3 = new JLabel();
+        payLable = new JLabel();
         panel5 = new JPanel();
         secondokbtn = new JButton();
         secondnobtn = new JButton();
@@ -390,7 +454,7 @@ public class RegisterDelivery extends JFrame {
         nobtn = new JButton();
         var numlabel = new JLabel();
         numdeliverytextField = new JTextField();
-        button1 = new JButton();
+        asidebtn = new JButton();
         producentlbl = new JLabel();
         producentBox = new JComboBox();
         var secondpanel = new JPanel();
@@ -407,10 +471,18 @@ public class RegisterDelivery extends JFrame {
         var lastpanel = new JPanel();
         var panel9 = new JPanel();
         var itogolbl = new JLabel();
+        label1 = new JLabel();
+        avansPaymentLbl = new JLabel();
         var suminfolbl = new JLabel();
         summlbl = new JLabel();
+        label4 = new JLabel();
+        onDeliveryPaymenttsLbl = new JLabel();
+        label5 = new JLabel();
+        nowPaymentLbl = new JLabel();
         var ndsinfolbl = new JLabel();
         ndslbl = new JLabel();
+        label2 = new JLabel();
+        creditPaymentLbl = new JLabel();
         var panel10 = new JPanel();
         registerandpaybtn = new JButton();
         var vSpacer2 = new JPanel(null);
@@ -443,10 +515,10 @@ public class RegisterDelivery extends JFrame {
             ((GridBagLayout)seconddialogContentPane.getLayout()).columnWeights = new double[] {0.0, 1.0, 1.0E-4};
             ((GridBagLayout)seconddialogContentPane.getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0, 1.0E-4};
 
-            //---- label3 ----
-            label3.setText("\u041e\u043f\u043b\u0430\u0442\u0438\u0442\u044c?");
-            label3.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-            seconddialogContentPane.add(label3, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+            //---- payLable ----
+            payLable.setText("\u041e\u043f\u043b\u0430\u0442\u0438\u0442\u044c? ");
+            payLable.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+            seconddialogContentPane.add(payLable, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -613,9 +685,10 @@ public class RegisterDelivery extends JFrame {
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));
 
-            //---- button1 ----
-            button1.setText("\u041e\u0442\u043b\u043e\u0436\u0438\u0442\u044c");
-            firstpanel.add(button1, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
+            //---- asidebtn ----
+            asidebtn.setText("\u041e\u0442\u043b\u043e\u0436\u0438\u0442\u044c");
+            asidebtn.addActionListener(e -> asidebtnActionPerformed());
+            firstpanel.add(asidebtn, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
 
@@ -779,9 +852,9 @@ public class RegisterDelivery extends JFrame {
             //======== panel9 ========
             {
                 panel9.setLayout(new GridBagLayout());
-                ((GridBagLayout)panel9.getLayout()).columnWidths = new int[] {0, 0, 69, 0};
+                ((GridBagLayout)panel9.getLayout()).columnWidths = new int[] {0, 0, 74, 169, 79, 58, 57, 0};
                 ((GridBagLayout)panel9.getLayout()).rowHeights = new int[] {42, 0, 0, 0};
-                ((GridBagLayout)panel9.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+                ((GridBagLayout)panel9.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
                 ((GridBagLayout)panel9.getLayout()).rowWeights = new double[] {1.0, 1.0, 1.0, 1.0E-4};
 
                 //---- itogolbl ----
@@ -789,6 +862,19 @@ public class RegisterDelivery extends JFrame {
                 itogolbl.setFont(new Font("Segoe UI", Font.BOLD, 20));
                 panel9.add(itogolbl, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- label1 ----
+                label1.setText("\u0417\u0430\u043f\u043b\u0430\u0447\u0435\u043d\u043e \u0430\u0432\u0430\u043d\u0441\u043e\u043c :");
+                label1.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                panel9.add(label1, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- avansPaymentLbl ----
+                avansPaymentLbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                panel9.add(avansPaymentLbl, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 5, 5), 0, 0));
 
                 //---- suminfolbl ----
@@ -802,6 +888,32 @@ public class RegisterDelivery extends JFrame {
                 summlbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
                 panel9.add(summlbl, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                     GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- label4 ----
+                label4.setText("\u0412\u043e \u0432\u0440\u0435\u043c\u044f \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 :");
+                label4.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                panel9.add(label4, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- onDeliveryPaymenttsLbl ----
+                onDeliveryPaymenttsLbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                panel9.add(onDeliveryPaymenttsLbl, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- label5 ----
+                label5.setText("\u041a \u043e\u043f\u043b\u0430\u0442\u0435 :");
+                label5.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                panel9.add(label5, new GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- nowPaymentLbl ----
+                nowPaymentLbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                panel9.add(nowPaymentLbl, new GridBagConstraints(6, 1, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 0), 0, 0));
 
                 //---- ndsinfolbl ----
@@ -815,7 +927,20 @@ public class RegisterDelivery extends JFrame {
                 ndslbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
                 panel9.add(ndslbl, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
-                    new Insets(0, 0, 0, 0), 0, 0));
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- label2 ----
+                label2.setText("\u0412 \u043a\u0440\u0435\u0434\u0438\u0442 :");
+                label2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                panel9.add(label2, new GridBagConstraints(3, 2, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+                //---- creditPaymentLbl ----
+                creditPaymentLbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                panel9.add(creditPaymentLbl, new GridBagConstraints(4, 2, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
             }
             lastpanel.add(panel9, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1054,9 +1179,9 @@ public class RegisterDelivery extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - hhh
+    // Generated using JFormDesigner Evaluation license - ff
     private JDialog seconddialog;
-    private JLabel label3;
+    private JLabel payLable;
     private JPanel panel5;
     private JButton secondokbtn;
     private JButton secondnobtn;
@@ -1071,7 +1196,7 @@ public class RegisterDelivery extends JFrame {
     private JPanel firstpanel;
     private JButton nobtn;
     private JTextField numdeliverytextField;
-    private JButton button1;
+    private JButton asidebtn;
     private JLabel producentlbl;
     private JComboBox producentBox;
     private JButton addrowBtn;
@@ -1083,8 +1208,16 @@ public class RegisterDelivery extends JFrame {
     private JScrollPane scrollPane2;
     private JTable table;
     private JPanel panel8;
+    private JLabel label1;
+    private JLabel avansPaymentLbl;
     private JLabel summlbl;
+    private JLabel label4;
+    private JLabel onDeliveryPaymenttsLbl;
+    private JLabel label5;
+    private JLabel nowPaymentLbl;
     private JLabel ndslbl;
+    private JLabel label2;
+    private JLabel creditPaymentLbl;
     private JButton registerandpaybtn;
     private JDialog addProdDialog;
     private JPanel panel2;

@@ -256,13 +256,13 @@ class CreateDelivery extends JFrame {
             //orderPayments
             if (!avansTF.getText().equals("")){
                 makeOrderPayments("Аванс",Double.parseDouble(avansTF.getText()));
-            }
+            }else makeOrderPayments("Аванс",0);
             if (!onDeliveryTF.getText().equals("")){
                 makeOrderPayments("Во время доставки",Double.parseDouble(onDeliveryTF.getText()));
-            }
+            }else makeOrderPayments("Во время доставки",0);
             if (!creditTF.getText().equals("")){
                 makeOrderPayments("Кредит",Double.parseDouble(creditTF.getText()));
-            }
+            }else makeOrderPayments("Кредит",0);
             this.dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,e,"Error",JOptionPane.ERROR_MESSAGE);
@@ -391,22 +391,22 @@ class CreateDelivery extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - Yaroslav
-        JPanel vSpacer1 = new JPanel(null);
+        // Generated using JFormDesigner Evaluation license - ff
+        var vSpacer1 = new JPanel(null);
         firstpanel = new JPanel();
         exitBtn = new JButton();
-        JLabel numlabel = new JLabel();
+        var numlabel = new JLabel();
         numbertextField = new JTextField();
         datelbl = new JLabel();
         noBtn = new JButton();
         printBtn = new JButton();
-        JLabel deliverylbl = new JLabel();
+        var deliverylbl = new JLabel();
         deliveryBox = new JComboBox();
-        JLabel numdelLbl = new JLabel();
+        var numdelLbl = new JLabel();
         deliveryPlacetextField = new JTextField();
-        JLabel contactlbl = new JLabel();
+        var contactlbl = new JLabel();
         contacttextField = new JTextField();
-        JPanel secondpanel = new JPanel();
+        var secondpanel = new JPanel();
         addrowBtn = new JButton();
         deleteBtn = new JButton();
         upBtn = new JButton();
@@ -414,28 +414,28 @@ class CreateDelivery extends JFrame {
         addComentBtn = new JButton();
         payBtn = new JButton();
         anotherBtn = new JButton();
-        JPanel tablepanel = new JPanel();
+        var tablepanel = new JPanel();
         scrollPane1 = new JScrollPane();
         table = new JTable();
         panel4 = new JPanel();
         checkBox = new JCheckBox();
-        JPanel lastpanel = new JPanel();
-        JPanel panel5 = new JPanel();
-        JLabel itogolbl = new JLabel();
-        JLabel etapslbl = new JLabel();
-        JLabel suminfolbl = new JLabel();
+        var lastpanel = new JPanel();
+        var panel5 = new JPanel();
+        var itogolbl = new JLabel();
+        var etapslbl = new JLabel();
+        var suminfolbl = new JLabel();
         summlbl = new JLabel();
-        JLabel avansinfolbl = new JLabel();
+        var avansinfolbl = new JLabel();
         avanslbl = new JLabel();
-        JLabel ndsinfolbl = new JLabel();
+        var ndsinfolbl = new JLabel();
         ndslbl = new JLabel();
-        JLabel nextinfolbl = new JLabel();
+        var nextinfolbl = new JLabel();
         ondeliverlbl = new JLabel();
-        JLabel creditinfo = new JLabel();
+        var creditinfo = new JLabel();
         creditlbl = new JLabel();
-        JPanel panel7 = new JPanel();
+        var panel7 = new JPanel();
         okbtn = new JButton();
-        JPanel vSpacer2 = new JPanel(null);
+        var vSpacer2 = new JPanel(null);
         addProdDialog = new JDialog();
         panel2 = new JPanel();
         exitbtn = new JButton();
@@ -468,7 +468,7 @@ class CreateDelivery extends JFrame {
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        Container contentPane = getContentPane();
+        var contentPane = getContentPane();
         contentPane.setLayout(new GridBagLayout());
         ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {0, 0};
         ((GridBagLayout)contentPane.getLayout()).rowHeights = new int[] {29, 0, 0, 113, 0, 0, 0, 0};
@@ -843,7 +843,7 @@ class CreateDelivery extends JFrame {
                     addProdDialogKeyPressed(e);
                 }
             });
-            Container addProdDialogContentPane = addProdDialog.getContentPane();
+            var addProdDialogContentPane = addProdDialog.getContentPane();
             addProdDialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)addProdDialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
             ((GridBagLayout)addProdDialogContentPane.getLayout()).rowHeights = new int[] {0, 218, 0, 0};
@@ -956,7 +956,7 @@ class CreateDelivery extends JFrame {
         //======== komentdialog ========
         {
             komentdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-            Container komentdialogContentPane = komentdialog.getContentPane();
+            var komentdialogContentPane = komentdialog.getContentPane();
             komentdialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)komentdialogContentPane.getLayout()).columnWidths = new int[] {0, 0, 0};
             ((GridBagLayout)komentdialogContentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
@@ -1038,7 +1038,7 @@ class CreateDelivery extends JFrame {
             paydialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             paydialog.setTitle("\u041e\u043f\u043b\u0430\u0442\u0430");
             paydialog.setResizable(false);
-            Container paydialogContentPane = paydialog.getContentPane();
+            var paydialogContentPane = paydialog.getContentPane();
             paydialogContentPane.setLayout(new GridBagLayout());
             ((GridBagLayout)paydialogContentPane.getLayout()).columnWidths = new int[] {0, 0};
             ((GridBagLayout)paydialogContentPane.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
@@ -1157,7 +1157,7 @@ class CreateDelivery extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - Yaroslav
+    // Generated using JFormDesigner Evaluation license - ff
     private JPanel firstpanel;
     private JButton exitBtn;
     private JTextField numbertextField;
