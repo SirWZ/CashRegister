@@ -85,14 +85,15 @@ public class AddEmployee {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
-            PreparedStatement preparedStatement1 = cn.prepareStatement("insert into \"Worker\" (idwor, \"Name\", surname, hiredate, \"date_of_birthday\") values (?,?,?,?,?) ");
-            preparedStatement1.setInt(1, Integer.parseInt(textField_id.getText()));
-            preparedStatement1.setString(2, textField_name.getText());
-            preparedStatement1.setString(3, textField_surname.getText());
+            PreparedStatement preparedStatement1 = cn.prepareStatement("insert into \"Worker\" values ( nextval('id_gen_worker'::regclass),?,current_timestamp,?,?)");
+            //values ( nextval('id_gen_worker'::regclass), 'Loch',current_timestamp, 'pidor','2016-07-07');
+            //preparedStatement1.setInt(1, Integer.parseInt(textField_id.getText()));
+            preparedStatement1.setString(1, textField_name.getText());
+            preparedStatement1.setString(2, textField_surname.getText());
             //preparedStatement1.setDate(4, Date.valueOf(LocalDate.now()));
             //preparedStatement1.setDate(5, Date.valueOf(LocalDate.now()));
-            preparedStatement1.setTimestamp(4,Timestamp.valueOf(df.format(System.currentTimeMillis())));
-            preparedStatement1.setTimestamp(5,Timestamp.valueOf(df.format(dateOfCreatePicker.getModel().getValue())));
+           // preparedStatement1.setTimestamp(4,Timestamp.valueOf(df.format(System.currentTimeMillis())));
+            preparedStatement1.setTimestamp(3,Timestamp.valueOf(df.format(dateOfCreatePicker.getModel().getValue())));
            ////preparedStatement1.setDate(5, Date.valueOf(xDatePicker1.getDate().toString()));
 
             PreparedStatement pr = cn.prepareStatement("select max(\"idpass\") from \"worker_password\"");

@@ -4,17 +4,115 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.GridBagLayout ) {
-			"$columnSpecs": "0, 0"
-			"$rowSpecs": "0, 0, 0"
+			"$columnSpecs": "25, 0, 25"
+			"$rowSpecs": "25, 0, 25"
 			"$hGap": 5
 			"$vGap": 5
 			"$alignLeft": true
 			"$alignTop": true
 		} ) {
 			name: "this"
+			"title": "Должности"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "90, 372, 25"
+				"$rowSpecs": "39, 0, 102, 0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button1"
+					"text": "Назад"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "90, 134, 197"
+					"$rowSpecs": "40"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "panel2"
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button2"
+						"text": "Добавить должность"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "comboBox1"
+						"toolTipText": "Сортировка"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "По должности (возр.)"
+							addElement( "По должности (возр.)" )
+							addElement( "По должности (убыв.)" )
+							addElement( "По сотруднику (ворз.)" )
+							addElement( "По сотруднику (убыв.)" )
+						}
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 1
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane1"
+					add( new FormComponent( "javax.swing.JTable" ) {
+						name: "table1"
+						"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+							} )
+						}, new java.util.Vector {
+							add( "Должности" )
+							add( "Сотрудники" )
+						}, new java.util.Vector {
+							add( null )
+							add( null )
+						}, new java.util.Vector {
+							add( null )
+							add( null )
+						}, new java.util.Vector {
+							add( null )
+							add( null )
+						} )
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 2
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "24, 25, 26, 29, 212, 151"
+					"$rowSpecs": "40"
+					"$hGap": 5
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "panel3"
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button3"
+						"text": "Изменить"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 5
+					} )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 3
+				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 1
+				"gridy": 1
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 400, 300 )
+			"size": new java.awt.Dimension( 670, 320 )
 		} )
 	}
 }
