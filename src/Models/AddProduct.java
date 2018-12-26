@@ -5,21 +5,58 @@
 package Models;
 
 import net.miginfocom.swing.MigLayout;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  * @author Yurii
  */
 public class AddProduct extends JFrame {
     Connection cn;
+    ArrayList<String[]> listOfMeasurings = new ArrayList();
+    ArrayList<Integer> listOfProviders = new ArrayList();
+    int idProdvider_Prod,idProduct;
 
     public AddProduct(Connection cn) {
         initComponents();//kkk
         this.cn = cn;
-
+        try {
+            //providers
+            PreparedStatement pr = cn.prepareStatement("select name from \"Provider\"");
+            ResultSet rs = pr.executeQuery();
+            nameProvidercomboBox.addItem(" ");
+            producentcomboBox.addItem(" ");
+            while (rs.next()){
+                nameProvidercomboBox.addItem(rs.getString(1));
+                producentcomboBox.addItem(rs.getString(1));
+            }
+            AutoCompleteDecorator.decorate(nameProvidercomboBox);
+            AutoCompleteDecorator.decorate(producentcomboBox);
+            //manufacturer
+            pr = cn.prepareStatement("select \"Name\" from \"Manufacturer\"");
+            rs = pr.executeQuery();
+            manufacturercomboBox.addItem(" ");
+            while (rs.next())manufacturercomboBox.addItem(rs.getString(1));
+            AutoCompleteDecorator.decorate(manufacturercomboBox);
+            //base measuring
+            pr=cn.prepareStatement("select \"name\" from \"Measuring_Rate\"");
+            rs = pr.executeQuery();
+            measuringcomboBox.addItem(" ");
+            while (rs.next())measuringcomboBox.addItem(rs.getString(1));
+            AutoCompleteDecorator.decorate(measuringcomboBox);
+            //category
+            pr=cn.prepareStatement("select \"name\" from \"Product_Category\"");
+            rs = pr.executeQuery();
+            categorycomboBox.addItem(" ");
+            while (rs.next())categorycomboBox.addItem(rs.getString(1));
+            AutoCompleteDecorator.decorate(categorycomboBox);
+        }catch(Exception e){e.printStackTrace();}
 
     }
 
@@ -29,7 +66,15 @@ public class AddProduct extends JFrame {
     }
 
     private void addMeasuringBtnActionPerformed() {
-       addmeasuringdialog.setVisible(true);
+        try {
+            nameMeasuringcomboBox.removeAllItems();
+            PreparedStatement pr = cn.prepareStatement("select \"name\" from \"Provider_product_measuring_rate\"");
+            ResultSet rs = pr.executeQuery();
+            nameMeasuringcomboBox.addItem(" ");
+            while (rs.next()) nameMeasuringcomboBox.addItem(rs.getString(1));
+            AutoCompleteDecorator.decorate(nameMeasuringcomboBox);
+        }catch (Exception e){e.printStackTrace();}
+        addmeasuringdialog.setVisible(true);
     }
 
     private void exitMeasuringDialogBtnActionPerformed() {
@@ -37,15 +82,17 @@ public class AddProduct extends JFrame {
     }
 
     private void addNewMeasuringBtnActionPerformed() {
-        String name = nametextField.getText();
+        String name = nameMeasuringcomboBox.getSelectedItem().toString();
         try {
-            int count = Integer.parseInt(countMeasuring.getText());
-
+           Integer.parseInt(coefficient.getText());
         }catch (Exception e){
             JOptionPane.showMessageDialog(addmeasuringdialog,"Неверный формат","Ошибка",JOptionPane.ERROR_MESSAGE);
-            countMeasuring.setText("");
+            coefficient.setText("");
+            return;
         }
-
+        String str[] = {name,coefficient.getText()};
+        listOfMeasurings.add(str);
+        newValueDialog.setVisible(true);
     }
 
     private void exitProviderDialogActionPerformed() {
@@ -53,16 +100,158 @@ public class AddProduct extends JFrame {
     }
 
     private void addNewProviderBtnActionPerformed() {
-        // TODO add your code here
+        listOfProviders.add(Integer.parseInt(codeProvidertf.getText()));
+        newValueDialog.setVisible(true);
     }
 
     private void addProducentBtnActionPerformed() {
+
         addProviderDialog.setVisible(true);
+    }
+
+    private void noNewValBtnActionPerformed() {
+        if (addmeasuringdialog.isShowing())addmeasuringdialog.dispose();
+        else addProviderDialog.dispose();
+        newValueDialog.dispose();
+    }
+
+    private void yesNewValBtnActionPerformed() {
+        if (addmeasuringdialog.isEnabled()){
+            nameMeasuringcomboBox.getModel().setSelectedItem(" ");
+            coefficient.setText("");
+        }else nameProvidercomboBox.getModel().setSelectedItem(" ");
+        newValueDialog.dispose();
+    }
+
+    private void nameProvidercomboBoxItemStateChanged() {
+        // zamiana provider -> zmiana code provider
+        String name = nameProvidercomboBox.getSelectedItem().toString();
+        if (!name.equals(" ")) {
+            try {
+                PreparedStatement pr = cn.prepareStatement("select \"idProvider\" from \"Provider\" where name like ?");
+                pr.setString(1, name);
+                ResultSet rs = pr.executeQuery();
+                rs.next();
+                codeProvidertf.setText(String.valueOf(rs.getInt(1)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addProductActionPerformed() {
+        try{
+            int idBMR=0,idManufacturer = 0, idMainProvider =0;
+            PreparedStatement pr;
+            ResultSet rs;
+            try {
+                pr = cn.prepareStatement("select \"idMeasuringRate\" from \"Measuring_Rate\" where name like ?");
+                pr.setString(1, measuringcomboBox.getSelectedItem().toString());
+                rs = pr.executeQuery();
+                rs.next();
+                idBMR = rs.getInt(1);
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(this,"Неверное значение Базовой еденици измирения.","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            try {
+                pr = cn.prepareStatement("select \"idProvider\" from \"Provider\" where name like ?");
+                pr.setString(1, producentcomboBox.getSelectedItem().toString());
+                rs = pr.executeQuery();
+                rs.next();
+                idMainProvider = rs.getInt(1);
+                listOfProviders.add(idMainProvider);
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(this,"Неверное значение Поставщика.","Error",JOptionPane.ERROR_MESSAGE);
+            }
+            try {
+                pr = cn.prepareStatement("select \"IdManufacturer\" from \"Manufacturer\" where \"Name\" like ?");
+                pr.setString(1, manufacturercomboBox.getSelectedItem().toString());
+                rs = pr.executeQuery();
+                rs.next();
+                idManufacturer = rs.getInt(1);
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(this,"Неверное значение Производителя.","Error",JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+            try {Integer.parseInt(barCodetextField.getText());}catch (Exception ex){JOptionPane.showMessageDialog(this,"Неверное значение Шрих-Кода.","Error",JOptionPane.ERROR_MESSAGE); }
+            // dobavlenie v product
+            pr = cn.prepareStatement("insert into \"Product\"(\"idProduct\",name,description,\"idBaseMeasuringRate\",vat,manufacturer)values (default, ?,?,?,?,?);");
+            pr.setString(1,nametextField.getText());
+            pr.setString(2,descripttextArea.getText());
+            pr.setInt(3,idBMR);
+            pr.setInt(4,Integer.parseInt(vattextField.getText()));
+            pr.setInt(5,idManufacturer);
+            pr.executeUpdate();
+            // poluchenie id posle dobavlenie v Prod
+            pr = cn.prepareStatement("select \"idProduct\" from \"Product\" where name like ?");
+            pr.setString(1,nametextField.getText());
+            rs = pr.executeQuery();
+            rs.next();
+            idProduct = rs.getInt(1);
+            //dobavlenie v Provider_Product
+            pr = cn.prepareStatement("insert into \"Provider_Product\"(\"idProviderProduct\",name,description,\"BaseMeasuringRate\",\"VAT\",\"Manufacturer\")values (default, ?,?,?,?,?)");
+            pr.setString(1,nametextField.getText());
+            pr.setString(2,descripttextArea.getText());
+            pr.setInt(3,idBMR);
+            pr.setInt(4,Integer.parseInt(vattextField.getText()));
+            pr.setInt(5,idManufacturer);
+            pr.executeUpdate();
+            // poluchenie id posle dobavlenie v PP
+            pr = cn.prepareStatement("select \"idProviderProduct\" from \"Provider_Product\" where name like ?");
+            pr.setString(1,nametextField.getText());
+            rs = pr.executeQuery();
+            rs.next();
+            idProdvider_Prod = rs.getInt(1);
+            //dobavlenie vsech providerov k produktu
+            for(int i : listOfProviders){
+                pr = cn.prepareStatement("insert into \"Provider_Connect_Product\"(\"idProviderConnectProduct\",\"idProvider\",\"idProviderProduct\") values (default ,?,?)");
+                pr.setInt(1,i);
+                pr.setInt(2,idProdvider_Prod);
+                pr.executeUpdate();
+            }
+            //dobavlenie vsech edenic izm
+            for (String[] s : listOfMeasurings){
+                pr = cn.prepareStatement("select \"Id_Provider_product_measuring_rate\" from \"Provider_product_measuring_rate\" where name like ?");
+                System.out.println(s[0]);
+                pr.setString(1,s[0]);
+                rs = pr.executeQuery();
+                rs.next();
+                int id = rs.getInt(1);
+                pr = cn.prepareStatement("insert into \"Product_connect_measuring_rate\"(id_product_connect_measuring_rate, product, measuring_rate, сoefficient, \"Name\") values (default, ?,?,?,?)");
+                pr.setInt(1,idProduct);
+                pr.setInt(2,id);
+                pr.setInt(3,Integer.parseInt(s[1]));
+                pr.setString(4,s[0] + " " +s[1] + "шт.");
+                pr.executeUpdate();
+            }
+            //dobavlenie bazovoj e.i.
+            pr = cn.prepareStatement("select \"idMeasuringRate\" from \"Measuring_Rate\" where name like ?");
+            pr.setString(1,measuringcomboBox.getSelectedItem().toString());
+            rs = pr.executeQuery();
+            rs.next();
+            int id = rs.getInt(1);
+            pr = cn.prepareStatement("insert into \"Product_connect_measuring_rate\"(id_product_connect_measuring_rate, product, measuring_rate, сoefficient, \"Name\") values (default, ?,?,?,?)");
+            pr.setInt(1,idProduct);
+            pr.setInt(2,id);
+            pr.setInt(3,1);
+            pr.setString(4,"BASE");
+            pr.executeUpdate();
+            //dobavlenie darcode
+            try {
+                pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
+                pr.setInt(1, Integer.parseInt(barCodetextField.getText()));
+                pr.setInt(2, idProduct);
+                pr.setInt(3, idBMR);
+                pr.executeUpdate();
+            }catch (Exception ex){JOptionPane.showMessageDialog(this, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);}
+        }catch (Exception e){e.printStackTrace();}
+        JOptionPane.showMessageDialog(this,"good","Error",JOptionPane.ERROR_MESSAGE);
+        this.dispose();
     }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - hhh
+        // Generated using JFormDesigner Evaluation license - k
         panel1 = new JPanel();
         exitBtn = new JButton();
         var lblProdCode = new JLabel();
@@ -73,17 +262,17 @@ public class AddProduct extends JFrame {
         var lblCategory = new JLabel();
         categorycomboBox = new JComboBox();
         var lblmanufact = new JLabel();
-        manufacttextField = new JTextField();
+        manufacturercomboBox = new JComboBox();
         panel2 = new JPanel();
         fotopanel = new JPanel();
         fotolbl = new JLabel();
         addFotoBtn = new JButton();
         panel4 = new JPanel();
         var lblMeasuring = new JLabel();
-        measuringtextField = new JTextField();
+        measuringcomboBox = new JComboBox();
         addMeasuringBtn = new JButton();
         var lblProducent = new JLabel();
-        producenttextField = new JTextField();
+        producentcomboBox = new JComboBox();
         addProducentBtn = new JButton();
         var lblBarcode = new JLabel();
         barCodetextField = new JTextField();
@@ -100,10 +289,11 @@ public class AddProduct extends JFrame {
         label1measuringDialog = new JLabel();
         panel6 = new JPanel();
         label2MeasuringDialog = new JLabel();
-        nameMeasuring = new JTextField();
+        nameMeasuringcomboBox = new JComboBox();
         label3MeasuringDialog = new JLabel();
-        countMeasuring = new JTextField();
+        coefficient = new JTextField();
         panel7 = new JPanel();
+        button2 = new JButton();
         addNewMeasuringBtn = new JButton();
         addProviderDialog = new JDialog();
         panel8 = new JPanel();
@@ -111,11 +301,17 @@ public class AddProduct extends JFrame {
         lable1ProviderDialog = new JLabel();
         panel9 = new JPanel();
         label2ProviderDialog = new JLabel();
-        codeProviderDialog = new JTextField();
+        codeProvidertf = new JTextField();
         label3ProviderDialog = new JLabel();
-        nameProviderDialog = new JTextField();
+        nameProvidercomboBox = new JComboBox();
         panel10 = new JPanel();
+        button3 = new JButton();
         addNewProviderBtn = new JButton();
+        newValueDialog = new JDialog();
+        label1 = new JLabel();
+        panel11 = new JPanel();
+        yesNewValBtn = new JButton();
+        noNewValBtn = new JButton();
 
         //======== this ========
         setTitle("\u0414\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u0430");
@@ -156,6 +352,9 @@ public class AddProduct extends JFrame {
             panel1.add(lblProdCode, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 5, 5), 0, 0));
+
+            //---- prodCodetextField ----
+            prodCodetextField.setEnabled(false);
             panel1.add(prodCodetextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));
@@ -193,7 +392,7 @@ public class AddProduct extends JFrame {
             panel1.add(lblmanufact, new GridBagConstraints(5, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 5, 5), 0, 0));
-            panel1.add(manufacttextField, new GridBagConstraints(6, 2, 1, 1, 0.0, 0.0,
+            panel1.add(manufacturercomboBox, new GridBagConstraints(6, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
         }
@@ -249,7 +448,7 @@ public class AddProduct extends JFrame {
                 panel4.add(lblMeasuring, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 5), 0, 0));
-                panel4.add(measuringtextField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                panel4.add(measuringcomboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
 
@@ -267,7 +466,7 @@ public class AddProduct extends JFrame {
                 panel4.add(lblProducent, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 5), 0, 0));
-                panel4.add(producenttextField, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
+                panel4.add(producentcomboBox, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
 
@@ -333,6 +532,7 @@ public class AddProduct extends JFrame {
             //---- addProduct ----
             addProduct.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0442\u043e\u0432\u0430\u0440");
             addProduct.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            addProduct.addActionListener(e -> addProductActionPerformed());
             panel5.add(addProduct, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
@@ -347,6 +547,7 @@ public class AddProduct extends JFrame {
         {
             addmeasuringdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             addmeasuringdialog.setAlwaysOnTop(true);
+            addmeasuringdialog.setResizable(false);
             var addmeasuringdialogContentPane = addmeasuringdialog.getContentPane();
             addmeasuringdialogContentPane.setLayout(new MigLayout(
                 "hidemode 3",
@@ -405,19 +606,16 @@ public class AddProduct extends JFrame {
                 label2MeasuringDialog.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0435\u0434. \u0438\u0437.");
                 label2MeasuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
                 panel6.add(label2MeasuringDialog, "cell 0 0");
-
-                //---- nameMeasuring ----
-                nameMeasuring.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-                panel6.add(nameMeasuring, "cell 1 0");
+                panel6.add(nameMeasuringcomboBox, "cell 1 0");
 
                 //---- label3MeasuringDialog ----
                 label3MeasuringDialog.setText("\u041a\u043e\u043b\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0448\u0442.");
                 label3MeasuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
                 panel6.add(label3MeasuringDialog, "cell 0 1");
 
-                //---- countMeasuring ----
-                countMeasuring.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-                panel6.add(countMeasuring, "cell 1 1");
+                //---- coefficient ----
+                coefficient.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                panel6.add(coefficient, "cell 1 1");
             }
             addmeasuringdialogContentPane.add(panel6, "cell 0 1");
 
@@ -426,7 +624,8 @@ public class AddProduct extends JFrame {
                 panel7.setLayout(new MigLayout(
                     "hidemode 3",
                     // columns
-                    "[239,fill]rel" +
+                    "[116,fill]para" +
+                    "[45,fill]para" +
                     "[fill]",
                     // rows
                     "[]0" +
@@ -434,10 +633,14 @@ public class AddProduct extends JFrame {
                     "[]0" +
                     "[]"));
 
+                //---- button2 ----
+                button2.setText("\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u0443\u044e");
+                panel7.add(button2, "cell 0 1");
+
                 //---- addNewMeasuringBtn ----
                 addNewMeasuringBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
                 addNewMeasuringBtn.addActionListener(e -> addNewMeasuringBtnActionPerformed());
-                panel7.add(addNewMeasuringBtn, "cell 1 1");
+                panel7.add(addNewMeasuringBtn, "cell 2 1");
             }
             addmeasuringdialogContentPane.add(panel7, "cell 0 2");
             addmeasuringdialog.setSize(425, 255);
@@ -507,18 +710,19 @@ public class AddProduct extends JFrame {
                 label2ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
                 panel9.add(label2ProviderDialog, "cell 0 0");
 
-                //---- codeProviderDialog ----
-                codeProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-                panel9.add(codeProviderDialog, "cell 1 0");
+                //---- codeProvidertf ----
+                codeProvidertf.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                codeProvidertf.setEditable(false);
+                panel9.add(codeProvidertf, "cell 1 0");
 
                 //---- label3ProviderDialog ----
                 label3ProviderDialog.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435");
                 label3ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
                 panel9.add(label3ProviderDialog, "cell 0 1");
 
-                //---- nameProviderDialog ----
-                nameProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-                panel9.add(nameProviderDialog, "cell 1 1");
+                //---- nameProvidercomboBox ----
+                nameProvidercomboBox.addItemListener(e -> nameProvidercomboBoxItemStateChanged());
+                panel9.add(nameProvidercomboBox, "cell 1 1");
             }
             addProviderDialogContentPane.add(panel9, "cell 0 1");
 
@@ -527,7 +731,8 @@ public class AddProduct extends JFrame {
                 panel10.setLayout(new MigLayout(
                     "hidemode 3",
                     // columns
-                    "[239,fill]rel" +
+                    "[113,fill]para" +
+                    "[37,fill]para" +
                     "[fill]",
                     // rows
                     "[]0" +
@@ -535,35 +740,97 @@ public class AddProduct extends JFrame {
                     "[]0" +
                     "[]"));
 
+                //---- button3 ----
+                button3.setText("\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u043e\u0433\u043e");
+                panel10.add(button3, "cell 0 1");
+
                 //---- addNewProviderBtn ----
                 addNewProviderBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
                 addNewProviderBtn.addActionListener(e -> addNewProviderBtnActionPerformed());
-                panel10.add(addNewProviderBtn, "cell 1 1");
+                panel10.add(addNewProviderBtn, "cell 2 1");
             }
             addProviderDialogContentPane.add(panel10, "cell 0 2");
             addProviderDialog.setSize(425, 255);
             addProviderDialog.setLocationRelativeTo(null);
         }
+
+        //======== newValueDialog ========
+        {
+            newValueDialog.setAlwaysOnTop(true);
+            newValueDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            newValueDialog.setResizable(false);
+            var newValueDialogContentPane = newValueDialog.getContentPane();
+            newValueDialogContentPane.setLayout(new MigLayout(
+                "hidemode 3",
+                // columns
+                "[fill]" +
+                "[fill]",
+                // rows
+                "[]0" +
+                "[20]0" +
+                "[10]"));
+
+            //---- label1 ----
+            label1.setText("\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u043e, \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0435\u0449\u0435?");
+            label1.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            newValueDialogContentPane.add(label1, "cell 0 0");
+
+            //======== panel11 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel11.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel11.getBorder())); panel11.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel11.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[24,fill]" +
+                    "[101,fill]para" +
+                    "[111,fill]",
+                    // rows
+                    "[]0" +
+                    "[]0" +
+                    "[]0" +
+                    "[]"));
+
+                //---- yesNewValBtn ----
+                yesNewValBtn.setText("\u0414\u0430");
+                yesNewValBtn.addActionListener(e -> yesNewValBtnActionPerformed());
+                panel11.add(yesNewValBtn, "cell 1 1");
+
+                //---- noNewValBtn ----
+                noNewValBtn.setText("\u041d\u0435\u0442");
+                noNewValBtn.addActionListener(e -> noNewValBtnActionPerformed());
+                panel11.add(noNewValBtn, "cell 2 1");
+            }
+            newValueDialogContentPane.add(panel11, "cell 0 1");
+            newValueDialog.pack();
+            newValueDialog.setLocationRelativeTo(newValueDialog.getOwner());
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - hhh
+    // Generated using JFormDesigner Evaluation license - k
     private JPanel panel1;
     private JButton exitBtn;
     private JTextField prodCodetextField;
     private JTextField nametextField;
     private JButton printBtn;
     private JComboBox categorycomboBox;
-    private JTextField manufacttextField;
+    private JComboBox manufacturercomboBox;
     private JPanel panel2;
     private JPanel fotopanel;
     private JLabel fotolbl;
     private JButton addFotoBtn;
     private JPanel panel4;
-    private JTextField measuringtextField;
+    private JComboBox measuringcomboBox;
     private JButton addMeasuringBtn;
-    private JTextField producenttextField;
+    private JComboBox producentcomboBox;
     private JButton addProducentBtn;
     private JTextField barCodetextField;
     private JTextField vattextField;
@@ -577,10 +844,11 @@ public class AddProduct extends JFrame {
     private JLabel label1measuringDialog;
     private JPanel panel6;
     private JLabel label2MeasuringDialog;
-    private JTextField nameMeasuring;
+    private JComboBox nameMeasuringcomboBox;
     private JLabel label3MeasuringDialog;
-    private JTextField countMeasuring;
+    private JTextField coefficient;
     private JPanel panel7;
+    private JButton button2;
     private JButton addNewMeasuringBtn;
     private JDialog addProviderDialog;
     private JPanel panel8;
@@ -588,10 +856,16 @@ public class AddProduct extends JFrame {
     private JLabel lable1ProviderDialog;
     private JPanel panel9;
     private JLabel label2ProviderDialog;
-    private JTextField codeProviderDialog;
+    private JTextField codeProvidertf;
     private JLabel label3ProviderDialog;
-    private JTextField nameProviderDialog;
+    private JComboBox nameProvidercomboBox;
     private JPanel panel10;
+    private JButton button3;
     private JButton addNewProviderBtn;
+    private JDialog newValueDialog;
+    private JLabel label1;
+    private JPanel panel11;
+    private JButton yesNewValBtn;
+    private JButton noNewValBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
