@@ -97,12 +97,13 @@ public class AddProduct extends JFrame {
         String name = nameMeasuringcomboBox.getSelectedItem().toString();
         try {
            Integer.parseInt(coefficient.getText());
+           Integer.parseInt(barcodeMeasuringRateTF.getText());
         }catch (Exception e){
             JOptionPane.showMessageDialog(addmeasuringdialog,"Неверный формат","Ошибка",JOptionPane.ERROR_MESSAGE);
             coefficient.setText("");
             return;
         }
-        String str[] = {name,coefficient.getText()};
+        String str[] = {name,coefficient.getText(),barcodeMeasuringRateTF.getText()};
         listOfMeasurings.add(str);
         newValueDialog.setVisible(true);
     }
@@ -262,6 +263,13 @@ public class AddProduct extends JFrame {
                 pr.setInt(3,Integer.parseInt(s[1]));
                 pr.setString(4,s[0] + " " +s[1] + "шт.");
                 pr.executeUpdate();
+                if(Integer.parseInt(barcodeMeasuringRateTF.getText())>0) {
+                    pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
+                    pr.setInt(1, Integer.parseInt(barcodeMeasuringRateTF.getText()));
+                    pr.setInt(2, idProduct);
+                    pr.setInt(3, id);
+                    pr.executeUpdate();
+                }
             }
             // poluczenie id_Product_conect_measuring_ratte
             pr = cn.prepareStatement("select max(id_product_connect_measuring_rate) from \"Product_connect_measuring_rate\"");
@@ -290,6 +298,8 @@ public class AddProduct extends JFrame {
             pr.setInt(3, idProduct);
             pr.executeUpdate();
             //dobavlenie category
+            System.out.println(idCategory);
+            System.out.println(idProduct);
             pr = cn.prepareStatement("insert into \"Product_connect_category\"(id_product_category, product, category) values (default ,?,?)");
             pr.setInt(1,idProduct);
             pr.setInt(2,idCategory);
@@ -297,6 +307,7 @@ public class AddProduct extends JFrame {
         }catch (Exception e){
             JOptionPane.showMessageDialog(this,"Ошибка добавления товара!","",JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+
             return;}
         JOptionPane.showMessageDialog(this,"Товар успешно добавлен.","",JOptionPane.INFORMATION_MESSAGE);
         exitBtn.doClick();
@@ -392,6 +403,8 @@ public class AddProduct extends JFrame {
         nameMeasuringcomboBox = new JComboBox();
         label3MeasuringDialog = new JLabel();
         coefficient = new JTextField();
+        label6 = new JLabel();
+        barcodeMeasuringRateTF = new JTextField();
         panel7 = new JPanel();
         button2 = new JButton();
         addNewMeasuringBtn = new JButton();
@@ -796,6 +809,7 @@ public class AddProduct extends JFrame {
                     "[255,fill]",
                     // rows
                     "[]" +
+                    "[]" +
                     "[]"));
 
                 //---- label2MeasuringDialog ----
@@ -815,6 +829,15 @@ public class AddProduct extends JFrame {
                 //---- coefficient ----
                 coefficient.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel6.add(coefficient, "cell 1 1");
+
+                //---- label6 ----
+                label6.setText("\u0428\u0442\u0440\u0438\u0445-\u043a\u043e\u0434");
+                label6.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                panel6.add(label6, "cell 0 2");
+
+                //---- barcodeMeasuringRateTF ----
+                barcodeMeasuringRateTF.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                panel6.add(barcodeMeasuringRateTF, "cell 1 2");
             }
             addmeasuringdialogContentPane.add(panel6, "cell 0 1");
 
@@ -844,7 +867,7 @@ public class AddProduct extends JFrame {
                 panel7.add(addNewMeasuringBtn, "cell 2 1");
             }
             addmeasuringdialogContentPane.add(panel7, "cell 0 2");
-            addmeasuringdialog.setSize(425, 265);
+            addmeasuringdialog.setSize(425, 300);
             addmeasuringdialog.setLocationRelativeTo(null);
         }
 
@@ -1122,6 +1145,8 @@ public class AddProduct extends JFrame {
     private JComboBox nameMeasuringcomboBox;
     private JLabel label3MeasuringDialog;
     private JTextField coefficient;
+    private JLabel label6;
+    private JTextField barcodeMeasuringRateTF;
     private JPanel panel7;
     private JButton button2;
     private JButton addNewMeasuringBtn;

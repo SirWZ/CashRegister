@@ -403,7 +403,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
 				"$columnConstraints": "[fill][255,fill]"
-				"$rowConstraints": "[][]"
+				"$rowConstraints": "[][][]"
 			} ) {
 				name: "panel6"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -431,6 +431,19 @@ new FormModel {
 					"font": #Font5
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label6"
+					"text": "Штрих-код"
+					"font": new java.awt.Font( "Segoe UI", 0, 18 )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "barcodeMeasuringRateTF"
+					"font": new java.awt.Font( "Segoe UI", 0, 18 )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 2"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1"
@@ -460,8 +473,8 @@ new FormModel {
 				"value": "cell 0 2"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 1285, 150 )
-			"size": new java.awt.Dimension( 425, 265 )
+			"location": new java.awt.Point( 1285, 100 )
+			"size": new java.awt.Dimension( 425, 300 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3"
