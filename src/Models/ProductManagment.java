@@ -46,8 +46,6 @@ public class ProductManagment extends JFrame {
         myProdBtn = new JButton();
         addProdBtn = new JButton();
         promotionBtn = new JButton();
-        addCatalogBtn = new JButton();
-        downLoadBtn = new JButton();
         priceListBtn = new JButton();
 
         //======== this ========
@@ -92,9 +90,9 @@ public class ProductManagment extends JFrame {
         //======== panel2 ========
         {
             panel2.setLayout(new GridBagLayout());
-            ((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {255, 30, 254, 30, 250, 0};
+            ((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {255, 30, 254, 25, 0};
             ((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {0, 30, 0, 0};
-            ((GridBagLayout)panel2.getLayout()).columnWeights = new double[] {1.0, 0.0, 1.0, 0.0, 1.0, 1.0E-4};
+            ((GridBagLayout)panel2.getLayout()).columnWeights = new double[] {1.0, 0.0, 1.0, 0.0, 1.0E-4};
             ((GridBagLayout)panel2.getLayout()).rowWeights = new double[] {1.0, 0.0, 1.0, 1.0E-4};
 
             //---- myProdBtn ----
@@ -112,27 +110,15 @@ public class ProductManagment extends JFrame {
 
             //---- promotionBtn ----
             promotionBtn.setText("\u0410\u043a\u0446\u0438\u0438");
-            panel2.add(promotionBtn, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 5, 0), 0, 0));
-
-            //---- addCatalogBtn ----
-            addCatalogBtn.setText("\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u043a\u0430\u0442\u0430\u043b\u043e\u0433");
-            panel2.add(addCatalogBtn, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 5), 0, 0));
-
-            //---- downLoadBtn ----
-            downLoadBtn.setText("\u0421\u043a\u0430\u0447\u0430\u0442\u044c");
-            panel2.add(downLoadBtn, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
+            panel2.add(promotionBtn, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 5), 0, 0));
 
             //---- priceListBtn ----
             priceListBtn.setText("\u0426\u0435\u043d\u043d\u0438\u043a\u0438");
-            panel2.add(priceListBtn, new GridBagConstraints(4, 2, 1, 1, 0.0, 0.0,
+            panel2.add(priceListBtn, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 0, 5), 0, 0));
         }
         contentPane.add(panel2, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -151,8 +137,6 @@ public class ProductManagment extends JFrame {
     private JButton myProdBtn;
     private JButton addProdBtn;
     private JButton promotionBtn;
-    private JButton addCatalogBtn;
-    private JButton downLoadBtn;
     private JButton priceListBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
