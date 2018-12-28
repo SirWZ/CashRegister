@@ -269,6 +269,11 @@ public class AddProduct extends JFrame {
                 pr.setString(4,s[0] + " " +s[1] + "шт.");
                 pr.executeUpdate();
                 if(Integer.parseInt(barcodeMeasuringRateTF.getText())>0) {
+                    // poluczenie id_Product_conect_measuring_ratte
+                    pr = cn.prepareStatement("select max(id_product_connect_measuring_rate) from \"Product_connect_measuring_rate\"");
+                    rs = pr.executeQuery();
+                    rs.next();
+                    id_P_C_M_R = rs.getInt(1);
                     pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
                     pr.setInt(1, Integer.parseInt(barcodeMeasuringRateTF.getText()));
                     pr.setInt(2, idProduct);
