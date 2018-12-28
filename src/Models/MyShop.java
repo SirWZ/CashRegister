@@ -6,6 +6,8 @@ package Models;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +21,12 @@ class MyShop extends JFrame {
     MyShop(Connection cn) {
         initComponents();
         this.cn=cn;
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                new CashierViewWindow(cn);
+            }
+        });
         try {
 
             PreparedStatement pr = cn.prepareStatement("select surname from \"Worker\" where idwor in (select idwor from \"shift_worker\" where logouttime is null) ");
@@ -47,7 +55,7 @@ class MyShop extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - hhh
+        // Generated using JFormDesigner Evaluation license - k
         var panel1 = new JPanel();
         var backbtn = new JButton();
         var textField1 = new JTextField();
@@ -201,7 +209,7 @@ class MyShop extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - hhh
+    // Generated using JFormDesigner Evaluation license - k
     private JLabel namelbl;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

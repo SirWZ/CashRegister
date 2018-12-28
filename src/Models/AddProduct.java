@@ -9,9 +9,12 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +29,11 @@ public class AddProduct extends JFrame {
     public AddProduct(Connection cn) {
         initComponents();//kkk
         this.cn = cn;
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                exitBtn.doClick();
+            }
+        });
         try {
             //providers
             PreparedStatement pr = cn.prepareStatement("select name from \"Provider\"");
@@ -152,6 +160,7 @@ public class AddProduct extends JFrame {
                 idBMR = rs.getInt(1);
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(this,"Неверное значение Базовой еденици измирения.","Error",JOptionPane.ERROR_MESSAGE);
+                return;
             }
             try {
                 pr = cn.prepareStatement("select \"idProvider\" from \"Provider\" where name like ?");
@@ -162,6 +171,7 @@ public class AddProduct extends JFrame {
                 listOfProviders.add(idMainProvider);
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(this,"Неверное значение Поставщика.","Error",JOptionPane.ERROR_MESSAGE);
+                return;
             }
             try {
                 pr = cn.prepareStatement("select \"IdManufacturer\" from \"Manufacturer\" where \"Name\" like ?");
@@ -171,9 +181,14 @@ public class AddProduct extends JFrame {
                 idManufacturer = rs.getInt(1);
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(this,"Неверное значение Производителя.","Error",JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
+                return;
             }
-            try {Integer.parseInt(barCodetextField.getText());}catch (Exception ex){JOptionPane.showMessageDialog(this,"Неверное значение Шрих-Кода.","Error",JOptionPane.ERROR_MESSAGE); }
+            try {Integer.parseInt(barCodetextField.getText());}catch (Exception ex){JOptionPane.showMessageDialog(this,"Неверное значение Шрих-Кода.","Error",JOptionPane.ERROR_MESSAGE);return; }
+           try{
+               Integer.parseInt(priceOfProviderTF.getText());
+               Integer.parseInt(priceOfSellingTF.getText());
+           }catch (Exception ex){JOptionPane.showMessageDialog(this,"Некоректное значеение Цены.","Error",JOptionPane.ERROR_MESSAGE);return;}
+
             // dobavlenie v product
             pr = cn.prepareStatement("insert into \"Product\"(\"idProduct\",name,description,\"idBaseMeasuringRate\",vat,manufacturer)values (default, ?,?,?,?,?);");
             pr.setString(1,nametextField.getText());
@@ -237,16 +252,74 @@ public class AddProduct extends JFrame {
             pr.setString(4,"BASE");
             pr.executeUpdate();
             //dobavlenie darcode
+            pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
+            pr.setInt(1, Integer.parseInt(barCodetextField.getText()));
+            pr.setInt(2, idProduct);
+            pr.setInt(3, idBMR);
+            pr.executeUpdate();
+
+            //dobavlenie cen
+            pr = cn.prepareStatement("insert into \"Provider_Price\"(\"idProviderPrice\", date, price, \"idProviderProduct\", currency) values (default ,?,?,?,?)");
+            pr.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            pr.setInt(2, Integer.parseInt(priceOfProviderTF.getText()));
+            pr.setInt(3, idProdvider_Prod);
+            pr.setString(4, "грн");
+            pr.executeUpdate();
+            pr.clearBatch();
+
+            pr = cn.prepareStatement("insert into \"Price\"(\"idPrice\", price, \"dateStart\", \"idProduct\") values (default ,?,?,?)");
+            pr.setInt(1,Integer.parseInt(priceOfSellingTF.getText()));
+            pr.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            pr.setInt(3, idProduct);
+            pr.executeUpdate();
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,"Ошибка добавления товара!","",JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return;}
+        JOptionPane.showMessageDialog(this,"Товар успешно добавлен.","",JOptionPane.INFORMATION_MESSAGE);
+        exitBtn.doClick();
+    }
+
+    private void addNewManufacturerBtnActionPerformed() {
+        if (nameNewManufacturer.getText().length()>2) {
             try {
-                pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
-                pr.setInt(1, Integer.parseInt(barCodetextField.getText()));
-                pr.setInt(2, idProduct);
-                pr.setInt(3, idBMR);
+                PreparedStatement pr = cn.prepareStatement("insert into \"Manufacturer\"(\"IdManufacturer\",\"Name\") values (default ,?)");
+                pr.setString(1, nameNewManufacturer.getText());
                 pr.executeUpdate();
-            }catch (Exception ex){JOptionPane.showMessageDialog(this, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);}
-        }catch (Exception e){e.printStackTrace();}
-        JOptionPane.showMessageDialog(this,"good","Error",JOptionPane.ERROR_MESSAGE);
-        this.dispose();
+                manufacturercomboBox.addItem(nameNewManufacturer.getText());
+                manufacturercomboBox.setSelectedItem(nameNewManufacturer.getText());
+                addNewManufacturerDialog.dispose();
+                JOptionPane.showMessageDialog(this, "Производитель успешно добавлен.", "", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Ошибка при создании Производителя!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }else JOptionPane.showMessageDialog(this, "Поле должно быть заполнено", "Ошибка", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void newManufacturerShowBtnActionPerformed() {
+        addNewManufacturerDialog.setVisible(true);
+    }
+
+    private void createNewProviderBtnActionPerformed() {
+        if (nameNewProviderTF.getText().length()>2 && adressNewProviderTF.getText().length()> 2){
+        try{
+            PreparedStatement pr = cn.prepareStatement("insert into \"Provider\"(\"idProvider\", name, adress, e_mail) values (default,?,?,?)");
+            pr.setString(1,nameNewProviderTF.getText());
+            pr.setString(2,adressNewProviderTF.getText());
+            pr.setString(3,emailNewProviderTF.getText());
+            pr.executeUpdate();
+            createNewProviderDialog.dispose();
+            JOptionPane.showMessageDialog(this,"Поставщик успешно добавлен.","",JOptionPane.ERROR_MESSAGE);
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(this,"Ошибка при создании Поставщика!","Ошибка",JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        }else JOptionPane.showMessageDialog(this, "Поле Имя и Адресс должны быть заполнены", "Ошибка", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showCreateNewProviderDialogActionPerformed() {
+        createNewProviderDialog.setVisible(true);
     }
 
     private void initComponents() {
@@ -261,8 +334,11 @@ public class AddProduct extends JFrame {
         printBtn = new JButton();
         var lblCategory = new JLabel();
         categorycomboBox = new JComboBox();
+        newCategoryShowBttn = new JButton();
         var lblmanufact = new JLabel();
+        panel13 = new JPanel();
         manufacturercomboBox = new JComboBox();
+        newManufacturerShowBtn = new JButton();
         panel2 = new JPanel();
         fotopanel = new JPanel();
         fotolbl = new JLabel();
@@ -274,6 +350,11 @@ public class AddProduct extends JFrame {
         var lblProducent = new JLabel();
         producentcomboBox = new JComboBox();
         addProducentBtn = new JButton();
+        label2 = new JLabel();
+        panel12 = new JPanel();
+        priceOfSellingTF = new JTextField();
+        label3 = new JLabel();
+        priceOfProviderTF = new JTextField();
         var lblBarcode = new JLabel();
         barCodetextField = new JTextField();
         var lblVAT = new JLabel();
@@ -305,16 +386,30 @@ public class AddProduct extends JFrame {
         label3ProviderDialog = new JLabel();
         nameProvidercomboBox = new JComboBox();
         panel10 = new JPanel();
-        button3 = new JButton();
+        showCreateNewProviderDialog = new JButton();
         addNewProviderBtn = new JButton();
         newValueDialog = new JDialog();
         label1 = new JLabel();
         panel11 = new JPanel();
         yesNewValBtn = new JButton();
         noNewValBtn = new JButton();
+        addNewManufacturerDialog = new JDialog();
+        label4 = new JLabel();
+        nameNewManufacturer = new JTextField();
+        addNewManufacturerBtn = new JButton();
+        createNewProviderDialog = new JDialog();
+        label5 = new JLabel();
+        nameNewProviderTF = new JTextField();
+        label6 = new JLabel();
+        adressNewProviderTF = new JTextField();
+        label7 = new JLabel();
+        emailNewProviderTF = new JTextField();
+        panel14 = new JPanel();
+        createNewProviderBtn = new JButton();
 
         //======== this ========
         setTitle("\u0414\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u0430");
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         var contentPane = getContentPane();
         contentPane.setLayout(new GridBagLayout());
         ((GridBagLayout)contentPane.getLayout()).columnWidths = new int[] {31, 0, 25, 0};
@@ -333,7 +428,7 @@ public class AddProduct extends JFrame {
                     java.awt.Color.red), panel1.getBorder())); panel1.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
             panel1.setLayout(new GridBagLayout());
-            ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {0, 0, 0, 113, 0, 0, 437, 0};
+            ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {0, 0, 0, 113, 0, 133, 499, 0};
             ((GridBagLayout)panel1.getLayout()).rowHeights = new int[] {50, 19, 50, 24, 0};
             ((GridBagLayout)panel1.getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0E-4};
             ((GridBagLayout)panel1.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 1.0E-4};
@@ -355,6 +450,7 @@ public class AddProduct extends JFrame {
 
             //---- prodCodetextField ----
             prodCodetextField.setEnabled(false);
+            prodCodetextField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
             panel1.add(prodCodetextField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));
@@ -365,6 +461,9 @@ public class AddProduct extends JFrame {
             panel1.add(lblName, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 5, 5), 0, 0));
+
+            //---- nametextField ----
+            nametextField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
             panel1.add(nametextField, new GridBagConstraints(6, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
@@ -382,8 +481,18 @@ public class AddProduct extends JFrame {
             panel1.add(lblCategory, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 5, 5), 0, 0));
+
+            //---- categorycomboBox ----
+            categorycomboBox.setFont(new Font("Segoe UI", Font.PLAIN, 18));
             panel1.add(categorycomboBox, new GridBagConstraints(3, 2, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 5, 5), 0, 0));
+
+            //---- newCategoryShowBttn ----
+            newCategoryShowBttn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
+            newCategoryShowBttn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            panel1.add(newCategoryShowBttn, new GridBagConstraints(4, 2, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 5, 5), 0, 0));
 
             //---- lblmanufact ----
@@ -392,7 +501,28 @@ public class AddProduct extends JFrame {
             panel1.add(lblmanufact, new GridBagConstraints(5, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                 new Insets(0, 0, 5, 5), 0, 0));
-            panel1.add(manufacturercomboBox, new GridBagConstraints(6, 2, 1, 1, 0.0, 0.0,
+
+            //======== panel13 ========
+            {
+                panel13.setLayout(new MigLayout(
+                    "hidemode 3,alignx right",
+                    // columns
+                    "[grow,fill]" +
+                    "[fill]",
+                    // rows
+                    "[grow]"));
+
+                //---- manufacturercomboBox ----
+                manufacturercomboBox.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                panel13.add(manufacturercomboBox, "cell 0 0,growx");
+
+                //---- newManufacturerShowBtn ----
+                newManufacturerShowBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0442\u044c \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044f");
+                newManufacturerShowBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                newManufacturerShowBtn.addActionListener(e -> newManufacturerShowBtnActionPerformed());
+                panel13.add(newManufacturerShowBtn, "cell 1 0,growy");
+            }
+            panel1.add(panel13, new GridBagConstraints(6, 2, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 0), 0, 0));
         }
@@ -438,9 +568,9 @@ public class AddProduct extends JFrame {
             {
                 panel4.setLayout(new GridBagLayout());
                 ((GridBagLayout)panel4.getLayout()).columnWidths = new int[] {0, 205, 0, 0};
-                ((GridBagLayout)panel4.getLayout()).rowHeights = new int[] {50, 23, 50, 23, 50, 23, 50, 18, 0};
+                ((GridBagLayout)panel4.getLayout()).rowHeights = new int[] {50, 23, 50, 0, 50, 23, 50, 18, 0};
                 ((GridBagLayout)panel4.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 1.0E-4};
-                ((GridBagLayout)panel4.getLayout()).rowWeights = new double[] {1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0E-4};
+                ((GridBagLayout)panel4.getLayout()).rowWeights = new double[] {1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0E-4};
 
                 //---- lblMeasuring ----
                 lblMeasuring.setText("\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0435\u0434. \u0438\u0437.");
@@ -448,6 +578,9 @@ public class AddProduct extends JFrame {
                 panel4.add(lblMeasuring, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- measuringcomboBox ----
+                measuringcomboBox.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel4.add(measuringcomboBox, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
@@ -466,6 +599,9 @@ public class AddProduct extends JFrame {
                 panel4.add(lblProducent, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- producentcomboBox ----
+                producentcomboBox.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel4.add(producentcomboBox, new GridBagConstraints(1, 2, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
@@ -478,12 +614,51 @@ public class AddProduct extends JFrame {
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 0), 0, 0));
 
+                //---- label2 ----
+                label2.setText("\u0426\u0435\u043d\u0430 \u043f\u0440\u043e\u0434\u0430\u0436\u0438");
+                label2.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                panel4.add(label2, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
+                //======== panel12 ========
+                {
+                    panel12.setLayout(new MigLayout(
+                        "hidemode 3",
+                        // columns
+                        "[162,fill]" +
+                        "[fill]" +
+                        "[216,fill]",
+                        // rows
+                        "[]0" +
+                        "[grow,fill]"));
+
+                    //---- priceOfSellingTF ----
+                    priceOfSellingTF.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                    panel12.add(priceOfSellingTF, "cell 0 1,aligny center,growy 0");
+
+                    //---- label3 ----
+                    label3.setText("\u0426\u0435\u043d\u0430 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430");
+                    label3.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                    panel12.add(label3, "cell 1 1,alignx right,growx 0");
+
+                    //---- priceOfProviderTF ----
+                    priceOfProviderTF.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                    panel12.add(priceOfProviderTF, "cell 2 1,growy");
+                }
+                panel4.add(panel12, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 5), 0, 0));
+
                 //---- lblBarcode ----
                 lblBarcode.setText("\u0428\u0442\u0440\u0438\u0445-\u043a\u043e\u0434");
                 lblBarcode.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel4.add(lblBarcode, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
                     GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- barCodetextField ----
+                barCodetextField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel4.add(barCodetextField, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
@@ -494,6 +669,9 @@ public class AddProduct extends JFrame {
                 panel4.add(lblVAT, new GridBagConstraints(0, 6, 1, 1, 0.0, 0.0,
                     GridBagConstraints.EAST, GridBagConstraints.VERTICAL,
                     new Insets(0, 0, 5, 5), 0, 0));
+
+                //---- vattextField ----
+                vattextField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel4.add(vattextField, new GridBagConstraints(1, 6, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 5, 5), 0, 0));
@@ -523,6 +701,9 @@ public class AddProduct extends JFrame {
 
             //======== scrollPane1 ========
             {
+
+                //---- descripttextArea ----
+                descripttextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 18));
                 scrollPane1.setViewportView(descripttextArea);
             }
             panel5.add(scrollPane1, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
@@ -548,15 +729,16 @@ public class AddProduct extends JFrame {
             addmeasuringdialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             addmeasuringdialog.setAlwaysOnTop(true);
             addmeasuringdialog.setResizable(false);
+            addmeasuringdialog.setTitle("\u0414\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0435\u0434\u0435\u043d\u0438\u0446\u044b \u0438\u0437\u043c\u0438\u0440\u0435\u043d\u0438\u044f");
             var addmeasuringdialogContentPane = addmeasuringdialog.getContentPane();
             addmeasuringdialogContentPane.setLayout(new MigLayout(
                 "hidemode 3",
                 // columns
                 "[grow,fill]",
                 // rows
-                "[]" +
-                "[]" +
-                "[]" +
+                "[]0" +
+                "[]0" +
+                "[]0" +
                 "[]"));
 
             //======== panel3 ========
@@ -575,7 +757,7 @@ public class AddProduct extends JFrame {
                     "[fill]" +
                     "[218,fill]",
                     // rows
-                    "[]" +
+                    "[]0" +
                     "[]"));
 
                 //---- exitMeasuringDialogBtn ----
@@ -604,17 +786,20 @@ public class AddProduct extends JFrame {
 
                 //---- label2MeasuringDialog ----
                 label2MeasuringDialog.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0435\u0434. \u0438\u0437.");
-                label2MeasuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                label2MeasuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel6.add(label2MeasuringDialog, "cell 0 0");
+
+                //---- nameMeasuringcomboBox ----
+                nameMeasuringcomboBox.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel6.add(nameMeasuringcomboBox, "cell 1 0");
 
                 //---- label3MeasuringDialog ----
                 label3MeasuringDialog.setText("\u041a\u043e\u043b\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0448\u0442.");
-                label3MeasuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                label3MeasuringDialog.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel6.add(label3MeasuringDialog, "cell 0 1");
 
                 //---- coefficient ----
-                coefficient.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                coefficient.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel6.add(coefficient, "cell 1 1");
             }
             addmeasuringdialogContentPane.add(panel6, "cell 0 1");
@@ -635,15 +820,17 @@ public class AddProduct extends JFrame {
 
                 //---- button2 ----
                 button2.setText("\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u0443\u044e");
+                button2.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel7.add(button2, "cell 0 1");
 
                 //---- addNewMeasuringBtn ----
                 addNewMeasuringBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
+                addNewMeasuringBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 addNewMeasuringBtn.addActionListener(e -> addNewMeasuringBtnActionPerformed());
                 panel7.add(addNewMeasuringBtn, "cell 2 1");
             }
             addmeasuringdialogContentPane.add(panel7, "cell 0 2");
-            addmeasuringdialog.setSize(425, 255);
+            addmeasuringdialog.setSize(425, 265);
             addmeasuringdialog.setLocationRelativeTo(null);
         }
 
@@ -651,16 +838,17 @@ public class AddProduct extends JFrame {
         {
             addProviderDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             addProviderDialog.setAlwaysOnTop(true);
+            addProviderDialog.setTitle("\u0414\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430");
+            addProviderDialog.setResizable(false);
             var addProviderDialogContentPane = addProviderDialog.getContentPane();
             addProviderDialogContentPane.setLayout(new MigLayout(
                 "hidemode 3",
                 // columns
                 "[grow,fill]",
                 // rows
-                "[]" +
-                "[]" +
-                "[]" +
-                "[]"));
+                "[]0" +
+                "[]0" +
+                "[]0"));
 
             //======== panel8 ========
             {
@@ -678,7 +866,7 @@ public class AddProduct extends JFrame {
                     "[fill]" +
                     "[218,fill]",
                     // rows
-                    "[]" +
+                    "[]0" +
                     "[]"));
 
                 //---- exitProviderDialog ----
@@ -707,20 +895,21 @@ public class AddProduct extends JFrame {
 
                 //---- label2ProviderDialog ----
                 label2ProviderDialog.setText("\u041a\u043e\u0434 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430");
-                label2ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                label2ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel9.add(label2ProviderDialog, "cell 0 0");
 
                 //---- codeProvidertf ----
-                codeProvidertf.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                codeProvidertf.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 codeProvidertf.setEditable(false);
                 panel9.add(codeProvidertf, "cell 1 0");
 
                 //---- label3ProviderDialog ----
                 label3ProviderDialog.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435");
-                label3ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                label3ProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 panel9.add(label3ProviderDialog, "cell 0 1");
 
                 //---- nameProvidercomboBox ----
+                nameProvidercomboBox.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 nameProvidercomboBox.addItemListener(e -> nameProvidercomboBoxItemStateChanged());
                 panel9.add(nameProvidercomboBox, "cell 1 1");
             }
@@ -735,22 +924,22 @@ public class AddProduct extends JFrame {
                     "[37,fill]para" +
                     "[fill]",
                     // rows
-                    "[]0" +
-                    "[]0" +
-                    "[]0" +
-                    "[]"));
+                    "0[]0"));
 
-                //---- button3 ----
-                button3.setText("\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u043e\u0433\u043e");
-                panel10.add(button3, "cell 0 1");
+                //---- showCreateNewProviderDialog ----
+                showCreateNewProviderDialog.setText("\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u043e\u0433\u043e");
+                showCreateNewProviderDialog.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                showCreateNewProviderDialog.addActionListener(e -> showCreateNewProviderDialogActionPerformed());
+                panel10.add(showCreateNewProviderDialog, "cell 0 0");
 
                 //---- addNewProviderBtn ----
                 addNewProviderBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
+                addNewProviderBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 addNewProviderBtn.addActionListener(e -> addNewProviderBtnActionPerformed());
-                panel10.add(addNewProviderBtn, "cell 2 1");
+                panel10.add(addNewProviderBtn, "cell 2 0");
             }
             addProviderDialogContentPane.add(panel10, "cell 0 2");
-            addProviderDialog.setSize(425, 255);
+            addProviderDialog.setSize(425, 245);
             addProviderDialog.setLocationRelativeTo(null);
         }
 
@@ -799,17 +988,126 @@ public class AddProduct extends JFrame {
 
                 //---- yesNewValBtn ----
                 yesNewValBtn.setText("\u0414\u0430");
+                yesNewValBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 yesNewValBtn.addActionListener(e -> yesNewValBtnActionPerformed());
                 panel11.add(yesNewValBtn, "cell 1 1");
 
                 //---- noNewValBtn ----
                 noNewValBtn.setText("\u041d\u0435\u0442");
+                noNewValBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
                 noNewValBtn.addActionListener(e -> noNewValBtnActionPerformed());
                 panel11.add(noNewValBtn, "cell 2 1");
             }
             newValueDialogContentPane.add(panel11, "cell 0 1");
             newValueDialog.pack();
             newValueDialog.setLocationRelativeTo(newValueDialog.getOwner());
+        }
+
+        //======== addNewManufacturerDialog ========
+        {
+            addNewManufacturerDialog.setTitle("\u0414\u043e\u0431\u0430\u0432\u043b\u0435\u0435\u043d\u0438\u0435\u0435 \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044f");
+            addNewManufacturerDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            addNewManufacturerDialog.setResizable(false);
+            addNewManufacturerDialog.setAlwaysOnTop(true);
+            var addNewManufacturerDialogContentPane = addNewManufacturerDialog.getContentPane();
+            addNewManufacturerDialogContentPane.setLayout(new MigLayout(
+                "hidemode 3",
+                // columns
+                "[fill]" +
+                "[256,fill]" +
+                "[fill]",
+                // rows
+                "[]"));
+
+            //---- label4 ----
+            label4.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 ");
+            label4.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            addNewManufacturerDialogContentPane.add(label4, "cell 0 0");
+
+            //---- nameNewManufacturer ----
+            nameNewManufacturer.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            addNewManufacturerDialogContentPane.add(nameNewManufacturer, "cell 1 0");
+
+            //---- addNewManufacturerBtn ----
+            addNewManufacturerBtn.setText("\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c");
+            addNewManufacturerBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            addNewManufacturerBtn.addActionListener(e -> addNewManufacturerBtnActionPerformed());
+            addNewManufacturerDialogContentPane.add(addNewManufacturerBtn, "cell 2 0");
+            addNewManufacturerDialog.setSize(455, 95);
+            addNewManufacturerDialog.setLocationRelativeTo(addNewManufacturerDialog.getOwner());
+        }
+
+        //======== createNewProviderDialog ========
+        {
+            createNewProviderDialog.setTitle("\u0421\u043e\u0437\u0434\u0430\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0433\u043e \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430");
+            createNewProviderDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            createNewProviderDialog.setResizable(false);
+            createNewProviderDialog.setAlwaysOnTop(true);
+            var createNewProviderDialogContentPane = createNewProviderDialog.getContentPane();
+            createNewProviderDialogContentPane.setLayout(new MigLayout(
+                "hidemode 3",
+                // columns
+                "[103,fill]" +
+                "[229,fill]",
+                // rows
+                "[]" +
+                "[]" +
+                "[]" +
+                "[]"));
+
+            //---- label5 ----
+            label5.setText("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435");
+            label5.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            createNewProviderDialogContentPane.add(label5, "cell 0 0");
+
+            //---- nameNewProviderTF ----
+            nameNewProviderTF.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            createNewProviderDialogContentPane.add(nameNewProviderTF, "cell 1 0");
+
+            //---- label6 ----
+            label6.setText("\u0410\u0434\u0440\u0435\u0441\u0441");
+            label6.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            createNewProviderDialogContentPane.add(label6, "cell 0 1");
+
+            //---- adressNewProviderTF ----
+            adressNewProviderTF.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            createNewProviderDialogContentPane.add(adressNewProviderTF, "cell 1 1");
+
+            //---- label7 ----
+            label7.setText("\u042d\u043c\u0435\u0438\u043b");
+            label7.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            createNewProviderDialogContentPane.add(label7, "cell 0 2");
+
+            //---- emailNewProviderTF ----
+            emailNewProviderTF.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            createNewProviderDialogContentPane.add(emailNewProviderTF, "cell 1 2");
+
+            //======== panel14 ========
+            {
+
+                // JFormDesigner evaluation mark
+                panel14.setBorder(new javax.swing.border.CompoundBorder(
+                    new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0, 0, 0, 0),
+                        "JFormDesigner Evaluation", javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.BOTTOM, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+                        java.awt.Color.red), panel14.getBorder())); panel14.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
+
+                panel14.setLayout(new MigLayout(
+                    "hidemode 3",
+                    // columns
+                    "[grow,fill]",
+                    // rows
+                    "[]"));
+
+                //---- createNewProviderBtn ----
+                createNewProviderBtn.setText("\u0421\u043e\u0437\u0434\u0430\u0442\u044c");
+                createNewProviderBtn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                createNewProviderBtn.addActionListener(e -> createNewProviderBtnActionPerformed());
+                panel14.add(createNewProviderBtn, "cell 0 0,alignx right,growx 0");
+            }
+            createNewProviderDialogContentPane.add(panel14, "cell 1 3");
+            createNewProviderDialog.setSize(365, 215);
+            createNewProviderDialog.setLocationRelativeTo(createNewProviderDialog.getOwner());
         }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
@@ -822,7 +1120,10 @@ public class AddProduct extends JFrame {
     private JTextField nametextField;
     private JButton printBtn;
     private JComboBox categorycomboBox;
+    private JButton newCategoryShowBttn;
+    private JPanel panel13;
     private JComboBox manufacturercomboBox;
+    private JButton newManufacturerShowBtn;
     private JPanel panel2;
     private JPanel fotopanel;
     private JLabel fotolbl;
@@ -832,6 +1133,11 @@ public class AddProduct extends JFrame {
     private JButton addMeasuringBtn;
     private JComboBox producentcomboBox;
     private JButton addProducentBtn;
+    private JLabel label2;
+    private JPanel panel12;
+    private JTextField priceOfSellingTF;
+    private JLabel label3;
+    private JTextField priceOfProviderTF;
     private JTextField barCodetextField;
     private JTextField vattextField;
     private JPanel panel5;
@@ -860,12 +1166,25 @@ public class AddProduct extends JFrame {
     private JLabel label3ProviderDialog;
     private JComboBox nameProvidercomboBox;
     private JPanel panel10;
-    private JButton button3;
+    private JButton showCreateNewProviderDialog;
     private JButton addNewProviderBtn;
     private JDialog newValueDialog;
     private JLabel label1;
     private JPanel panel11;
     private JButton yesNewValBtn;
     private JButton noNewValBtn;
+    private JDialog addNewManufacturerDialog;
+    private JLabel label4;
+    private JTextField nameNewManufacturer;
+    private JButton addNewManufacturerBtn;
+    private JDialog createNewProviderDialog;
+    private JLabel label5;
+    private JTextField nameNewProviderTF;
+    private JLabel label6;
+    private JTextField adressNewProviderTF;
+    private JLabel label7;
+    private JTextField emailNewProviderTF;
+    private JPanel panel14;
+    private JButton createNewProviderBtn;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -6,6 +6,8 @@ package Models;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 
 /**
@@ -17,6 +19,11 @@ public class ProductManagment extends JFrame {
     public ProductManagment(Connection cn) {
         initComponents();
         this.cn = cn;
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                exitBtnActionPerformed();
+            }
+        });
     }
 
     private void addProdBtnActionPerformed() {
@@ -31,7 +38,7 @@ public class ProductManagment extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - hhh
+        // Generated using JFormDesigner Evaluation license - k
         panel1 = new JPanel();
         exitBtn = new JButton();
         findtextField = new JTextField();
@@ -136,7 +143,7 @@ public class ProductManagment extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - hhh
+    // Generated using JFormDesigner Evaluation license - k
     private JPanel panel1;
     private JButton exitBtn;
     private JTextField findtextField;
