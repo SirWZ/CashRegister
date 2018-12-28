@@ -248,6 +248,11 @@ public class AddProduct extends JFrame {
             pr.setInt(3,1);
             pr.setString(4,"BASE");
             pr.executeUpdate();
+            // poluczenie id_Product_conect_measuring_ratte
+            pr = cn.prepareStatement("select max(id_product_connect_measuring_rate) from \"Product_connect_measuring_rate\"");
+            rs = pr.executeQuery();
+            rs.next();
+            int id_P_C_M_R = rs.getInt(1);
 
             //dobavlenie vsech edenic izm
             for (String[] s : listOfMeasurings){
@@ -267,15 +272,11 @@ public class AddProduct extends JFrame {
                     pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
                     pr.setInt(1, Integer.parseInt(barcodeMeasuringRateTF.getText()));
                     pr.setInt(2, idProduct);
-                    pr.setInt(3, id);
+                    pr.setInt(3, id_P_C_M_R);
                     pr.executeUpdate();
                 }
             }
-            // poluczenie id_Product_conect_measuring_ratte
-            pr = cn.prepareStatement("select max(id_product_connect_measuring_rate) from \"Product_connect_measuring_rate\"");
-            rs = pr.executeQuery();
-            rs.next();
-            int id_P_C_M_R = rs.getInt(1);
+
             //dobavlenie darcode
             pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
             pr.setInt(1, Integer.parseInt(barCodetextField.getText()));
