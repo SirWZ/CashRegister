@@ -27,7 +27,7 @@ public class AddProduct extends JFrame {
     int idProdvider_Prod,idProduct;
 
     public AddProduct(Connection cn) {
-        initComponents();//kkk
+        initComponents();
         this.cn = cn;
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
