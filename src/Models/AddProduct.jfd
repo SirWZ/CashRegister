@@ -15,8 +15,9 @@ new FormModel {
 			"$sizePolicy": 1
 			"$locationPolicy": 1
 			"title": "Добавление продукта"
+			"defaultCloseOperation": 2
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "0, 0, 0, 108:1.0, 0, 0, 437:1.0"
+				"$columnSpecs": "0, 0, 0, 108:1.0, 0, 128, 499:1.0"
 				"$rowSpecs": "45, 14, 45, 24"
 				"$hGap": 5
 				"$vGap": 5
@@ -43,6 +44,8 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
 					name: "prodCodetextField"
+					"enabled": false
+					"font": &Font1 new java.awt.Font( "Segoe UI", 0, 18 )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 3
 				} )
@@ -59,6 +62,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
 					name: "nametextField"
+					"font": #Font1
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 6
 				} )
@@ -83,9 +87,21 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "categorycomboBox"
+					"font": &Font2 new java.awt.Font( "Segoe UI", 0, 18 )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 3
 					"gridy": 2
+					"vAlign": 0
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "newCategoryShowBttn"
+					"text": "Добавить"
+					"font": new java.awt.Font( "Segoe UI", 0, 18 )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "newCategoryShowBttnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 4
+					"gridy": 2
+					"vAlign": 0
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "lblmanufact"
@@ -99,15 +115,35 @@ new FormModel {
 					"gridy": 2
 					"hAlign": 4
 				} )
-				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "manufacttextField"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "hidemode 3,alignx right"
+					"$columnConstraints": "[grow,fill][fill]"
+					"$rowConstraints": "[grow]"
+				} ) {
+					name: "panel13"
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "manufacturercomboBox"
+						"font": #Font2
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0,growx"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "newManufacturerShowBtn"
+						"text": "Добавть производителя"
+						"font": new java.awt.Font( "Segoe UI", 0, 18 )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "newManufacturerShowBtnActionPerformed", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0,growy"
+					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 6
 					"gridy": 2
+					"hAlign": 5
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridx": 1
 				"gridy": 1
+				"hAlign": 5
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 				"$columnSpecs": "309:1.0, 909:1.0"
@@ -145,7 +181,7 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 					"$columnSpecs": "0, 200:1.0, 0"
-					"$rowSpecs": "45:1.0, 18, 45:1.0, 18, 45:1.0, 18, 45:1.0, 18"
+					"$rowSpecs": "45:1.0, 18, 45:1.0, 0:1.0, 45:1.0, 18, 45:1.0, 18"
 					"$hGap": 5
 					"$vGap": 5
 					"$alignLeft": true
@@ -162,8 +198,9 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"hAlign": 4
 					} )
-					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "measuringtextField"
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "measuringcomboBox"
+						"font": #Font2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 					} )
@@ -186,8 +223,9 @@ new FormModel {
 						"gridy": 2
 						"hAlign": 4
 					} )
-					add( new FormComponent( "javax.swing.JTextField" ) {
-						name: "producenttextField"
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "producentcomboBox"
+						"font": #Font2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 						"gridy": 2
@@ -202,6 +240,43 @@ new FormModel {
 						"gridy": 2
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label2"
+						"text": "Цена продажи"
+						"font": new java.awt.Font( "Segoe UI", 0, 18 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridy": 3
+						"hAlign": 4
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+						"$layoutConstraints": "hidemode 3"
+						"$columnConstraints": "[162,fill][fill][216,fill]"
+						"$rowConstraints": "[]0[grow,fill]"
+					} ) {
+						name: "panel12"
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "priceOfSellingTF"
+							"font": new java.awt.Font( "Segoe UI", 0, 18 )
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 0 1,aligny center,growy 0"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label3"
+							"text": "Цена поставщика"
+							"font": new java.awt.Font( "Segoe UI", 0, 18 )
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 1 1,alignx right,growx 0"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "priceOfProviderTF"
+							"font": new java.awt.Font( "Segoe UI", 0, 18 )
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 2 1,growy"
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+						"gridy": 3
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "lblBarcode"
 						"text": "Штрих-код"
 						"font": #Font0
@@ -214,6 +289,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
 						name: "barCodetextField"
+						"font": new java.awt.Font( "Segoe UI", 0, 18 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 						"gridy": 4
@@ -231,6 +307,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
 						name: "vattextField"
+						"font": new java.awt.Font( "Segoe UI", 0, 18 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 1
 						"gridy": 6
@@ -266,6 +343,7 @@ new FormModel {
 					name: "scrollPane1"
 					add( new FormComponent( "javax.swing.JTextArea" ) {
 						name: "descripttextArea"
+						"font": new java.awt.Font( "Monospaced", 0, 18 )
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 2
@@ -274,6 +352,7 @@ new FormModel {
 					name: "addProduct"
 					"text": "Добавить товар"
 					"font": #Font0
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addProductActionPerformed", false ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 3
 				} )
@@ -288,23 +367,25 @@ new FormModel {
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3"
 			"$columnConstraints": "[grow,fill]"
-			"$rowConstraints": "[][][][]"
+			"$rowConstraints": "[]0[]0[]0[]"
 		} ) {
 			name: "addmeasuringdialog"
 			"$sizePolicy": 1
 			"$locationPolicy": 1
 			"defaultCloseOperation": 2
 			"alwaysOnTop": true
+			"resizable": false
+			"title": "Добавление еденицы измирения"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
 				"$columnConstraints": "[fill][218,fill]"
-				"$rowConstraints": "[][]"
+				"$rowConstraints": "[]0[]"
 			} ) {
 				name: "panel3"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "exitMeasuringDialogBtn"
 					"text": "Выход"
-					"font": &Font1 new java.awt.Font( "Segoe UI", 0, 18 )
+					"font": &Font3 new java.awt.Font( "Segoe UI", 0, 18 )
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitMeasuringDialogBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
@@ -312,7 +393,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label1measuringDialog"
 					"text": "Добавить еденицу измирения"
-					"font": &Font2 new java.awt.Font( "Segoe UI", 0, 18 )
+					"font": &Font4 new java.awt.Font( "Segoe UI", 0, 18 )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
 				} )
@@ -322,78 +403,101 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
 				"$columnConstraints": "[fill][255,fill]"
-				"$rowConstraints": "[][]"
+				"$rowConstraints": "[][][]"
 			} ) {
 				name: "panel6"
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label2MeasuringDialog"
 					"text": "Название ед. из."
-					"font": &Font3 new java.awt.Font( "Segoe UI", 0, 16 )
+					"font": &Font5 new java.awt.Font( "Segoe UI", 0, 18 )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
 				} )
-				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "nameMeasuring"
-					"font": &Font4 new java.awt.Font( "Segoe UI", 0, 16 )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "nameMeasuringcomboBox"
+					"font": #Font5
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 0"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3MeasuringDialog"
 					"text": "Колличество шт."
-					"font": &Font5 new java.awt.Font( "Segoe UI", 0, 16 )
+					"font": #Font5
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "countMeasuring"
-					"font": &Font6 new java.awt.Font( "Segoe UI", 0, 16 )
+					name: "coefficient"
+					"font": #Font5
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label6"
+					"text": "Штрих-код"
+					"font": new java.awt.Font( "Segoe UI", 0, 18 )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "barcodeMeasuringRateTF"
+					"font": new java.awt.Font( "Segoe UI", 0, 18 )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 2"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[239,fill]rel[fill]"
+				"$columnConstraints": "[116,fill]para[45,fill]para[fill]"
 				"$rowConstraints": "[]0[]0[]0[]"
 			} ) {
 				name: "panel7"
 				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button2"
+					"text": "Создать новую"
+					"font": #Font5
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "addNewMeasuringBtn"
 					"text": "Добавить"
+					"font": #Font5
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addNewMeasuringBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 1 1"
+					"value": "cell 2 1"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 2"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 1305, 225 )
-			"size": &Dimension0 new java.awt.Dimension( 425, 255 )
+			"location": new java.awt.Point( 1285, 100 )
+			"size": new java.awt.Dimension( 425, 300 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3"
 			"$columnConstraints": "[grow,fill]"
-			"$rowConstraints": "[][][][]"
+			"$rowConstraints": "[]0[]0[]0"
 		} ) {
 			name: "addProviderDialog"
 			"$sizePolicy": 1
 			"$locationPolicy": 1
 			"defaultCloseOperation": 2
 			"alwaysOnTop": true
+			"title": "Добавление поставщика"
+			"resizable": false
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
 				"$columnConstraints": "[fill][218,fill]"
-				"$rowConstraints": "[][]"
+				"$rowConstraints": "[]0[]"
 			} ) {
 				name: "panel8"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "exitProviderDialog"
 					"text": "Выход"
-					"font": #Font1
+					"font": #Font3
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitProviderDialogActionPerformed", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
@@ -401,7 +505,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "lable1ProviderDialog"
 					"text": "Добавить поставщика"
-					"font": #Font2
+					"font": #Font4
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
 				} )
@@ -417,26 +521,28 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label2ProviderDialog"
 					"text": "Код поставщика"
-					"font": #Font3
+					"font": &Font6 new java.awt.Font( "Segoe UI", 0, 18 )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
 				} )
 				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "codeProviderDialog"
-					"font": #Font4
+					name: "codeProvidertf"
+					"font": #Font6
+					"editable": false
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 0"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3ProviderDialog"
 					"text": "Название"
-					"font": #Font5
+					"font": #Font6
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
 				} )
-				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "nameProviderDialog"
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "nameProvidercomboBox"
 					"font": #Font6
+					addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "nameProvidercomboBoxItemStateChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
 				} )
@@ -445,23 +551,141 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[239,fill]rel[fill]"
-				"$rowConstraints": "[]0[]0[]0[]"
+				"$columnConstraints": "[113,fill]para[37,fill]para[fill]"
+				"$rowConstraints": "0[]0"
 			} ) {
 				name: "panel10"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "addNewProviderBtn"
 					"text": "Добавить"
+					"font": #Font6
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addNewProviderBtnActionPerformed", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 1 1"
+					"value": "cell 2 0"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 2"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"size": #Dimension0
-			"location": new java.awt.Point( 1760, 225 )
+			"size": new java.awt.Dimension( 425, 255 )
+			"location": new java.awt.Point( 1750, 150 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
+			"$columnConstraints": "[fill][fill]"
+			"$rowConstraints": "[]0[20]0[10]"
+		} ) {
+			name: "newValueDialog"
+			"alwaysOnTop": true
+			"defaultCloseOperation": 2
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Значение добавлено, добавить еще?"
+				"font": new java.awt.Font( "Segoe UI", 0, 18 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[24,fill][101,fill]para[111,fill]"
+				"$rowConstraints": "[]0[]0[]0[]"
+			} ) {
+				name: "panel11"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "yesNewValBtn"
+					"text": "Да"
+					"font": #Font5
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "yesNewValBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "noNewValBtn"
+					"text": "Нет"
+					"font": #Font5
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "noNewValBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 1"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 1330, 440 )
+			"size": new java.awt.Dimension( 345, 110 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
+			"$columnConstraints": "[fill][256,fill][fill]"
+			"$rowConstraints": "[]"
+		} ) {
+			name: "addNewManufacturerDialog"
+			"title": "Добавлеениее производителя"
+			"$sizePolicy": 1
+			"defaultCloseOperation": 2
+			"resizable": false
+			"alwaysOnTop": true
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "Название "
+				"font": &Font7 new java.awt.Font( "Segoe UI", 0, 18 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "nameNewManufacturer"
+				"font": #Font7
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "addNewManufacturerBtn"
+				"text": "Создать"
+				"font": #Font7
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addNewManufacturerBtnActionPerformed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 1725, 465 )
+			"size": new java.awt.Dimension( 455, 95 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
+			"$columnConstraints": "[fill][297,fill][fill]"
+			"$rowConstraints": "[]"
+		} ) {
+			name: "createCattegoryDialog"
+			"alwaysOnTop": true
+			"defaultCloseOperation": 2
+			"$sizePolicy": 1
+			"resizable": false
+			"title": "Создание Категории"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label5"
+				"text": "Название"
+				"font": &Font8 new java.awt.Font( "Segoe UI", 0, 18 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "categoryNameTF"
+				"font": #Font8
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "createCattegoryBtn"
+				"text": "Создать"
+				"font": #Font8
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "createCattegoryBtnActionPerformed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 1725, 570 )
+			"size": new java.awt.Dimension( 450, 90 )
 		} )
 	}
 }
