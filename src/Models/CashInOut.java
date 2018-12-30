@@ -4,10 +4,10 @@
 
 package Models;
 
-import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.sql.*;
+import javax.swing.*;
 
 import static java.lang.Double.parseDouble;
 
@@ -97,7 +97,7 @@ class CashInOut extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - hhh
+        // Generated using JFormDesigner Evaluation license - Yurii
         inoutlabel = new JLabel();
         inOuttextField = new JTextField();
         komentlabel = new JLabel();
@@ -164,11 +164,11 @@ class CashInOut extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - hhh
+    // Generated using JFormDesigner Evaluation license - Yurii
     private JLabel inoutlabel;
     public JTextField inOuttextField;
     private JLabel komentlabel;
-    protected JTextField komenttextField;
+    private JTextField komenttextField;
     private JButton okbtn;
     private JDialog InOutdialog;
     private JLabel infolabel;
