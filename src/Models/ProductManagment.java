@@ -36,6 +36,11 @@ public class ProductManagment extends JFrame {
         new MyShop(cn).setVisible(true);
     }
 
+    private void myProdBtnActionPerformed() {
+        this.dispose();
+        new PM_MyProduct(cn);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - k
@@ -97,6 +102,7 @@ public class ProductManagment extends JFrame {
 
             //---- myProdBtn ----
             myProdBtn.setText("\u041c\u041e\u0418 \u0442\u043e\u0432\u0430\u0440\u044b");
+            myProdBtn.addActionListener(e -> myProdBtnActionPerformed());
             panel2.add(myProdBtn, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 5, 5), 0, 0));

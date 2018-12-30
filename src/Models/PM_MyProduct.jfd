@@ -1,0 +1,453 @@
+JFDML JFormDesigner: "7.0.0.0.117" Java: "1.8.0_152-release" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"title": "Мои товары"
+			"font": new java.awt.Font( "Dialog", 0, 18 )
+			"defaultCloseOperation": 2
+			"$sizePolicy": 1
+			"$locationPolicy": 1
+			"minimumSize": new java.awt.Dimension( 800, 300 )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "insets dialog,hidemode 3"
+					"$columnConstraints": "[grow,fill]"
+					"$rowConstraints": "[][grow][]"
+				} ) {
+					name: "contentPanel"
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+						"$layoutConstraints": "hidemode 3"
+						"$columnConstraints": "[fill]para[122,grow,fill][175,grow,fill][119,grow,fill][162,grow,fill]rel[101,grow,fill]para[132,grow,fill]"
+						"$rowConstraints": "[][grow][]0[]0[grow,fill]0[]"
+					} ) {
+						name: "panel1"
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "extBtn"
+							"text": "Выход"
+							"font": &Font0 new java.awt.Font( "Segoe UI", 0, 18 )
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "extBtnActionPerformed", false ) )
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 0 1"
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "showAddProdDialogBtn"
+							"text": "Добавить"
+							"font": #Font0
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showAddProdDialogBtnActionPerformed", false ) )
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 0 4"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "textField2"
+							"text": "Штрих-код"
+							"font": #Font0
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 1 4"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "textField1"
+							"text": "Наименование"
+							"font": #Font0
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 2 4"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "textField3"
+							"text": "Категория"
+							"font": #Font0
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 3 4"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "textField4"
+							"font": #Font0
+							"text": "Производитель"
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 4 4"
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "findBtn"
+							"text": "Поиск"
+							"font": #Font0
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 5 4"
+						} )
+						add( new FormComponent( "javax.swing.JComboBox" ) {
+							name: "sortingCB"
+							"font": #Font0
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 6 4"
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane1"
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "ptodTable"
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+								add( new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+								add( new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+								add( new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+								add( new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+								add( new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+								add( new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+								add( new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+							}, new java.util.Vector {
+								add( "Код товара" )
+								add( "Имя" )
+								add( "Базовая ед. из." )
+								add( "Производитель" )
+								add( "Дата доб./ред." )
+								add( "НДС" )
+								add( "Цена продажи" )
+								add( "Категория (главная)" )
+							}, new java.util.Vector {
+								add( class java.lang.Integer )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.util.Date )
+								add( class java.lang.Integer )
+								add( class java.lang.Double )
+								add( class java.lang.String )
+							}, new java.util.Vector {
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+							}, new java.util.Vector {
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, false ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 115, 0, 0, false ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 150, 0, 0, false ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 110, 0, 0, false ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 95, 0, 0, false ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 115, 0, 0, false ) )
+							} )
+							"font": new java.awt.Font( "Segoe UI", 0, 18 )
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+						"$layoutConstraints": "hidemode 3"
+						"$columnConstraints": "[fill][fill][575,fill][fill]"
+						"$rowConstraints": "[]"
+					} ) {
+						name: "panel3"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label1"
+							"text": "Всего (кол-во) Товаров "
+							"font": &Font1 new java.awt.Font( "Segoe UI", 0, 18 )
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 0 0"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "summaryCountOfProductsLBL"
+							"text": "xx"
+							"font": #Font1
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 1 0"
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "button8"
+							"text": "Печать"
+							"font": new java.awt.Font( "Segoe UI", 0, 18 )
+						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+							"value": "cell 3 0"
+						} )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 955, 475 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
+			"$columnConstraints": "[fill]0[grow,fill]para[grow,fill]para[grow,fill]"
+			"$rowConstraints": "[]para[grow,fill]"
+		} ) {
+			name: "categoryOrListDialog"
+			"$sizePolicy": 1
+			"alwaysOnTop": true
+			"defaultCloseOperation": 2
+			"resizable": false
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "exitToPMBtn"
+				"text": "Выход"
+				"font": new java.awt.Font( "Segoe UI", 0, 18 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitToPMBtnActionPerformed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showListOfCategoryBttn"
+				"text": "Категории"
+				"font": &Font2 new java.awt.Font( "Segoe UI", 0, 20 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "listOfCategoryBttnActionPerformed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showListOfProductsBtn"
+				"text": "Список"
+				"font": #Font2
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "listOfProductsBtnActionPerformed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 1045, 125 )
+			"size": new java.awt.Dimension( 485, 200 )
+		} )
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
+			"$columnConstraints": "[grow,fill]"
+			"$rowConstraints": "[]0[]0[]0[]"
+		} ) {
+			name: "categoryFrame"
+			"title": "Категории"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][fill][193,grow,fill][150,grow,fill]"
+				"$rowConstraints": "[0]0[fill]0[]0[][][]"
+			} ) {
+				name: "panel4"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "exitFromCategoryListBttn"
+					"text": "Выход"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitFromCategoryListBttnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1,growy"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "showaddNewCategoryDialogBtn"
+					"text": "Добавить категорию"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addNewCategoryDialogBtnActionPerformed", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 4"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "sortngCategoryCB"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 4"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[grow,fill]"
+				"$rowConstraints": "[grow,fill]0[]0[]"
+			} ) {
+				name: "panel6"
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane2"
+					add( new FormComponent( "javax.swing.JTable" ) {
+						name: "categoryTable"
+						"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+							add( new java.util.Vector {
+								add( null )
+								add( "" )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+							add( new java.util.Vector {
+								add( null )
+								add( null )
+								add( null )
+								add( null )
+							} )
+						}, new java.util.Vector {
+							add( "Id Категории" )
+							add( "Название категории" )
+							add( "Кол-во штук в категории" )
+							add( "Дата создания" )
+						}, new java.util.Vector {
+							add( class java.lang.Integer )
+							add( class java.lang.String )
+							add( class java.lang.Integer )
+							add( class java.util.Date )
+						}, new java.util.Vector {
+							add( false )
+							add( false )
+							add( false )
+							add( false )
+						}, new java.util.Vector {
+							add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 145, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 155, 0, 0, false ) )
+							add( new com.jformdesigner.model.SwingTableColumn( null, 135, 0, 0, false ) )
+						} )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 1550, 5 )
+			"size": new java.awt.Dimension( 640, 290 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
+			"$columnConstraints": "[fill]0[90,fill]para[271,fill]"
+			"$rowConstraints": "[][][][]"
+		} ) {
+			name: "addNewCattegoryDialog"
+			"alwaysOnTop": true
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "exitFromAddingCategoryDialogBtn"
+				"text": "Выход"
+				"font": &Font3 new java.awt.Font( "Segoe UI", 0, 18 )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitFromAddingCategoryDialogBtnActionPerformed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "Неїбу нахера це поле нада"
+				"font": #Font3
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "idCategoryTF"
+				"text": "якшо в нього ми нічого вписать не можем"
+				"font": new java.awt.Font( "Segoe UI", 0, 12 )
+				"editable": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "Название категории"
+				"font": #Font3
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "nameCategoryTF"
+				"font": #Font3
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "addNewCategoryBtn"
+				"text": "Добавить"
+				"font": #Font3
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addNewCategoryBtnActionPerformed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 3,alignx trailing,growx 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 1545, 320 )
+			"size": new java.awt.Dimension( 660, 190 )
+		} )
+	}
+}

@@ -78,14 +78,6 @@ public class AddProduct extends JFrame {
     }
 
     private void addMeasuringBtnActionPerformed() {
-       /* try {
-            nameMeasuringcomboBox.removeAllItems();
-            PreparedStatement pr = cn.prepareStatement("select \"name\" from \"Measuring_Ratte\"");
-            ResultSet rs = pr.executeQuery();
-            nameMeasuringcomboBox.addItem(" ");
-            while (rs.next()) nameMeasuringcomboBox.addItem(rs.getString(1));
-            AutoCompleteDecorator.decorate(nameMeasuringcomboBox);
-        }catch (Exception e){e.printStackTrace();}*/
         addmeasuringdialog.setVisible(true);
     }
 
