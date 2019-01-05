@@ -264,7 +264,7 @@ public class AddProduct extends JFrame {
 
             //dobavlenie darcode
             pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
-            pr.setInt(1, Integer.parseInt(barCodetextField.getText()));
+            pr.setString(1, barCodetextField.getText());
             pr.setInt(2, idProdvider_Prod);
             pr.setInt(3, id_P_C_M_R);
             pr.executeUpdate();
