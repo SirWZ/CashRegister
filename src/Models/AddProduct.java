@@ -242,10 +242,10 @@ public class AddProduct extends JFrame {
                 rs = pr.executeQuery();
                 rs.next();
                 int id = rs.getInt(1);
-                pr = cn.prepareStatement("insert into \"Measuring_rate_connect_provider_product\"(id_measuring_rate_connect_provider_product, provider_product, measuring_rate, сoefficient, name) values (default, ?,?,?,?)");
-                pr.setInt(1,idProdvider_Prod);
-                pr.setInt(2,id);
-                pr.setInt(3,Integer.parseInt(s[1]));
+                pr = cn.prepareStatement("insert into \"Measuring_rate_connect_provider_product\"(id_measuring_rate_connect_provider_product,coefficient, provider_product, measuring_rate, name) values (default, ?,?,?,?)");
+                pr.setInt(1,Integer.parseInt(s[1]));
+                pr.setInt(2,idProdvider_Prod);
+                pr.setInt(3,id);
                 pr.setString(4,s[0] + " " +s[1] + "шт.");
                 pr.executeUpdate();
                 if(Integer.parseInt(barcodeMeasuringRateTF.getText())>0) {
