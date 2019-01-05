@@ -70,6 +70,7 @@ public class AddProduct extends JFrame {
             AutoCompleteDecorator.decorate(categorycomboBox);
         }catch(Exception e){e.printStackTrace();}
 
+
     }
 
     private void exitBtnActionPerformed() {
@@ -196,12 +197,7 @@ public class AddProduct extends JFrame {
                Integer.parseInt(priceOfSellingTF.getText());
            }catch (Exception ex){JOptionPane.showMessageDialog(this,"Некоректное значеение Цены.","Error",JOptionPane.ERROR_MESSAGE);return;}
 
-            // poluchenie id posle dobavlenie v Prod
-            pr = cn.prepareStatement("select \"idProduct\" from \"Product\" where name like ?");
-            pr.setString(1,nametextField.getText());
-            rs = pr.executeQuery();
-            rs.next();
-            idProduct = rs.getInt(1);
+
             //dobavlenie v Provider_Product
             pr = cn.prepareStatement("insert into \"Provider_Product\"(\"idProviderProduct\",name,description,\"BaseMeasuringRate\",\"VAT\",\"Manufacturer\")values (default, ?,?,?,?,?)");
             pr.setString(1,nametextField.getText());
