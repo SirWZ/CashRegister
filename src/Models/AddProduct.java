@@ -53,7 +53,7 @@ public class AddProduct extends JFrame {
             while (rs.next())manufacturercomboBox.addItem(rs.getString(1));
             AutoCompleteDecorator.decorate(manufacturercomboBox);
             //base measuring
-            pr=cn.prepareStatement("select \"name\" from \"Measuring_Rate\"");
+            pr=cn.prepareStatement("select \"name\" from \"Provider_product_measuring_rate\"");
             rs = pr.executeQuery();
             measuringcomboBox.addItem(" ");
             nameMeasuringcomboBox.addItem(" ");
@@ -160,7 +160,7 @@ public class AddProduct extends JFrame {
                 return;
             }
             try {
-                pr = cn.prepareStatement("select \"idMeasuringRate\" from \"Measuring_Rate\" where name like ?");
+                pr = cn.prepareStatement("select \"Id_Provider_product_measuring_rate\" from \"Provider_product_measuring_rate\" where name like ?");
                 pr.setString(1, measuringcomboBox.getSelectedItem().toString());
                 rs = pr.executeQuery();
                 rs.next();
@@ -196,14 +196,6 @@ public class AddProduct extends JFrame {
                Integer.parseInt(priceOfSellingTF.getText());
            }catch (Exception ex){JOptionPane.showMessageDialog(this,"Некоректное значеение Цены.","Error",JOptionPane.ERROR_MESSAGE);return;}
 
-            // dobavlenie v product
-            pr = cn.prepareStatement("insert into \"Product\"(\"idProduct\",name,description,\"idBaseMeasuringRate\",vat,manufacturer)values (default, ?,?,?,?,?);");
-            pr.setString(1,nametextField.getText());
-            pr.setString(2,descripttextArea.getText());
-            pr.setInt(3,idBMR);
-            pr.setInt(4,Integer.parseInt(vattextField.getText()));
-            pr.setInt(5,idManufacturer);
-            pr.executeUpdate();
             // poluchenie id posle dobavlenie v Prod
             pr = cn.prepareStatement("select \"idProduct\" from \"Product\" where name like ?");
             pr.setString(1,nametextField.getText());
@@ -234,27 +226,27 @@ public class AddProduct extends JFrame {
             //dobavlenie bazovoj e.i.
 
 
-            pr = cn.prepareStatement("insert into \"Product_connect_measuring_rate\"(id_product_connect_measuring_rate, product, measuring_rate, сoefficient, \"Name\") values (default, ?,?,?,?)");
+            pr = cn.prepareStatement("insert into \"Measuring_rate_connect_provider_product\"(id_measuring_rate_connect_provider_product, provider_product, measuring_rate, сoefficient, name) values (default, ?,?,?,?)");
             pr.setInt(1,idProduct);
             pr.setInt(2,idBMR);
             pr.setInt(3,1);
             pr.setString(4,"BASE");
             pr.executeUpdate();
             // poluczenie id_Product_conect_measuring_ratte
-            pr = cn.prepareStatement("select max(id_product_connect_measuring_rate) from \"Product_connect_measuring_rate\"");
+            pr = cn.prepareStatement("select max(Id_Provider_product_measuring_rate) from \"Provider_product_measuring_rate\"");
             rs = pr.executeQuery();
             rs.next();
             int id_P_C_M_R = rs.getInt(1);
 
             //dobavlenie vsech edenic izm
             for (String[] s : listOfMeasurings){
-                pr = cn.prepareStatement("select \"idMeasuringRate\" from \"Measuring_Rate\" where name like ?");
+                pr = cn.prepareStatement("select \"Id_Provider_product_measuring_rate\" from \"Provider_product_measuring_rate\" where name like ?");
                 System.out.println(s[0]);
                 pr.setString(1,s[0]);
                 rs = pr.executeQuery();
                 rs.next();
                 int id = rs.getInt(1);
-                pr = cn.prepareStatement("insert into \"Product_connect_measuring_rate\"(id_product_connect_measuring_rate, product, measuring_rate, сoefficient, \"Name\") values (default, ?,?,?,?)");
+                pr = cn.prepareStatement("insert into \"Measuring_rate_connect_provider_product\"(id_measuring_rate_connect_provider_product, provider_product, measuring_rate, сoefficient, name) values (default, ?,?,?,?)");
                 pr.setInt(1,idProduct);
                 pr.setInt(2,id);
                 pr.setInt(3,Integer.parseInt(s[1]));
@@ -262,7 +254,7 @@ public class AddProduct extends JFrame {
                 pr.executeUpdate();
                 if(Integer.parseInt(barcodeMeasuringRateTF.getText())>0) {
                     // poluczenie id_Product_conect_measuring_ratte
-                    pr = cn.prepareStatement("select max(id_product_connect_measuring_rate) from \"Product_connect_measuring_rate\"");
+                    pr = cn.prepareStatement("select max(id_measuring_rate_connect_provider_product) from \"Measuring_rate_connect_provider_product\"");
                     rs = pr.executeQuery();
                     rs.next();
                     id_P_C_M_R = rs.getInt(1);
