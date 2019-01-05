@@ -24,7 +24,7 @@ public class AddProduct extends JFrame {
     Connection cn;
     ArrayList<String[]> listOfMeasurings = new ArrayList();
     ArrayList<Integer> listOfProviders = new ArrayList();
-    int idProdvider_Prod,idProduct;
+    int idProdvider_Prod;
 
     public AddProduct(Connection cn) {
         initComponents();
@@ -199,7 +199,7 @@ public class AddProduct extends JFrame {
 
 
             //dobavlenie v Provider_Product
-            pr = cn.prepareStatement("insert into \"Provider_Product\"(\"idProviderProduct\",name,description,\"BaseMeasuringRate\",\"VAT\",\"Manufacturer\")values (default, ?,?,?,?,?)");
+            pr = cn.prepareStatement("insert into \"Provider_Product\"(\"idProviderProduct\",name,description,\"BaseMeasuringRate\",\"VAT\",manufacturer   )values (default, ?,?,?,?,?)");
             pr.setString(1,nametextField.getText());
             pr.setString(2,descripttextArea.getText());
             pr.setInt(3,idBMR);
@@ -222,14 +222,14 @@ public class AddProduct extends JFrame {
             //dobavlenie bazovoj e.i.
 
 
-            pr = cn.prepareStatement("insert into \"Measuring_rate_connect_provider_product\"(id_measuring_rate_connect_provider_product, provider_product, measuring_rate, сoefficient, name) values (default, ?,?,?,?)");
-            pr.setInt(1,idProduct);
+            pr = cn.prepareStatement("insert into \"Measuring_rate_connect_provider_product\"(id_measuring_rate_connect_provider_product, coefficient,provider_product, measuring_rate , name) values (default, ?,?,?,?)");
+            pr.setInt(1,idProdvider_Prod);
             pr.setInt(2,idBMR);
             pr.setInt(3,1);
             pr.setString(4,"BASE");
             pr.executeUpdate();
             // poluczenie id_Product_conect_measuring_ratte
-            pr = cn.prepareStatement("select max(Id_Provider_product_measuring_rate) from \"Provider_product_measuring_rate\"");
+            pr = cn.prepareStatement("select max(p.\"Id_Provider_product_measuring_rate\") from \"Provider_product_measuring_rate\" p");
             rs = pr.executeQuery();
             rs.next();
             int id_P_C_M_R = rs.getInt(1);
@@ -243,7 +243,7 @@ public class AddProduct extends JFrame {
                 rs.next();
                 int id = rs.getInt(1);
                 pr = cn.prepareStatement("insert into \"Measuring_rate_connect_provider_product\"(id_measuring_rate_connect_provider_product, provider_product, measuring_rate, сoefficient, name) values (default, ?,?,?,?)");
-                pr.setInt(1,idProduct);
+                pr.setInt(1,idProdvider_Prod);
                 pr.setInt(2,id);
                 pr.setInt(3,Integer.parseInt(s[1]));
                 pr.setString(4,s[0] + " " +s[1] + "шт.");
@@ -256,7 +256,7 @@ public class AddProduct extends JFrame {
                     id_P_C_M_R = rs.getInt(1);
                     pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
                     pr.setInt(1, Integer.parseInt(barcodeMeasuringRateTF.getText()));
-                    pr.setInt(2, idProduct);
+                    pr.setInt(2, idProdvider_Prod);
                     pr.setInt(3, id_P_C_M_R);
                     pr.executeUpdate();
                 }
@@ -265,7 +265,7 @@ public class AddProduct extends JFrame {
             //dobavlenie darcode
             pr = cn.prepareStatement("insert into barcode(idbarcode, code, product, product_measuring_rate) values (default ,?,?,?)");
             pr.setInt(1, Integer.parseInt(barCodetextField.getText()));
-            pr.setInt(2, idProduct);
+            pr.setInt(2, idProdvider_Prod);
             pr.setInt(3, id_P_C_M_R);
             pr.executeUpdate();
 
@@ -281,13 +281,13 @@ public class AddProduct extends JFrame {
             pr = cn.prepareStatement("insert into \"Price\"(\"idPrice\", price, \"dateStart\", \"idProduct\") values (default ,?,?,?)");
             pr.setInt(1,Integer.parseInt(priceOfSellingTF.getText()));
             pr.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-            pr.setInt(3, idProduct);
+            pr.setInt(3, idProdvider_Prod);
             pr.executeUpdate();
             //dobavlenie category
             System.out.println(idCategory);
-            System.out.println(idProduct);
+            System.out.println(idProdvider_Prod);
             pr = cn.prepareStatement("insert into \"Product_connect_category\"(id_product_category, product, category) values (default ,?,?)");
-            pr.setInt(1,idProduct);
+            pr.setInt(1,idProdvider_Prod);
             pr.setInt(2,idCategory);
             pr.executeUpdate();
         }catch (Exception e){
