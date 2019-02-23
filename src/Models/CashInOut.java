@@ -4,10 +4,10 @@
 
 package Models;
 
+import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.sql.*;
-import javax.swing.*;
 
 import static java.lang.Double.parseDouble;
 
